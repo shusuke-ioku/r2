@@ -1,10 +1,17 @@
-// style.typ — shared style for paper and slides
-// Imported by paper/paper.typ and talk/slides.typ
+// r2 — Academic paper and slides template
+//
+// Usage (paper):
+//   #import "@local/r2:0.1.0": paper, nneq, caption-note, caption-with-note,
+//     table-note, theorem, proof, prop, lem, asp
+//
+// Usage (slides):
+//   #import "@local/r2:0.1.0": slides-style, title-slide
+//   #import "@preview/polylux:0.4.0": *
 
 #import "@preview/ctheorems:1.1.3": *
 
 // ---------------------------------------------------------------------------
-// Design tokens (edit these to change the look everywhere)
+// Design tokens — edit these to change the look everywhere
 // ---------------------------------------------------------------------------
 
 #let default-style = (
@@ -57,11 +64,13 @@
 )
 
 // ---------------------------------------------------------------------------
-// Utilities (used by both paper and slides)
+// Utilities
 // ---------------------------------------------------------------------------
 
+/// Unnumbered display equation.
 #let nneq(eq) = math.equation(block: true, numbering: none, eq)
 
+/// Figure caption with a note underneath.
 #let caption-note(body) = align(left)[
   #pad(x: 2em, y: 0em)[
     #par(leading: 0.2em)[
@@ -70,8 +79,10 @@
   ]
 ]
 
+/// Caption title + note combined.
 #let caption-with-note(title, note) = [#title #caption-note(note)]
 
+/// Italic note below a table.
 #let table-note(body) = align(left)[
   #text(size: 0.9em)[#emph(body)]
 ]
@@ -110,9 +121,10 @@
 ).with(numbering: "1")
 
 // ---------------------------------------------------------------------------
-// Paper layout function
+// Paper layout
 // ---------------------------------------------------------------------------
 
+/// Format a manuscript. Pass `style: (key: value)` to override design tokens.
 #let paper(
   title: none,
   subtitle: none,
@@ -212,9 +224,10 @@
 }
 
 // ---------------------------------------------------------------------------
-// Slides layout functions
+// Slides layout
 // ---------------------------------------------------------------------------
 
+/// Apply slides styling. Use with `#show: slides-style`.
 #let slides-style(doc) = {
   set page(paper: "presentation-4-3", margin: (top: 3em, rest: 3em))
   set text(size: 22pt, font: "PT Sans")
@@ -228,6 +241,7 @@
   doc
 }
 
+/// Title slide for presentations.
 #let title-slide(
   title: none,
   subtitle: none,
