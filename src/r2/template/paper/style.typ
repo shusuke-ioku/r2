@@ -232,6 +232,18 @@
 // Slides layout
 // ---------------------------------------------------------------------------
 
+/// Auto-spaced one-by-one: adds vertical gap between revealed items.
+/// Re-export this to shadow polylux's default `one-by-one`.
+#let one-by-one(start: 1, ..items) = {
+  import "@preview/polylux:0.4.0": one-by-one as _one-by-one
+  let section-gap = 0.4em
+  let pos = items.pos()
+  let spaced = pos.enumerate().map(((i, item)) => {
+    if i == 0 { item } else { v(section-gap) + item }
+  })
+  _one-by-one(start: start, ..spaced)
+}
+
 /// Apply slides styling. Use with `#show: slides-style`.
 #let slides-style(doc) = {
   set page(paper: "presentation-4-3", margin: (top: 3em, rest: 3em))
