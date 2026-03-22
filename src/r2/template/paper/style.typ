@@ -239,8 +239,10 @@
   set par(spacing: 1.5em)
 
   show heading: it => { set align(center); set text(size: 0.75em); it }
-  set list(marker: ([], [‣], [–]), indent: 1em)
+  set list(marker: ([•], [‣], [–]), indent: 1em)
   show list: set par(leading: .8em, spacing: 1.7em)
+  set bibliography(style: "american-political-science-association")
+  show bibliography: set par(first-line-indent: 0em)
   show cite: set text(size: .8em, rgb(169,169,169))
 
   doc
