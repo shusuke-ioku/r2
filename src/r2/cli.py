@@ -126,6 +126,14 @@ def init(path: str, defaults: bool) -> None:
         click.echo(f"Error: {e}", err=True)
         raise SystemExit(1)
 
+    # Remove empty files produced by Jinja conditionals that rendered to nothing
+    for candidate in [dest / "paper" / "paper.typ", dest / "talk" / "slides.typ"]:
+        if candidate.exists() and candidate.stat().st_size == 0:
+            candidate.unlink()
+            # Remove empty parent dir too
+            if candidate.parent.exists() and not any(candidate.parent.iterdir()):
+                candidate.parent.rmdir()
+
     # Restore backed-up files (user's originals take priority)
     restored = []
     for fname, content in backups.items():

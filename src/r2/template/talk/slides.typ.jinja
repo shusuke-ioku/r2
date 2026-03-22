@@ -1,0 +1,21 @@
+{% if use_slides and paper_tool == "typst" %}#import "@preview/polylux:0.4.0": *
+#import "../paper/style.typ": slides-style, title-slide
+
+#show: slides-style
+
+#title-slide(
+  title: [{{ project_name }}],
+  subtitle: none,
+  author: [Author Name],
+)
+
+#slide[
+  = Motivation
+
+  #set align(horizon)
+
+  - Point one
+  - Point two
+  - Point three
+]
+{% endif %}

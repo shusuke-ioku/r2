@@ -1,0 +1,29 @@
+{% if paper_tool == "typst" %}#import "./style.typ": paper, nneq, caption-note, table-note, caption-with-note, theorem, proof, prop, lem, asp
+
+#show: doc => paper(
+  title: [{{ project_name }}],
+  subtitle: none,
+  authors: (
+    (name: [Author Name], affiliation: [University]),
+  ),
+  date: datetime.today().display("[month repr:long] [day], [year]"),
+  abstract: [
+    Your abstract here.
+  ],
+  doc,
+)
+
+= Introduction
+
+Your introduction here.
+
+// ---------------------------------------------------------------------------
+
+#heading(outlined: false, numbering: none, level: 1)[References]
+
+#bibliography(
+  "../ref.bib",
+  style: "american-political-science-association",
+  title: none
+)
+{% endif %}
