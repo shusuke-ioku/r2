@@ -2,7 +2,7 @@
 
 *Not the droid you're looking for — but it will get your paper through R&R.*
 
-An AI-powered research environment for academic papers, built on [Claude Code](https://claude.ai/claude-code). Implements current best practices in agent engineering — multi-agent orchestration, skill-based dispatch, RAG-augmented retrieval, and autonomous debugging — and is actively maintained as the field advances.
+An AI-powered research environment for academic papers, built on [Claude Code](https://claude.ai/claude-code). Uses multi-agent orchestration, skill-based task routing, RAG retrieval, and autonomous debugging — following the latest agentic AI design patterns and actively maintained as they evolve.
 
 Out of the box you get: literature search, paper downloads, semantic knowledge retrieval, multi-agent writing, formal modeling, and peer-review simulation.
 
