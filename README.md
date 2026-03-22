@@ -83,13 +83,37 @@ r2 rag lit-deep-research "institutional decay mechanisms"
 
 ### Skills Engine
 
+Every task is routed through a skill dispatch system. When you ask Claude Code to do something, the framework matches your request against 14 skill definitions using semantic search, then delegates to the right specialized agent with the right tools and instructions. Skills are composable — a literature survey triggers deep-research, which calls source-acquisition to download papers, which calls reading to evaluate them. You can also create, update, and benchmark your own skills.
+
 ```bash
-# See which skill matches a task
+# Which skill handles this task? (ranked by confidence)
 r2 skills dispatch "write the introduction"
 
-# List all available skills
+# List all registered skills
 r2 skills list
+
+# Create a custom skill
+r2 skills create my-skill -d "description" --body-file SKILL.md
 ```
+
+**Built-in skills:**
+
+| Skill | What it does |
+|-------|-------------|
+| `writing` | Dense academic prose, equations, tables, captions |
+| `analysis` | R pipeline execution, debugging, result alignment |
+| `review` | Skeptical stress-testing of arguments and claims |
+| `deep-research` | Multi-database literature surveys with snowballing |
+| `reading` | Critical evaluation of individual papers |
+| `formal-modeling` | Game-theoretic models, proofs, propositions |
+| `source-acquisition` | Download, Zotero, and RAG indexing in one step |
+| `verification` | Prove correctness before reporting "done" |
+| `debugging` | Autonomous error diagnosis and self-correction |
+| `proofreading` | First-time reader simulation for flow diagnosis |
+| `slides` | Presentation slides synced with manuscript |
+| `parallel-dispatch` | Run independent tasks concurrently |
+| `portfolio-sync` | Sync title/abstract to a GitHub Pages site |
+| `skill-creation` | Create, evaluate, and optimize custom skills |
 
 ## API Keys
 
