@@ -1,0 +1,21 @@
+# Skills Engine
+
+Semantic skill management via the `r2` CLI.
+
+**Usage:** `r2 skills <command>`
+
+| Command | Purpose |
+|---------|---------|
+| `search QUERY [-k N]` | Semantic search for skills matching a query |
+| `dispatch TASK [-k N]` | Ranked skill recommendations with confidence scores |
+| `info NAME` | Full details about a named skill |
+| `list` | List all registered skills |
+| `create NAME -d "description" [--body-file F]` | Create a new skill |
+| `update NAME [-d "desc"] [--body-file F]` | Update a skill |
+| `delete NAME --confirm` | Remove a skill |
+| `relationships [--skill NAME]` | Show skill dependencies |
+| `usage [--skill NAME] [--limit N]` | Query usage history |
+| `reindex [--force]` | Re-index all skills |
+
+- `.claude/skills/` is the source of truth. The engine adds a semantic layer on top.
+- Run `r2 skills reindex` if skills were modified manually.

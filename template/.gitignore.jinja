@@ -1,0 +1,22 @@
+# Environment
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# r2 runtime data
+.claude/rag/.chromadb/
+.claude/skills_engine/.cognee/
+.claude/skills_engine/.usage.db
+
+# OS
+.DS_Store
+Thumbs.db
+{% if use_r %}
+# R
+.Rhistory
+.RData
+.Rproj.user/
+{% endif %}

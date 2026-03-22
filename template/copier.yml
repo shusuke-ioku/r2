@@ -1,0 +1,35 @@
+_min_copier_version: "9.0"
+_subdirectory: ""
+_answers_file: .copier-answers.yml
+
+project_name:
+  type: str
+  help: "Short project slug (e.g., my-paper)"
+
+project_description:
+  type: str
+  help: "One-line description of the paper"
+  default: ""
+
+paper_tool:
+  type: str
+  help: "Manuscript typesetting tool"
+  choices:
+    - typst
+    - latex
+  default: typst
+
+use_r:
+  type: bool
+  help: "Include R analysis pipeline scaffolding?"
+  default: true
+
+use_zotero:
+  type: bool
+  help: "Enable Zotero integration for bibliography management?"
+  default: true
+
+use_slides:
+  type: bool
+  help: "Include presentation slides scaffolding?"
+  default: false

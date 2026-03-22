@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Environment
+.env
+
+# Runtime data (generated per-project, never in framework)
+.claude/rag/.chromadb/
+.claude/skills_engine/.cognee/
+.claude/skills_engine/.usage.db
+
+# R
+.Rhistory
+.RData
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test artifacts
+/tmp-test-*/

@@ -1,0 +1,12 @@
+[
+  {"query": "run the analysis pipeline", "should_trigger": true},
+  {"query": "rerun the R scripts after changing the data", "should_trigger": true},
+  {"query": "debug why the regression output has NA coefficients", "should_trigger": true},
+  {"query": "add a new robustness check with region fixed effects", "should_trigger": true},
+  {"query": "check if analysis outputs are up to date", "should_trigger": true},
+  {"query": "the results look wrong, significance changed", "should_trigger": true},
+  {"query": "rewrite the introduction paragraph", "should_trigger": false},
+  {"query": "find papers on democratic backsliding", "should_trigger": false},
+  {"query": "proofread the conclusion section", "should_trigger": false},
+  {"query": "sync the portfolio site", "should_trigger": false}
+]

@@ -1,0 +1,82 @@
+[
+  {
+    "query": "draft intro section",
+    "should_trigger": true
+  },
+  {
+    "query": "debug the R script error",
+    "should_trigger": false
+  },
+  {
+    "query": "run the pipeline",
+    "should_trigger": false
+  },
+  {
+    "query": "check results",
+    "should_trigger": false
+  },
+  {
+    "query": "rewrite the conclusion to be more concise",
+    "should_trigger": true
+  },
+  {
+    "query": "the literature review reads too loosely \u2014 tighten it",
+    "should_trigger": true
+  },
+  {
+    "query": "add a figure caption for the main results plot",
+    "should_trigger": true
+  },
+  {
+    "query": "this paragraph overclaims, fix it",
+    "should_trigger": true
+  },
+  {
+    "query": "draft the contributions paragraph",
+    "should_trigger": true
+  },
+  {
+    "query": "fix the citation format in the theory section",
+    "should_trigger": true
+  },
+  {
+    "query": "write an equation for the probability model in section 3",
+    "should_trigger": true
+  },
+  {
+    "query": "format the regression table in the paper",
+    "should_trigger": true
+  },
+  {
+    "query": "clean up the abstract",
+    "should_trigger": true
+  },
+  {
+    "query": "survey the literature on democratic backsliding",
+    "should_trigger": false
+  },
+  {
+    "query": "run the robustness checks",
+    "should_trigger": false
+  },
+  {
+    "query": "download the Acemoglu 2005 paper and add it to Zotero",
+    "should_trigger": false
+  },
+  {
+    "query": "derive the equilibrium in the formal model",
+    "should_trigger": false
+  },
+  {
+    "query": "update the slides with the new results",
+    "should_trigger": false
+  },
+  {
+    "query": "check if the analysis outputs match the paper numbers",
+    "should_trigger": false
+  },
+  {
+    "query": "what does Slater 2010 argue about party systems",
+    "should_trigger": false
+  }
+]

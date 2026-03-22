@@ -1,0 +1,94 @@
+# Project
+
+{{ project_description }}
+
+## Rules for Every Agent
+
+### Skill Dispatch (Mandatory)
+
+Before ANY response—including clarifying questions—check whether a skill applies. If there is even a 1% chance a skill is relevant, invoke it. This is non-negotiable.
+
+**Available skills** (in `.claude/skills/`):
+
+| Skill | Trigger | Agent |
+|-------|---------|-------|
+| `writing` | Any prose/equation/table/caption edit in the manuscript | `manuscript-writer` |
+{% if use_r %}| `analysis` | Any R script, pipeline, results, or data task | `analyst-agent` |
+{% endif %}| `review` | Stress-testing arguments, identification strategy, or claims | `reviewer` |
+| `deep-research` | Surveying a literature, finding papers, mapping a field | `researcher` |
+| `reading` | Reading/evaluating a specific paper or book | `researcher` |
+| `formal-modeling` | Formal theory, game trees, proofs, propositions, equilibria | `theorist` |
+| `verification` | About to claim work is done, commit, or move to next task | *(cross-cutting)* |
+| `debugging` | Any error, failure, or unexpected behavior | `analyst-agent` |
+| `parallel-dispatch` | 2+ independent tasks that can run concurrently | *(orchestration)* |
+| `source-acquisition` | Download papers, add to Zotero, index into RAG | `source-acquirer` |
+{% if use_slides %}| `slides` | Create/update/sync presentation slides | `slides-writer` |
+{% endif %}| `proofreading` | Evaluating paper flow, readability, reader experience | `proofreader` |
+
+**Rationalization prevention:**
+
+| Thought | Reality |
+|---------|---------|
+| "This is just a simple question" | Questions are tasks. Check skills. |
+| "I need more context first" | Skill check comes BEFORE clarifying questions. |
+| "Let me explore the codebase first" | Skills tell you HOW to explore. Check first. |
+| "This doesn't need a formal skill" | If a skill exists, use it. |
+| "The skill is overkill" | Simple things become complex. Use it. |
+| "I'll just do this one thing first" | Check BEFORE doing anything. |
+
+**Priority:** If multiple skills apply, trigger process skills first (debugging, verification) then domain skills (writing, analysis).
+
+**Available agents** (in `.claude/agents/`):
+
+| Agent | Skills | Tool Restrictions |
+|-------|--------|-------------------|
+{% if use_r %}| `analyst-agent` | analysis, debugging, verification | Full tools |
+{% endif %}| `manuscript-writer` | writing, verification, proofreading | Full tools |
+| `researcher` | deep-research, reading, source-acquisition | No Edit (creates new files only) |
+| `source-acquirer` | source-acquisition, reading | Full tools (download + index) |
+| `reviewer` | review | Read-only + Bash (RAG); no Write/Edit |
+| `theorist` | formal-modeling, verification | Full tools |
+{% if use_slides %}| `slides-writer` | slides, writing | Full tools (never modify manuscript) |
+{% endif %}| `proofreader` | proofreading | Read-only (Read, Glob, Grep only) |
+
+**Agent routing:** When a skill applies and has a corresponding agent, delegate to that agent for focused, isolated execution. Use subagents liberally — one focused task per subagent.
+
+### Approach
+
+- **Role:** Professional researcher with data-science skills.
+- **Simplicity first:** Minimal changes, root causes only.
+- **Plan first:** Enter plan mode for 3+ step tasks. Re-plan if blocked.
+- **Subagents:** Use liberally. One focused task per subagent.
+- **Destructive actions:** Always confirm before deleting files/folders.
+- **Ambiguity:** Ask for clarification when instructions are unclear.
+
+### Execution
+
+- **Autonomous debugging:** Re-run affected scripts and self-correct without asking.
+- **Verification:** Never mark a task complete without proving correctness (re-run, check logs, demonstrate results).
+
+### Documentation
+
+- **Update this doc:** When changes affect project structure or rules.
+- **Update structure map:** When files/folders change, update `.claude/directory-structure.md`.
+- **Lessons:** After any user correction, update `.claude/lessons.md`. Review lessons at session start.
+
+---
+
+## Key Paths
+
+| Path | Purpose |
+|------|---------|
+{% if use_r %}| `analysis/scripts/` | R scripts (numbered by pipeline stage) |
+| `analysis/data/` | Raw and constructed data (never modify raw) |
+| `analysis/output/results/` | Generated markdown summaries |
+| `analysis/output/figures/` | Generated plots |
+{% endif %}{% if paper_tool == "typst" %}| `paper/paper.typ` | Main manuscript (Typst) |
+{% else %}| `paper/paper.tex` | Main manuscript (LaTeX) |
+{% endif %}| `paper/notes/lit/` | Literature review notes |
+| `ref.bib` | Bibliography |
+{% if use_slides %}{% if paper_tool == "typst" %}| `talk/slides.typ` | Presentation slides |
+{% else %}| `talk/slides.tex` | Presentation slides |
+{% endif %}{% endif %}| `.claude/lessons.md` | Learned patterns from corrections |
+
+Full directory structure: see `.claude/directory-structure.md`

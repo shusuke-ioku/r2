@@ -1,0 +1,44 @@
+# RAG System
+
+Local semantic search over research literature via the `r2` CLI.
+
+**Usage:** `r2 rag <command>`
+
+| Command | Purpose |
+|---------|---------|
+| `search QUERY [-n N] [--citekey KEY]` | Retrieve relevant chunks with citations |
+| `query QUERY [-n N] [-p TEMPLATE] [--citekey KEY]` | Retrieve + formatted prompt for synthesis |
+| `self-query QUERY [-n N] [--citekey KEY]` | Over-retrieve + Self-RAG instructions (LLM grades relevance) |
+| `deep-query QUERY [-s '["q1","q2"]'] [-n N]` | Decompose query into sub-questions, retrieve per sub-question |
+| `index [--force] [--source bib\|dir\|all]` | Index PDFs into vector store |
+| `stats` | Index statistics |
+| `remove CITEKEY` | Remove a paper from the index |
+| `lit-search QUERY [--focus broad\|top_journals\|classical\|recent] [-n N]` | Search Semantic Scholar + OpenAlex + Scopus |
+| `lit-paper PAPER_ID` | Get paper details from Semantic Scholar |
+| `lit-citations PAPER_ID [-n N]` | Forward citations |
+| `lit-references PAPER_ID [-n N]` | Backward citations |
+| `lit-deep-research QUERY [--focus F] [--n-external N] [--n-local N]` | Combined local RAG + external search |
+| `lit-download IDENTIFIER [--type doi\|pmid\|title]` | Download PDF (Sci-Hub) + add to Zotero + index |
+| `lit-download-batch 'JSON_ARRAY' [--auto-index]` | Batch download multiple papers |
+| `lit-save-report QUERY --file report.md` | Save a literature review report |
+
+- Save analyses to `paper/notes/` with descriptive filenames.
+- Cite as `(Author Year, pp. X-Y)` from chunk metadata.
+- Run `r2 rag index` before searching if new PDFs were added.
+{% if use_zotero %}
+## Zotero Local API
+
+Direct access to the Zotero library via CLI (requires Zotero desktop running with MCP plugin).
+
+**Usage:** `r2 zotero <command>` (or `python .claude/scripts/zotero_cli.py <command>`)
+
+| Command | Purpose |
+|---------|---------|
+| `ping` | Health check |
+| `search [QUERY]` | Search library |
+| `get-item KEY` | Get item by key |
+| `find-item --doi DOI` | Find by identifier |
+| `collections` | List all collections |
+| `pdf-content ITEM_KEY` | Extract PDF text |
+| `search-annotations [QUERY]` | Search annotations |
+{% endif %}

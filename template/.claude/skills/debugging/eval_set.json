@@ -1,0 +1,82 @@
+[
+  {
+    "query": "debug the R script error",
+    "should_trigger": true
+  },
+  {
+    "query": "run the pipeline",
+    "should_trigger": false
+  },
+  {
+    "query": "draft intro section",
+    "should_trigger": false
+  },
+  {
+    "query": "check results",
+    "should_trigger": false
+  },
+  {
+    "query": "my R script is throwing a warning about factor levels being dropped",
+    "should_trigger": true
+  },
+  {
+    "query": "typst compile failed with a syntax error on line 42",
+    "should_trigger": true
+  },
+  {
+    "query": "the coefficient on treatment flipped signs after I added region controls",
+    "should_trigger": true
+  },
+  {
+    "query": "I'm getting NA coefficients in my feols output",
+    "should_trigger": true
+  },
+  {
+    "query": "the pipeline exited with a non-zero status code",
+    "should_trigger": true
+  },
+  {
+    "query": "the standard errors in my regression look implausibly large",
+    "should_trigger": true
+  },
+  {
+    "query": "the analysis script crashes when I try to source it",
+    "should_trigger": true
+  },
+  {
+    "query": "why is the robustness check producing NaN values instead of estimates",
+    "should_trigger": true
+  },
+  {
+    "query": "something broke after I updated the data merge step",
+    "should_trigger": true
+  },
+  {
+    "query": "add a new control variable to the codebook",
+    "should_trigger": false
+  },
+  {
+    "query": "summarize the civil society literature for the lit review",
+    "should_trigger": false
+  },
+  {
+    "query": "write the conclusion section of the paper",
+    "should_trigger": false
+  },
+  {
+    "query": "rerun the main analysis pipeline to refresh outputs",
+    "should_trigger": false
+  },
+  {
+    "query": "download this paper and add it to Zotero",
+    "should_trigger": false
+  },
+  {
+    "query": "create slides for the introduction and theory sections",
+    "should_trigger": false
+  },
+  {
+    "query": "what does Acemoglu 2005 argue about institutions and growth",
+    "should_trigger": false
+  }
+]
