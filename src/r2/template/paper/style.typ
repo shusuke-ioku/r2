@@ -94,7 +94,12 @@
 #show: thmrules.with(qed-symbol: $square$)
 
 #let theorem = thmbox("theorem", "Theorem")
-#let proof = thmproof("proof", "Proof")
+#let proof = thmproof(
+  "proof", "Proof",
+  inset: (x: 2em, y: .5em),
+  titlefmt: smallcaps,
+  bodyfmt: body => [#body],
+)
 
 #let prop = thmbox(
   "prop", "Proposition",
