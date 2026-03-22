@@ -11,7 +11,7 @@ r2 gives you a complete research workflow out of the box: literature search, pap
 ```bash
 pip install r2-research
 
-# With all optional extras (Sci-Hub downloads, Cognee skills engine):
+# With all optional extras:
 pip install r2-research[all]
 ```
 
@@ -44,7 +44,7 @@ Your project now has the full r2 framework: 8 agents, 14 skills, 10 slash comman
 | `manuscript-writer` | Dense academic prose, equations, tables, captions |
 | `analyst-agent` | R pipeline execution, debugging, result verification |
 | `researcher` | Literature surveys, paper reading, source acquisition |
-| `source-acquirer` | Download papers via Sci-Hub, add to Zotero, index into RAG |
+| `source-acquirer` | Download papers, add to Zotero, index into RAG |
 | `reviewer` | Skeptical stress-testing of arguments and claims |
 | `theorist` | Formal game-theoretic models, proofs, propositions |
 | `slides-writer` | Presentation slides synced with manuscript |
@@ -87,7 +87,6 @@ r2 skills list
 | `RAG_OPENALEX_EMAIL` | No | OpenAlex polite pool (higher rate limits) |
 | `RAG_SCOPUS_API_KEY` | No | Scopus literature search |
 | `RAG_S2_API_KEY` | No | Semantic Scholar higher rate limits |
-| `RAG_SCIHUB_URL` | No | Paper downloads via Sci-Hub |
 | `RAG_ZOTERO_API_KEY` | No | Zotero bibliography integration |
 | `RAG_ZOTERO_USER_ID` | No | Zotero bibliography integration |
 | `OPENAI_API_KEY` | No | Skills engine semantic dispatch (Cognee) |
