@@ -9,10 +9,7 @@ Out of the box you get: literature search, paper downloads, semantic knowledge r
 ## Install
 
 ```bash
-pip install r2-research
-
-# With all optional extras:
-pip install r2-research[all]
+pip install "r2-research @ git+https://github.com/shusuke-ioku/r2.git"
 ```
 
 ## Quick Start
@@ -132,7 +129,7 @@ r2 works with zero optional keys — you get local PDF indexing and embedding se
 
 ```bash
 # Update the Python package
-pip install --upgrade r2-research
+pip install --upgrade "r2-research @ git+https://github.com/shusuke-ioku/r2.git"
 
 # Update framework files (skills, agents, commands, rules) in your project
 r2 update
