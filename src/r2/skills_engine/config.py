@@ -31,18 +31,13 @@ class SkillsConfig(BaseSettings):
     # Cognee
     dataset_name: str = "claude_skills"
 
-    # LLM (for cognee's cognify step — uses OpenAI by default for compatibility)
-    openai_api_key: str = Field(
-        default="",
-        validation_alias=AliasChoices("SKILLS_OPENAI_API_KEY", "OPENAI_API_KEY"),
-    )
-    llm_provider: str = "openai"
-    llm_model: str = "gpt-4.1-mini"
-
+    # LLM (for cognee's cognify step — uses Anthropic by default)
     anthropic_api_key: str = Field(
         default="",
         validation_alias=AliasChoices("SKILLS_ANTHROPIC_API_KEY", "ANTHROPIC_API_KEY"),
     )
+    llm_provider: str = "anthropic"
+    llm_model: str = "claude-haiku-4-5-20251001"
 
     # Dispatch
     default_top_k: int = 5

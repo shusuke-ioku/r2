@@ -105,16 +105,8 @@ def _configure_cognee(config: SkillsConfig) -> None:
     cognee.config.data_root_directory(data_dir)
     cognee.config.system_root_directory(system_dir)
 
-    # Configure LLM for cognify step (OpenAI by default for best cognee compatibility)
-    if config.openai_api_key:
-        cognee.config.set_llm_config(
-            {
-                "llm_provider": "openai",
-                "llm_model": config.llm_model,
-                "llm_api_key": config.openai_api_key,
-            }
-        )
-    elif config.anthropic_api_key:
+    # Configure LLM for cognify step (Anthropic by default — same key as RAG)
+    if config.anthropic_api_key:
         cognee.config.set_llm_config(
             {
                 "llm_provider": "anthropic",

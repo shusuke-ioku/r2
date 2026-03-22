@@ -89,7 +89,6 @@ r2 skills list
 | `RAG_S2_API_KEY` | No | Semantic Scholar higher rate limits |
 | `RAG_ZOTERO_API_KEY` | No | Zotero bibliography integration |
 | `RAG_ZOTERO_USER_ID` | No | Zotero bibliography integration |
-| `OPENAI_API_KEY` | No | Skills engine semantic dispatch (Cognee) |
 
 r2 works with zero optional keys — you get local PDF indexing and embedding search. Features unlock as you add keys.
 
