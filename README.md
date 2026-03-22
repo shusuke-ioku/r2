@@ -1,5 +1,7 @@
 # r2
 
+*Not the droid you're looking for — but it will get your paper through R&R.*
+
 AI-driven research environment for academic papers — powered by [Claude Code](https://claude.ai/claude-code).
 
 r2 gives you a complete research workflow out of the box: literature search, paper downloads, RAG-powered knowledge retrieval, multi-agent writing, formal modeling, and review — all orchestrated through Claude Code's skill and agent system.
