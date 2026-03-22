@@ -52,7 +52,7 @@ Your project now has the full r2 framework: 8 agents, 14 skills, 10 slash comman
 
 ### RAG System
 
-Full-stack literature engine: index PDFs locally, search three external databases simultaneously, download papers in one command, and combine everything for deep research queries. Retrieval modes include standard semantic search, Self-RAG (LLM-graded relevance filtering), and DeepRAG (automatic query decomposition into sub-questions).
+Full-stack literature engine: index PDFs locally, search three external databases simultaneously, download papers in one command, and combine everything for deep research queries. Retrieval modes include standard semantic search, Self-RAG (LLM-graded relevance filtering), and DeepRAG (automatic query decomposition into sub-questions). Forward and backward citation snowballing lets you iteratively expand from seed papers until convergence.
 
 ```bash
 # Index your bibliography's PDFs into a local vector store
@@ -72,6 +72,10 @@ r2 rag lit-search "authoritarian resilience" --focus top_journals
 
 # Download a paper, add to Zotero, and index — one command
 r2 rag lit-download "10.1093/example" --type doi
+
+# Forward/backward citation snowballing
+r2 rag lit-citations PAPER_ID    # who cited this paper?
+r2 rag lit-references PAPER_ID   # what did this paper cite?
 
 # Deep research: local RAG + external databases combined with synthesis
 r2 rag lit-deep-research "institutional decay mechanisms"
