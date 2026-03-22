@@ -73,7 +73,12 @@ def cli() -> None:
 @click.argument("path", default=".")
 @click.option("--defaults", is_flag=True, help="Accept all Copier defaults.")
 def init(path: str, defaults: bool) -> None:
-    """Scaffold a new research project at PATH."""
+    """Scaffold a new research project at PATH.
+
+    Safe to run on existing projects — never overwrites your files.
+    Framework files (.claude/agents, skills, commands, rules) are added;
+    existing content (paper/, analysis/, notes/) is never touched.
+    """
     from copier import run_copy
 
     template_dir = _find_template_dir()
@@ -81,27 +86,85 @@ def init(path: str, defaults: bool) -> None:
         click.echo("Error: could not locate the r2 template directory.", err=True)
         raise SystemExit(1)
 
-    # Derive a sensible default project_name from the destination path
     dest = Path(path).resolve()
     default_name = dest.name if dest.name != "." else Path.cwd().name
+    existing = dest.exists() and any(dest.iterdir())
 
-    click.echo(f"Scaffolding project at {path} ...")
+    if existing:
+        click.echo(f"Adding r2 framework to existing project at {path} ...")
+    else:
+        click.echo(f"Scaffolding project at {path} ...")
+
+    # Back up files that Copier would overwrite
+    backup_files = [".gitignore", "CLAUDE.md"]
+    backups: dict[str, bytes] = {}
+    if existing:
+        for fname in backup_files:
+            fp = dest / fname
+            if fp.exists():
+                backups[fname] = fp.read_bytes()
+
+        # Preserve everything in .claude/ that isn't part of the template
+        claude_dir = dest / ".claude"
+        if claude_dir.exists():
+            import shutil
+            backup_claude = dest / ".claude-backup-r2-init"
+            if backup_claude.exists():
+                shutil.rmtree(backup_claude)
+            shutil.copytree(claude_dir, backup_claude)
+
     try:
         run_copy(
             str(template_dir),
             str(dest),
             defaults=defaults,
             data={"project_name": default_name} if defaults else None,
-            unsafe=True,  # allow local template path
+            unsafe=True,
+            overwrite=True,  # Copier needs this to write into existing dirs
         )
+    except Exception as e:
+        click.echo(f"Error: {e}", err=True)
+        raise SystemExit(1)
+
+    # Restore backed-up files (user's originals take priority)
+    restored = []
+    for fname, content in backups.items():
+        fp = dest / fname
+        fp.write_bytes(content)
+        restored.append(fname)
+
+    # Merge back non-template files from .claude/ backup
+    if existing:
+        backup_claude = dest / ".claude-backup-r2-init"
+        if backup_claude.exists():
+            import shutil
+            # Restore files that the template doesn't provide
+            # (e.g., settings.local.json, user's custom files)
+            _template_claude = template_dir / ".claude"
+            for item in backup_claude.rglob("*"):
+                if item.is_file():
+                    rel = item.relative_to(backup_claude)
+                    template_equiv = _template_claude / rel
+                    dest_file = dest / ".claude" / rel
+                    if not template_equiv.exists():
+                        # Not a template file — restore the user's version
+                        dest_file.parent.mkdir(parents=True, exist_ok=True)
+                        shutil.copy2(item, dest_file)
+                        restored.append(f".claude/{rel}")
+            shutil.rmtree(backup_claude)
+
+    if existing:
+        click.echo(f"\nr2 framework added to {dest}/")
+        if restored:
+            click.echo(f"Preserved existing files: {', '.join(restored)}")
+        click.echo("Next steps:")
+        click.echo("  cp .env.example .env   # add your API keys")
+    else:
         click.echo(f"\nProject created at {dest}/")
         click.echo("Next steps:")
         click.echo(f"  cd {dest}")
         click.echo("  cp .env.example .env   # add your API keys")
         click.echo("  git init && git add -A && git commit -m 'Initial scaffold'")
-    except Exception as e:
-        click.echo(f"Error: {e}", err=True)
-        raise SystemExit(1)
 
 
 # ---------------------------------------------------------------------------

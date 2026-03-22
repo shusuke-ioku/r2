@@ -104,6 +104,48 @@ r2 update
 
 `r2 update` uses [Copier](https://copier.readthedocs.io/) to merge upstream changes with your local edits. It will never touch your content (analysis, paper, notes).
 
+## Adding r2 to an Existing Project
+
+If you already have a research project with paper, data, and analysis scripts, you can add r2 on top.
+
+**Important:** Before proceeding, make a backup copy of your project folder (e.g., `cp -r my-project/ my-project-backup/`). The restructuring only renames and moves files — it never deletes — but a backup ensures you can always recover if anything goes wrong.
+
+Open Claude Code in your project and paste this prompt:
+
+> Prepare this project for r2. The r2 framework expects this layout:
+>
+> ```
+> project-root/
+> ├── paper/paper.typ (or paper.tex)   # manuscript
+> ├── ref.bib                          # bibliography (project root)
+> ├── analysis/scripts/                # R scripts (00_setup.R, 20_data.R, 30_*.R, etc.)
+> ├── analysis/data/                   # datasets
+> ├── analysis/output/results/         # generated result summaries
+> ├── analysis/output/figures/         # generated plots
+> ├── paper/notes/lit/                 # literature review notes
+> └── .here                            # project root marker
+> ```
+>
+> Audit the current project structure and make it r2-compatible:
+>
+> 1. **Manuscript**: If the main .typ/.tex file isn't named `paper.typ`/`paper.tex`, rename it to `paper.typ` (or `paper.tex`) so r2 agents can find it. Update any internal references (e.g., `#import` or `\input` paths). Do NOT delete the old file — rename it.
+> 2. **Bibliography**: If `ref.bib` is inside `paper/`, move it to the project root. Update the bibliography path in the manuscript.
+> 3. **Analysis**: If R scripts or data aren't under `analysis/`, move them. Create `analysis/output/results/` and `analysis/output/figures/` if they don't exist.
+> 4. **Literature notes**: Create `paper/notes/lit/` if it doesn't exist.
+> 5. **Root marker**: Create `.here` if it doesn't exist.
+> 6. **Never delete** any data files, scripts, source documents, PDFs, or analysis outputs. Only rename and move.
+>
+> After restructuring, report what you changed. Then I'll run `r2 init . --defaults`.
+
+After Claude restructures the project, run:
+
+```bash
+r2 init . --defaults
+cp .env.example .env  # add your API keys
+```
+
+`r2 init` only writes framework files (`.claude/agents/`, `.claude/skills/`, `.claude/commands/`, `.claude/rules/`, `CLAUDE.md`, `.env.example`). It never touches your paper, data, or scripts.
+
 ## Project Structure After `r2 init`
 
 ```
