@@ -47,8 +47,8 @@ all = [
 r2 = "r2.cli:cli"
 
 [project.urls]
-Homepage = "https://github.com/shusukeioku/r2"
-Repository = "https://github.com/shusukeioku/r2"
+Homepage = "https://github.com/shusuke-ioku/r2"
+Repository = "https://github.com/shusuke-ioku/r2"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/r2"]
