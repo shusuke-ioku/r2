@@ -60,7 +60,7 @@ r2 integrates with Zotero at two levels:
 
 **Cloud API** (pyzotero) — when you download a paper with `r2 rag lit-download`, r2 automatically creates a Zotero item with full metadata (resolved via CrossRef) and attaches the PDF if obtainable. This means every paper you acquire through r2 appears in your Zotero library with correct bibliographic data. Set `RAG_ZOTERO_API_KEY` and `RAG_ZOTERO_USER_ID` in `.env` to enable.
 
-**Local API** (Zotero desktop) — if Zotero is running with the MCP plugin, r2 can search your library, read PDF content, and retrieve your highlights and annotations directly. This gives Claude access to everything in your Zotero library without exporting anything.
+**Local API** (Zotero desktop) — if Zotero desktop is running, r2 can search your library, read PDF content, and retrieve your highlights and annotations directly. This gives Claude access to everything in your Zotero library without exporting anything.
 
 ```bash
 # Download a paper: PDF saved + Zotero item created + indexed into RAG
