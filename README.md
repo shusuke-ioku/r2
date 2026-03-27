@@ -84,19 +84,21 @@ python .claude/scripts/zotero_cli.py pdf-content ITEM_KEY
 python .claude/scripts/zotero_cli.py search-annotations "key finding"
 ```
 
+## Literature Surveys
+
+The `deep-research` skill runs systematic, iterative literature surveys. It searches your local Zotero library (full-text via RAG) and three external databases (Semantic Scholar, OpenAlex, Scopus), then enters a discovery loop: search, snowball citations in both directions, triage candidates by priority, download and index HIGH-priority papers, read them in full text, and check whether reading surfaced new leads. The loop repeats until no new high-priority papers emerge — typically 2-4 iterations. Only then does it write the report, organized thematically with synthesis across sources.
+
+The orchestrator runs the loop in the main conversation, launching focused subagents for each step (search, acquire, read) and reporting progress between steps — so you see the candidate list grow in real time rather than waiting for a single monolithic agent to finish.
+
+```
+> /survey "economic shocks and political extremism"
+> "survey the literature on democratic backsliding"
+> "what does the field say about civil society and authoritarianism"
+```
+
 ## Simulated Peer Review
 
-r2 simulates the full editorial review process at a top journal. An editor agent reads your paper, instantiates three independent reviewer subagents tailored to your paper's specific field, method, and case, then collects their reports and renders a consolidated decision.
-
-**Three reviewers, three perspectives:**
-
-| Reviewer | Focus |
-|----------|-------|
-| Literature Scholar | Novelty, theoretical contribution, literature engagement |
-| Methodologist | Identification strategy, inference, data quality, robustness |
-| Case/Domain Expert | Empirical accuracy, source quality, contextual validity |
-
-Each reviewer operates independently (no cross-contamination), writes a structured report with severity-graded objections (fatal / serious / minor), and grounds criticisms in published work via RAG. The editor then synthesizes all three into a single report with NVI assessment (Novelty, Validity, Importance), calibrated publication prospects at named venues, and a ranked revision roadmap.
+An editor agent dispatches three independent reviewer subagents — a literature scholar, a methodologist, and a case/domain expert — each tailored to the paper's specific field, method, and empirical context. Reviewers operate independently, write severity-graded reports (fatal / serious / minor), and ground criticisms in published work via RAG. The editor synthesizes all three into a consolidated report with NVI assessment (Novelty, Validity, Importance), calibrated publication prospects at named venues, and a ranked revision roadmap.
 
 ```
 > /review-section              # review the full paper or a section
