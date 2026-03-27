@@ -86,9 +86,17 @@ python .claude/scripts/zotero_cli.py search-annotations "key finding"
 
 ## Literature Surveys
 
-The `deep-research` skill runs systematic, iterative literature surveys. It searches your local Zotero library (full-text via RAG) and three external databases (Semantic Scholar, OpenAlex, Scopus), then enters a discovery loop: search, snowball citations in both directions, triage candidates by priority, download and index HIGH-priority papers, read them in full text, and check whether reading surfaced new leads. The loop repeats until no new high-priority papers emerge — typically 2-4 iterations. Only then does it write the report, organized thematically with synthesis across sources.
+The `deep-research` skill runs systematic literature surveys built around an iterative discovery loop:
 
-The orchestrator runs the loop in the main conversation, launching focused subagents for each step (search, acquire, read) and reporting progress between steps — so you see the candidate list grow in real time rather than waiting for a single monolithic agent to finish.
+1. **Search** your local Zotero library (full-text via RAG) and three external databases (Semantic Scholar, OpenAlex, Scopus) with varied queries
+2. **Snowball** forward and backward citations from every high-priority paper found
+3. **Triage** candidates by relevance, download and index the high-priority ones
+4. **Read** acquired papers in full text — not abstracts
+5. **Check convergence**: did reading surface new leads? If yes, loop back to step 1 with the new leads. If no, the frontier has closed — proceed to synthesis.
+
+The loop typically runs 2-4 iterations before converging. The final report is written only after convergence, organized thematically with synthesis across sources — not paper-by-paper summaries.
+
+Progress is visible throughout: the orchestrator runs the loop in the main conversation, launching focused subagents for each step and reporting the growing candidate list between steps.
 
 ```
 > /survey "economic shocks and political extremism"
