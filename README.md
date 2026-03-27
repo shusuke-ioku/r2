@@ -59,9 +59,35 @@ If your project doesn't have `/update-r2` yet, tell Claude:
 
 > Update the r2 framework files from https://github.com/shusuke-ioku/r2/tree/main/src/r2/template — preserve my local changes.
 
+**14 skills** route tasks to the right agent automatically:
+
+| Skill | What it does |
+|-------|-------------|
+| `writing` | Academic prose, equations, tables, captions |
+| `analysis` | R pipeline, debugging, result alignment |
+| `review` | Stress-testing arguments and claims |
+| `deep-research` | Multi-database literature surveys with snowballing |
+| `reading` | Critical evaluation of individual papers |
+| `formal-modeling` | Game-theoretic models, proofs, propositions |
+| `source-acquisition` | Download, Zotero, and RAG indexing in one step |
+| `verification` | Prove correctness before reporting "done" |
+| `debugging` | Autonomous error diagnosis and self-correction |
+| `proofreading` | First-time reader simulation for flow diagnosis |
+| `slides` | Presentation slides synced with manuscript |
+| `parallel-dispatch` | Run independent tasks concurrently |
+| `portfolio-sync` | Sync title/abstract to a GitHub Pages site |
+| `skill-creation` | Create, evaluate, and optimize custom skills |
+
 ## API Keys
 
 Only `ANTHROPIC_API_KEY` is required. Optional keys unlock external database search (Scopus, Semantic Scholar) and Zotero integration. See `.env.example` for the full list.
+
+## Update History
+
+| Date | Change |
+|------|--------|
+| 2026-03-27 | Drop copier; add `/update-r2` slash command; add humanizer skill; expand review skill with editor-report template and reviewer profiles; update agents and skills |
+| 2026-03-22 | Initial release — 8 agents, 14 skills, 10 slash commands, RAG with three external databases, citation snowballing |
 
 ## License
 
