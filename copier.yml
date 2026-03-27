@@ -1,0 +1,4 @@
+# Root-level copier config — redirects to the template subdirectory.
+# This file must live at the repo root so that `copier copy <git-url> dest`
+# and `copier update` can locate the template automatically.
+_subdirectory: "src/r2/template"

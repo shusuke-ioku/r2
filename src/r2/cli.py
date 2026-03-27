@@ -3,13 +3,21 @@
 from __future__ import annotations
 
 import importlib
-import subprocess
 import sys
 from pathlib import Path
 
 import click
 
 from r2 import __version__
+
+
+# ---------------------------------------------------------------------------
+# Constants
+# ---------------------------------------------------------------------------
+
+_GITHUB_REPO = "https://github.com/shusuke-ioku/r2.git"
+# _subdirectory is declared in the repo-root copier.yml, so copier
+# handles it automatically when cloning from the git URL.
 
 
 # ---------------------------------------------------------------------------
@@ -55,6 +63,113 @@ def _find_template_dir() -> Path | None:
     return None
 
 
+def _resolve_template_source() -> str:
+    """Return the best available template source.
+
+    Prefers the GitHub repo (enables copier version tracking and ``r2 update``).
+    Falls back to the bundled template directory when offline or repo is
+    unreachable.
+    """
+    import subprocess
+
+    try:
+        subprocess.run(
+            ["git", "ls-remote", _GITHUB_REPO, "HEAD"],
+            capture_output=True, timeout=10, check=True,
+        )
+        return _GITHUB_REPO
+    except Exception:
+        local = _find_template_dir()
+        if local is not None:
+            return str(local)
+        raise click.ClickException(
+            "Cannot reach the r2 GitHub repo and no bundled template found."
+        )
+
+
+def _run_init(dest: Path, *, defaults: bool, data: dict | None = None) -> None:
+    """Core init logic shared by ``r2 init`` and the ``r2 update`` fallback."""
+    import shutil
+
+    from copier import run_copy
+
+    existing = dest.exists() and any(dest.iterdir())
+
+    # --- back up user files ---
+    backup_files = [".gitignore", "CLAUDE.md"]
+    backups: dict[str, bytes] = {}
+    if existing:
+        for fname in backup_files:
+            fp = dest / fname
+            if fp.exists():
+                backups[fname] = fp.read_bytes()
+
+        claude_dir = dest / ".claude"
+        if claude_dir.exists():
+            backup_claude = dest / ".claude-backup-r2-init"
+            if backup_claude.exists():
+                shutil.rmtree(backup_claude)
+            shutil.copytree(claude_dir, backup_claude)
+
+    # --- resolve template source ---
+    src = _resolve_template_source()
+    is_git = src.startswith("https://") or src.startswith("git@")
+    copy_kwargs: dict = dict(
+        defaults=defaults,
+        data=data,
+        unsafe=True,
+        overwrite=True,
+    )
+    if is_git:
+        copy_kwargs["vcs_ref"] = "HEAD"
+
+    try:
+        run_copy(src, str(dest), **copy_kwargs)
+    except Exception as e:
+        # If git source failed, retry with bundled template
+        if is_git:
+            local = _find_template_dir()
+            if local is not None:
+                click.echo("Git source failed, using bundled template ...")
+                copy_kwargs.pop("vcs_ref", None)
+                run_copy(str(local), str(dest), **copy_kwargs)
+            else:
+                raise click.ClickException(f"Template copy failed: {e}")
+        else:
+            raise click.ClickException(f"Template copy failed: {e}")
+
+    # --- clean up empty Jinja outputs ---
+    for candidate in [dest / "paper" / "paper.typ", dest / "talk" / "slides.typ"]:
+        if candidate.exists() and candidate.stat().st_size == 0:
+            candidate.unlink()
+            if candidate.parent.exists() and not any(candidate.parent.iterdir()):
+                candidate.parent.rmdir()
+
+    # --- restore user files ---
+    restored: list[str] = []
+    for fname, content in backups.items():
+        (dest / fname).write_bytes(content)
+        restored.append(fname)
+
+    if existing:
+        backup_claude = dest / ".claude-backup-r2-init"
+        if backup_claude.exists():
+            template_dir = _find_template_dir()
+            _template_claude = template_dir / ".claude" if template_dir else None
+            for item in backup_claude.rglob("*"):
+                if item.is_file():
+                    rel = item.relative_to(backup_claude)
+                    dest_file = dest / ".claude" / rel
+                    # Restore files not provided by the template
+                    if _template_claude is None or not (_template_claude / rel).exists():
+                        dest_file.parent.mkdir(parents=True, exist_ok=True)
+                        shutil.copy2(item, dest_file)
+                        restored.append(f".claude/{rel}")
+            shutil.rmtree(backup_claude)
+
+    return restored
+
+
 # ---------------------------------------------------------------------------
 # Main CLI group
 # ---------------------------------------------------------------------------
@@ -79,13 +194,6 @@ def init(path: str, defaults: bool) -> None:
     Framework files (.claude/agents, skills, commands, rules) are added;
     existing content (paper/, analysis/, notes/) is never touched.
     """
-    from copier import run_copy
-
-    template_dir = _find_template_dir()
-    if template_dir is None:
-        click.echo("Error: could not locate the r2 template directory.", err=True)
-        raise SystemExit(1)
-
     dest = Path(path).resolve()
     default_name = dest.name if dest.name != "." else Path.cwd().name
     existing = dest.exists() and any(dest.iterdir())
@@ -95,71 +203,11 @@ def init(path: str, defaults: bool) -> None:
     else:
         click.echo(f"Scaffolding project at {path} ...")
 
-    # Back up files that Copier would overwrite
-    backup_files = [".gitignore", "CLAUDE.md"]
-    backups: dict[str, bytes] = {}
-    if existing:
-        for fname in backup_files:
-            fp = dest / fname
-            if fp.exists():
-                backups[fname] = fp.read_bytes()
-
-        # Preserve everything in .claude/ that isn't part of the template
-        claude_dir = dest / ".claude"
-        if claude_dir.exists():
-            import shutil
-            backup_claude = dest / ".claude-backup-r2-init"
-            if backup_claude.exists():
-                shutil.rmtree(backup_claude)
-            shutil.copytree(claude_dir, backup_claude)
-
-    try:
-        run_copy(
-            str(template_dir),
-            str(dest),
-            defaults=defaults,
-            data={"project_name": default_name} if defaults else None,
-            unsafe=True,
-            overwrite=True,  # Copier needs this to write into existing dirs
-        )
-    except Exception as e:
-        click.echo(f"Error: {e}", err=True)
-        raise SystemExit(1)
-
-    # Remove empty files produced by Jinja conditionals that rendered to nothing
-    for candidate in [dest / "paper" / "paper.typ", dest / "talk" / "slides.typ"]:
-        if candidate.exists() and candidate.stat().st_size == 0:
-            candidate.unlink()
-            # Remove empty parent dir too
-            if candidate.parent.exists() and not any(candidate.parent.iterdir()):
-                candidate.parent.rmdir()
-
-    # Restore backed-up files (user's originals take priority)
-    restored = []
-    for fname, content in backups.items():
-        fp = dest / fname
-        fp.write_bytes(content)
-        restored.append(fname)
-
-    # Merge back non-template files from .claude/ backup
-    if existing:
-        backup_claude = dest / ".claude-backup-r2-init"
-        if backup_claude.exists():
-            import shutil
-            # Restore files that the template doesn't provide
-            # (e.g., settings.local.json, user's custom files)
-            _template_claude = template_dir / ".claude"
-            for item in backup_claude.rglob("*"):
-                if item.is_file():
-                    rel = item.relative_to(backup_claude)
-                    template_equiv = _template_claude / rel
-                    dest_file = dest / ".claude" / rel
-                    if not template_equiv.exists():
-                        # Not a template file — restore the user's version
-                        dest_file.parent.mkdir(parents=True, exist_ok=True)
-                        shutil.copy2(item, dest_file)
-                        restored.append(f".claude/{rel}")
-            shutil.rmtree(backup_claude)
+    restored = _run_init(
+        dest,
+        defaults=defaults,
+        data={"project_name": default_name} if defaults else None,
+    )
 
     if existing:
         click.echo(f"\nr2 framework added to {dest}/")
@@ -184,15 +232,37 @@ def init(path: str, defaults: bool) -> None:
 def update(defaults: bool) -> None:
     """Update framework files from the latest r2 template.
 
-    Merges upstream changes with local edits. Requires a git repo with clean tree.
+    If the project has a .copier-answers.yml (created by ``r2 init``),
+    copier performs a three-way merge of upstream changes with your local
+    edits. Otherwise falls back to a fresh ``r2 init .`` (safe — existing
+    content is preserved).
     """
-    cmd = ["copier", "update"]
-    if defaults:
-        cmd.append("--defaults")
+    dest = Path.cwd().resolve()
+    answers_file = dest / ".copier-answers.yml"
 
-    click.echo("Updating framework files ...")
-    result = subprocess.run(cmd)
-    raise SystemExit(result.returncode)
+    if answers_file.exists():
+        from copier import run_update as _run_update
+
+        click.echo("Updating framework files (three-way merge) ...")
+        try:
+            _run_update(
+                str(dest),
+                defaults=defaults,
+                unsafe=True,
+                overwrite=True,
+            )
+        except Exception as e:
+            click.echo(f"Error during copier update: {e}", err=True)
+            click.echo("Falling back to r2 init . ...")
+            _run_init(dest, defaults=True)
+    else:
+        click.echo(
+            "No .copier-answers.yml found — running r2 init . to apply latest "
+            "template (safe: existing content is preserved)."
+        )
+        _run_init(dest, defaults=True)
+
+    click.echo("Update complete.")
 
 
 # ---------------------------------------------------------------------------
