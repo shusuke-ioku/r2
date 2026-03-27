@@ -2,7 +2,7 @@
 
 *Not the droid you're looking for — but it will get your paper through R&R.*
 
-An AI-powered research environment for academic papers, built on [Claude Code](https://claude.ai/claude-code). You talk to Claude; r2 routes your request to the right specialized agent.
+An AI-powered research environment for political science papers, built on [Claude Code](https://claude.ai/claude-code). You talk to Claude; r2 routes your request to the right specialized agent.
 
 ## Install
 
