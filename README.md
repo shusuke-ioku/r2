@@ -196,6 +196,13 @@ my-paper/
     └── directory-structure.md
 ```
 
+## Update History
+
+| Date | Change |
+|------|--------|
+| 2026-03-27 | Add humanizer skill; expand review skill with editor-report template and reviewer profiles; update agents (reviewer, researcher, slides-writer, source-acquirer, manuscript-writer), commands (acquire, review-section), and skills (deep-research, proofreading, source-acquisition, writing) |
+| 2026-03-22 | Initial release v0.1.0 — 8 agents, 14 skills, 10 slash commands, RAG with three external databases, citation snowballing, Skills Engine with Anthropic embeddings, Copier-based project scaffolding and updates |
+
 ## License
 
 MIT
