@@ -96,6 +96,25 @@ Each reviewer operates independently (no cross-contamination), writes a structur
 > "what would reviewers say"   # triggers automatically
 ```
 
+## Skill Maintenance
+
+Skills are not static instructions — they can be created, tested, and iteratively improved. The `skill-creation` skill handles the full lifecycle:
+
+1. **Create**: Draft a SKILL.md from a description of what you want Claude to do, with bundled scripts and reference docs as needed
+2. **Test**: Generate realistic test prompts, run them with and without the skill (in parallel via subagents), and compare outputs side by side in a browser-based viewer
+3. **Evaluate**: Grade outputs against assertions (automated where possible, human judgment where not), aggregate into benchmarks with pass rates and timing data
+4. **Improve**: Read user feedback, revise the skill, rerun — repeat until satisfied
+5. **Optimize triggering**: Generate edge-case eval queries (should-trigger and should-not-trigger), then run an automated optimization loop that rewrites the skill's description for better dispatch accuracy
+
+The Skills Engine CLI (`r2 skills`) adds a semantic layer on top: search skills by natural language, get ranked dispatch recommendations with confidence scores, and track usage patterns over time.
+
+```bash
+r2 skills dispatch "rewrite the theory section"   # which skill handles this?
+r2 skills list                                      # all registered skills
+r2 skills search "literature"                       # semantic search
+r2 skills usage --skill writing                     # usage history
+```
+
 ## Updating
 
 Run `/update-r2` inside Claude Code. Claude fetches the latest template from GitHub, diffs each file, and merges changes — preserving your customizations.
