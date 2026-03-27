@@ -1,6 +1,6 @@
 # Citation Rules
 
-- **Zotero only:** Use `.claude/scripts/zotero_add.py` for missing/broken citations (Zotero API + BBT auto-export). Never edit `ref.bib` directly.
+- **Zotero always:** Use `.claude/scripts/zotero_add.py` for missing/broken citations (Zotero API + BBT auto-export). Never edit `ref.bib` directly.
 - **Cite only what you have read:** Read the source (at minimum its abstract) via RAG or PDF before citing. Never cite from title alone.
 - **Never self-cite:** Never use the user's own paper as a source for any argument. The lit review surveys external literature only.
 - **Literature context:** Always consult `paper/notes/lit/` before writing prose that engages the literature. Start with `00_overview.md`.
