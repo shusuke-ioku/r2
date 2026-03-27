@@ -54,6 +54,48 @@ r2 rag lit-search "exit voice" --focus top_journals  # search external DBs
 r2 rag lit-download "10.1093/example"      # download + Zotero + index
 ```
 
+## Zotero Integration
+
+r2 integrates with Zotero at two levels:
+
+**Cloud API** (pyzotero) — when you download a paper with `r2 rag lit-download`, r2 automatically creates a Zotero item with full metadata (resolved via CrossRef) and attaches the PDF. This means every paper you acquire through r2 appears in your Zotero library with correct bibliographic data. Set `RAG_ZOTERO_API_KEY` and `RAG_ZOTERO_USER_ID` in `.env` to enable.
+
+**Local API** (Zotero desktop) — if Zotero is running with the MCP plugin, r2 can search your library, read PDF content, and retrieve your highlights and annotations directly. This gives Claude access to everything in your Zotero library without exporting anything.
+
+```bash
+# Download a paper: PDF saved + Zotero item created + indexed into RAG
+r2 rag lit-download "10.1093/example"
+
+# Search your Zotero library (requires Zotero desktop running)
+python .claude/scripts/zotero_cli.py search "democratic backsliding"
+
+# Read PDF content from a Zotero item
+python .claude/scripts/zotero_cli.py pdf-content ITEM_KEY
+
+# Search your highlights and annotations
+python .claude/scripts/zotero_cli.py search-annotations "key finding"
+```
+
+## Simulated Peer Review
+
+r2 simulates the full editorial review process at a top journal. An editor agent reads your paper, instantiates three independent reviewer subagents tailored to your paper's specific field, method, and case, then collects their reports and renders a consolidated decision.
+
+**Three reviewers, three perspectives:**
+
+| Reviewer | Focus |
+|----------|-------|
+| Literature Scholar | Novelty, theoretical contribution, literature engagement |
+| Methodologist | Identification strategy, inference, data quality, robustness |
+| Case/Domain Expert | Empirical accuracy, source quality, contextual validity |
+
+Each reviewer operates independently (no cross-contamination), writes a structured report with severity-graded objections (fatal / serious / minor), and grounds criticisms in published work via RAG. The editor then synthesizes all three into a single report with NVI assessment (Novelty, Validity, Importance), calibrated publication prospects at named venues, and a ranked revision roadmap.
+
+```
+> /review-section              # review the full paper or a section
+> "stress-test my argument"    # triggers automatically
+> "what would reviewers say"   # triggers automatically
+```
+
 ## Updating
 
 Run `/update-r2` inside Claude Code. Claude fetches the latest template from GitHub, diffs each file, and merges changes — preserving your customizations.
