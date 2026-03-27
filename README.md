@@ -48,16 +48,17 @@ r2 rag lit-download "10.1093/example"      # download + Zotero + index
 
 ## Updating
 
-```bash
-# Update the r2 CLI
-pip install --upgrade "r2-research @ git+https://github.com/shusuke-ioku/r2.git"
-```
-
-To update framework files (agents, skills, commands) in your project, run `/update-r2` inside Claude Code. Claude fetches the latest template, diffs each file against your local version, and merges changes — preserving your customizations.
+Run `/update-r2` inside Claude Code. Claude fetches the latest template from GitHub, diffs each file against your local version, and merges changes — preserving your customizations.
 
 If your project doesn't have `/update-r2` yet, tell Claude:
 
 > Update the r2 framework files from https://github.com/shusuke-ioku/r2/tree/main/src/r2/template — preserve my local changes.
+
+To update the r2 CLI itself:
+
+```bash
+pip install --upgrade "r2-research @ git+https://github.com/shusuke-ioku/r2.git"
+```
 
 **14 skills** route tasks to the right agent automatically:
 
