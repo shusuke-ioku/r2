@@ -127,15 +127,37 @@ r2 works with zero optional keys — you get local PDF indexing and embedding se
 
 ## Updating
 
-```bash
-# Update the Python package
-pip install --upgrade "r2-research @ git+https://github.com/shusuke-ioku/r2.git"
+r2 has two components: the **Python package** (CLI + RAG engine) and the **framework files** (agents, skills, commands, rules that live in your project's `.claude/` directory). They update separately.
 
-# Update framework files (skills, agents, commands, rules) in your project
-r2 update
+### Update the Python package
+
+```bash
+pip install --upgrade "r2-research @ git+https://github.com/shusuke-ioku/r2.git"
 ```
 
-`r2 update` uses [Copier](https://copier.readthedocs.io/) to merge upstream changes with your local edits. It will never touch your content (analysis, paper, notes).
+This updates the `r2` CLI, RAG engine, and skills engine. It does not touch your project files.
+
+### Update framework files
+
+Inside Claude Code, run:
+
+```
+/update-r2
+```
+
+This slash command tells Claude to:
+
+1. Clone the latest r2 template from GitHub
+2. Diff each framework file against your local version
+3. Auto-apply upstream changes to files you haven't modified
+4. For files you *have* customized, show the diff and merge intelligently — preserving your edits while incorporating upstream improvements
+5. Never touch user content (`paper.typ`, `ref.bib`, analysis scripts, data)
+
+Because Claude handles the merge (not a script), it understands context: if you renamed a variable in a skill definition and upstream restructured the same skill, Claude merges both changes correctly instead of producing conflict markers.
+
+**First time updating an older project?** If your project doesn't have the `/update-r2` command yet, just tell Claude:
+
+> Update the r2 framework files in this project from https://github.com/shusuke-ioku/r2/tree/main/src/r2/template — diff each file, preserve my local changes, and apply upstream updates.
 
 ## Adding r2 to an Existing Project
 
@@ -186,7 +208,7 @@ my-paper/
 ├── CLAUDE.md              # Project rules and skill dispatch
 ├── .env.example           # API key template
 ├── .here                  # Project root marker
-├── .copier-answers.yml    # Template config (for r2 update)
+├── .env                   # API keys (created from .env.example)
 └── .claude/
     ├── agents/            # 8 agent definitions
     ├── skills/            # 14 skill definitions
@@ -200,8 +222,8 @@ my-paper/
 
 | Date | Change |
 |------|--------|
-| 2026-03-27 | Add humanizer skill; expand review skill with editor-report template and reviewer profiles; update agents (reviewer, researcher, slides-writer, source-acquirer, manuscript-writer), commands (acquire, review-section), and skills (deep-research, proofreading, source-acquisition, writing) |
-| 2026-03-22 | Initial release v0.1.0 — 8 agents, 14 skills, 10 slash commands, RAG with three external databases, citation snowballing, Skills Engine with Anthropic embeddings, Copier-based project scaffolding and updates |
+| 2026-03-27 | Drop copier dependency; replace `r2 update` with `/update-r2` slash command (Claude-driven merge); add humanizer skill; expand review skill with editor-report template and reviewer profiles; update agents and skills |
+| 2026-03-22 | Initial release v0.1.0 — 8 agents, 14 skills, 10 slash commands, RAG with three external databases, citation snowballing, Skills Engine with Anthropic embeddings |
 
 ## License
 
