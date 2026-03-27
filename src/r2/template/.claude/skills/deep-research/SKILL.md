@@ -164,13 +164,13 @@ tier succeeded.
 
 ```bash
 # Find DOI
-PYTHONPATH=.claude .venv/bin/python -m rag lit-search "PAPER TITLE" --focus broad -n 5
+r2 rag lit-search "PAPER TITLE" --focus broad -n 5
 
 # Tier 1: Sci-Hub
-PYTHONPATH=.claude .venv/bin/python -m rag lit-download "10.xxxx/yyyy" --type doi --title "Paper Title"
+r2 rag lit-download "10.xxxx/yyyy" --type doi --title "Paper Title"
 
 # Tier 1 batch (3+ papers):
-PYTHONPATH=.claude .venv/bin/python -m rag lit-download-batch \
+r2 rag lit-download-batch \
   '[{"id": "10.xxxx/yyyy", "title": "Paper A"}]' --auto-index
 
 # Tier 2 (if Sci-Hub fails): Web search for open-access PDF
@@ -190,7 +190,7 @@ For every HIGH-priority paper (pre-existing or newly acquired), do a
 targeted full-text read:
 
 ```bash
-PYTHONPATH=.claude .venv/bin/python -m rag query "TARGETED QUESTION" --citekey dir__FILENAME
+r2 rag query "TARGETED QUESTION" --citekey dir__FILENAME
 ```
 
 Use query variations tailored to what each paper contributes. Record

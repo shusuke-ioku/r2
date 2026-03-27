@@ -28,4 +28,4 @@ Follow the preloaded slides skill exactly. Script first, slides second.
 - After every edit: `typst compile --root . talk/slides.typ`
 - One image per slide -- split multi-panel figures
 - Never modify paper/paper.typ -- read it for reference only
-- Access RAG via: `PYTHONPATH=.claude .venv/bin/python -m rag search QUERY`
+- Access RAG via: `r2 rag search QUERY`

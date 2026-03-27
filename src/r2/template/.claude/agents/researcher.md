@@ -28,7 +28,7 @@ Do not just list papers to add -- actually download them.
 ## RAG CLI
 Access the local RAG system via Bash:
 ```bash
-PYTHONPATH=.claude .venv/bin/python -m rag <command>
+r2 rag <command>
 ```
 Key commands: `search`, `query`, `deep-query`, `lit-search`, `lit-deep-research`, `lit-download`, `lit-download-batch`, `lit-citations`, `lit-references`, `lit-paper`, `lit-save-report`, `index`, `stats`.
 
@@ -38,6 +38,6 @@ Key commands: `search`, `query`, `deep-query`, `lit-search`, `lit-deep-research`
 - Every survey must identify AND ACQUIRE high-priority papers
 - Always add acquired papers to Zotero (mandatory -- ensures ref.bib inclusion)
 - Use `lit-download` for single papers, `lit-download-batch --auto-index` for 3+
-- Save reports via `PYTHONPATH=.claude .venv/bin/python -m rag lit-save-report`
+- Save reports via `r2 rag lit-save-report`
 - Never cite a paper you haven't read at least the abstract of
 - After acquiring, verify each paper is searchable in RAG

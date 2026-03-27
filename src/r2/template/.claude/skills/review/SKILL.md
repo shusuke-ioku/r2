@@ -1,98 +1,123 @@
 ---
 name: review
 description: >
-  Maximally skeptical yet constructive review of a paper, draft, section, or argument.
-  Trigger this skill when the user asks to stress-test, review with rigor, prepare for
-  hostile peer review, evaluate an argument, or any variant of: "will reviewers object
-  to this", "is my identification strategy solid", "stress-test this section", "what are
-  the weaknesses", "prepare me for R&R", "play devil's advocate", "what would Reviewer 2
-  say", "is this claim defensible", "check my logic", "is this convincing", "poke holes
-  in this", "what am I missing". Also trigger when the user is about to incorporate a
-  new argument or citation and wants to vet it first. When in doubt, trigger---a false
-  positive costs nothing, a missed weakness costs a rejection.
+  Simulated journal review process. An editor agent launches three independent
+  reviewer subagents (literature scholar, methodologist, case/domain expert),
+  collects their reports, and writes a consolidated editorial decision with
+  honest publication prospects. Trigger on: "review the paper", "stress-test",
+  "prepare for submission", "what would reviewers say", "is this publishable",
+  "hostile peer review", "R&R prep", "poke holes", "what am I missing",
+  "check my argument", "will this get accepted". When in doubt, trigger.
 ---
 
-# Skeptrustive Reviewer
+# Journal Review Simulation
 
-Stress-test and rebuild stronger. Every claim gets challenged; every challenge comes with a way forward.
+Simulate the full editorial review process at a top journal in the paper's discipline. The editor dispatches three independent reviewers, collects their reports, and renders a decision.
 
-## Why This Approach Works
+## Architecture
 
-A review that only attacks is demoralizing and unhelpful. A review that only praises is useless. The skeptrustive method forces you to find the real vulnerabilities---the ones a hostile reviewer will find---and pair each one with a concrete repair. The author walks away knowing exactly what to fix and how.
+```
+Editor (top journal editor in the paper's field)
+  ├── Reviewer 1: Literature Scholar
+  │     Focus: theory, contribution, literature engagement, framing, novelty
+  ├── Reviewer 2: Methodologist
+  │     Focus: identification, inference, data quality, robustness, measurement
+  └── Reviewer 3: Case/Domain Expert
+        Focus: empirical accuracy, domain knowledge, sources, interpretive validity
+```
 
-## Core Principles
+## Execution Flow
+
+### Phase 1: Editor Reads the Target
+
+The editor reads the target (full paper or specific section) to understand:
+1. The paper's **discipline and subfield** (to calibrate venue tiers and reviewer expertise)
+2. The **key claims, methods, and contributions**
+3. The **case, context, or empirical domain**
+
+This information is used to **instantiate the three reviewer profiles** from `references/reviewer-profiles.md`. Each reviewer's expertise is tailored to the specific paper being reviewed — the Literature Scholar becomes an expert in the paper's subfield, the Methodologist specializes in the paper's methods, and the Domain Expert knows the paper's case.
+
+### Phase 2: Dispatch Three Reviewers (Parallel)
+
+Launch all three reviewers as **parallel subagents**. Each reviewer:
+
+1. **Reads the target** section/paper
+2. **Searches literature** via RAG for grounding (if RAG tools are available)
+3. **Reviews from their perspective** using the instantiated profile from `references/reviewer-profiles.md`
+4. **Outputs a structured review** following `references/review-template.md`
+5. **Uses the threat taxonomy** in `references/threat-taxonomy.md` to classify objections
+
+Each reviewer operates independently. They do not see each other's reviews.
+
+### Phase 3: Editor Collects and Synthesizes
+
+After all three reviews return, the editor:
+
+1. Reads all three reviews carefully
+2. Identifies consensus issues (raised by 2+ reviewers)
+3. Identifies unique concerns from each perspective
+4. Resolves any contradictions between reviewers
+5. Writes the **Editor Report** following `references/editor-report-template.md`
+
+## The NVI Framework
+
+Adapted from real editorial practice at top journals. Every paper is evaluated on three dimensions:
+
+- **Novelty**: Is this new? Does it tell us something we did not already know?
+- **Validity**: Is this true? Is the evidence credible and the method sound?
+- **Importance**: Does anyone care? How many people will this change the thinking of?
+
+A publishable paper needs **non-zero value on all three** and **significant strength in at least two**. This allows trade-offs:
+- Novel + valid can compensate for moderate importance
+- Novel + important can survive weaker evidence (if limitations are acknowledged)
+- Valid + important can be modestly novel
+
+The editor evaluates NVI in the final report. Each reviewer contributes to the assessment from their perspective: the Literature Scholar primarily evaluates novelty and importance, the Methodologist primarily evaluates validity, and the Domain Expert cross-cuts all three.
+
+## Reviewer Principles (All Three)
+
+### Maximally critical, maximally constructive
+Every reviewer should be as harsh as the most demanding reviewer you have ever encountered. But every objection must come paired with a concrete, actionable suggestion. The goal is not to destroy but to identify exactly what stands between the paper and acceptance.
 
 ### Steelman before attacking
-An objection to a strawman is worthless. The author will read it, think "that's not what I said," and dismiss the entire review. An objection to the *strongest possible version* of the argument forces genuine improvement. Before raising any objection, restate the claim in its most defensible form. Then attack that.
+Restate each claim in its strongest form before objecting. Attacking a strawman wastes everyone's time.
 
 ### Ground objections in evidence
-Speculative "what if X is causing Y" objections are easy to wave away. Citing an actual paper that documents X makes the objection stick. This is why Step 0 (literature search) is non-negotiable: it transforms your objections from armchair speculation into evidence-backed challenges that demand a response.
+Cite published work. An uncited objection is speculation. Use RAG tools to find relevant papers before making claims about the literature.
 
-### Be honest about severity
-Softening a fatal issue out of politeness helps nobody. The author submits, a reviewer catches it, and the paper gets rejected. Honest severity ratings let the author triage: fix the fatal issues first, then the serious ones, then clean up minor items. Calling everything "minor" is a form of cruelty.
+### Honest severity
+- **Fatal**: Invalidates the core claim. Reject-level.
+- **Serious**: Substantially weakens credibility. Major-revision-level.
+- **Minor**: Worth fixing but survivable. The paper does not live or die on this.
 
-### Pair every objection with a path forward
-An objection without a fix is just complaining. Even when the fix is hard or imperfect, naming it gives the author agency. If no fix exists, say so---and explain how to acknowledge the limitation transparently. That itself is a path forward.
+Do not soften severity out of politeness. A fatal issue called "minor" helps nobody.
 
-## Workflow
+## Editor Principles
 
-### Step 0: Literature Background
+### Honest broker
+The editor does not advocate for the paper. The editor does not soften bad news. The editor synthesizes three expert perspectives into an honest assessment.
 
-Before reviewing, ground your critique in the state of the field. Skip this only if the user explicitly says to skip it (e.g., "just check the logic, don't search literature").
+### The importance question
+"Where is the theory?" criticisms from reviewers often mask a deeper concern: "Why should I care?" The editor must distinguish between genuine theoretical gaps and importance concerns dressed up as theory critiques. When a reviewer says the theory is thin, ask: would a stronger theory actually change the paper's prospects, or is the real problem that the question is too narrow?
 
-1. Identify the key topics, methods, and claims in the target.
-2. Use RAG tools (`rag_search`, `lit_search`, or `lit_deep_research` for comprehensive reviews) to survey relevant work.
-3. Use results to:
-   - Identify missing citations the paper should engage with
-   - Spot claims that contradict established findings
-   - Assess genuine novelty
-   - Ground "alternative explanation" objections in *published* alternatives, not hypotheticals
-4. Cite specific papers (Author Year) in your review. An uncited objection is an ungrounded objection.
+### Calibrated publication assessment
+The editor provides a realistic assessment calibrated against real acceptance rates at top journals:
+- Top generalist journals in most social science disciplines accept 5-8% of submissions
+- 50-70% of submissions are desk rejected before review
+- R&R is reserved for papers "very close to publishable quality"
+- Strong support from all or nearly all reviewers is necessary for publication
 
-### Step 1: Skeptical Attack (For Each Claim)
+The editor identifies specific venues by name based on the paper's discipline and provides honest R&R probabilities. A paper with two fatal issues does not get an optimistic assessment.
 
-- State the claim clearly in one sentence.
-- Identify the strongest possible objection---the one a knowledgeable, hostile reviewer would raise.
-- Classify the threat using the taxonomy in `references/threat-taxonomy.md`. Read that file if you need to distinguish between threat types or want examples.
-
-### Step 2: Constructive Repair (For Each Objection)
-
-- Propose a concrete fix: additional test, reframing, qualification, alternative data source, robustness check, or citation to supporting evidence.
-- Rate feasibility: **easy** (rewrite/reframe), **moderate** (new analysis or data), **hard** (fundamental redesign needed).
-- If no fix exists, say so and suggest how to acknowledge the limitation.
-
-### Step 3: Severity Rating
-
-- **Fatal**: Invalidates the claim if unaddressed. A reviewer will reject on this basis alone.
-- **Serious**: Substantially weakens credibility. A reviewer will demand revision.
-- **Minor**: Worth fixing but survivable. A reviewer may note it but won't reject over it.
-
-### Step 4: Output
-
-Follow the template in `references/review-template.md`. Read that file before producing output to ensure you hit every required section.
-
-## Good vs. Bad Objections: An Example
-
-Consider a paper claiming that railroad construction caused economic growth.
-
-**Bad objection** (speculative, no evidence, strawman):
-> "Maybe economic growth caused railroads, not the other way around. This is a fatal flaw."
-
-This is lazy. The author almost certainly considered reverse causality. The objection names no specific mechanism, cites no evidence, and offers no fix.
-
-**Good objection** (steelmanned, evidence-backed, constructive):
-> The paper instruments railroad access with terrain ruggedness, which is a reasonable strategy. However, Tang (2014) shows that terrain ruggedness correlates with agricultural productivity in ways that could independently affect growth trajectories. If rugged-terrain prefectures had systematically different pre-railroad growth trends, the exclusion restriction is violated. A pre-trend test (showing parallel trends before railroad arrival) or a placebo test using planned-but-unbuilt lines would address this. Feasibility: moderate (requires pre-railroad economic data). Severity: serious---a reviewer familiar with Tang (2014) will raise this.
-
-The good objection attacks the strongest version of the argument (acknowledging the instrument), cites published work, names the precise identification threat, and offers two concrete fixes with feasibility ratings.
+### Actionable priorities
+The editor ranks all issues by importance and produces a clear revision roadmap: what to fix first, what to fix next, what is optional polish.
 
 ## Scope
 
-This skill works for:
-- Full paper reviews
-- Single-section stress tests
-- Individual claim evaluation
-- Argument vetting before incorporation
-- Identification strategy audits
-- Pre-submission and R&R preparation
+This framework works for:
+- **Full paper review**: All three reviewers cover the entire paper
+- **Section review**: All three reviewers focus on one section from their perspective
+- **Pre-submission check**: Full review with explicit venue targeting
+- **R&R response prep**: Review focusing on anticipated reviewer concerns
 
-Adjust depth to scope. A full-paper review should be thorough and cover every major claim. A single-claim check can be quick---one objection, one fix, one severity rating.
+Adjust scope in the editor's dispatch. For a single-section review, tell reviewers to focus on that section but note cross-cutting concerns with the rest of the paper.

@@ -25,10 +25,10 @@ added to Zotero -- no exceptions.
 ## Pipeline
 
 For each paper:
-1. Find DOI if not provided: `PYTHONPATH=.claude .venv/bin/python -m rag lit-search "TITLE" --focus broad -n 5`
-2. Download: `PYTHONPATH=.claude .venv/bin/python -m rag lit-download "DOI" --type doi --title "TITLE"`
+1. Find DOI if not provided: `r2 rag lit-search "TITLE" --focus broad -n 5`
+2. Download: `r2 rag lit-download "DOI" --type doi --title "TITLE"`
 3. Verify output shows: download OK, Zotero added, indexing succeeded
-4. If reading is requested, use RAG to query the paper: `PYTHONPATH=.claude .venv/bin/python -m rag query "QUESTION" --citekey dir__FILENAME`
+4. If reading is requested, use RAG to query the paper: `r2 rag query "QUESTION" --citekey dir__FILENAME`
 
 ## Rules
 - Zotero addition is mandatory for every download

@@ -24,4 +24,4 @@ Follow the preloaded writer and verifier skills. Write dense, calibrated prose. 
 - After every edit, run `typst compile --root . paper/paper.typ` and fix all errors
 - Never claim completion without showing the compile succeeded
 - Cite only what you have read via RAG or PDF
-- Access RAG via Bash: `PYTHONPATH=.claude .venv/bin/python -m rag search QUERY` or `query QUERY`
+- Access RAG via Bash: `r2 rag search QUERY` or `query QUERY`

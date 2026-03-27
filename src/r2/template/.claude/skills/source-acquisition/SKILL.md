@@ -36,7 +36,7 @@ Every acquisition follows this exact sequence:
 Use the RAG CLI to download the paper:
 
 ```bash
-PYTHONPATH=.claude .venv/bin/python -m rag lit-download "IDENTIFIER" \
+r2 rag lit-download "IDENTIFIER" \
   --type TYPE --title "PAPER TITLE"
 ```
 
@@ -48,7 +48,7 @@ DOI is always preferred. If you only have a title, search Semantic Scholar first
 to find the DOI:
 
 ```bash
-PYTHONPATH=.claude .venv/bin/python -m rag lit-search "TITLE" --focus broad -n 5
+r2 rag lit-search "TITLE" --focus broad -n 5
 ```
 
 Then use the DOI from the search results.
@@ -84,7 +84,7 @@ output for:
 
 Verify the paper is searchable:
 ```bash
-PYTHONPATH=.claude .venv/bin/python -m rag search "KEY TERM FROM PAPER" -n 3
+r2 rag search "KEY TERM FROM PAPER" -n 3
 ```
 
 ### Step 4: Read (Optional but Recommended)
@@ -94,7 +94,7 @@ was acquired for a specific purpose (e.g., to support a claim in the manuscript)
 read it immediately using the reading skill:
 
 ```bash
-PYTHONPATH=.claude .venv/bin/python -m rag query "SPECIFIC QUESTION" --citekey dir__FILENAME
+r2 rag query "SPECIFIC QUESTION" --citekey dir__FILENAME
 ```
 
 Or trigger the reading skill for a comprehensive evaluation.
@@ -104,7 +104,7 @@ Or trigger the reading skill for a comprehensive evaluation.
 For multiple papers (e.g., from a deep-research "Papers to Index" table):
 
 ```bash
-PYTHONPATH=.claude .venv/bin/python -m rag lit-download-batch \
+r2 rag lit-download-batch \
   '[{"id": "10.xxxx/yyyy", "title": "Paper Title"}, {"id": "10.xxxx/zzzz", "title": "Another Paper"}]' \
   --auto-index
 ```
@@ -192,7 +192,7 @@ To add the downloaded PDF to Zotero and index into RAG:
 # Add to Zotero with metadata
 python .claude/scripts/zotero_add.py --doi "DOI" --pdf ".claude/rag/pdfs/FILENAME.pdf"
 # Index into RAG
-PYTHONPATH=.claude .venv/bin/python -m rag index --source dir --pdf-dir .claude/rag/pdfs
+r2 rag index --source dir --pdf-dir .claude/rag/pdfs
 ```
 
 ### Tier 3: Semantic Scholar open-access URL
@@ -200,7 +200,7 @@ PYTHONPATH=.claude .venv/bin/python -m rag index --source dir --pdf-dir .claude/
 Some papers have publisher-provided open-access links in Semantic Scholar:
 
 ```bash
-PYTHONPATH=.claude .venv/bin/python -m rag lit-paper "S2_PAPER_ID"
+r2 rag lit-paper "S2_PAPER_ID"
 ```
 
 Check the output for an `openAccessPdf` URL. If present, download directly.
@@ -226,11 +226,11 @@ Only after Tiers 1-3 all fail, flag the paper for the user with:
 
 ### Auto-indexing shows 0 entries
 - This was a known bug (now fixed): `pdf_dir` was empty
-- If it recurs, manually index: `PYTHONPATH=.claude .venv/bin/python -m rag index --source dir --pdf-dir .claude/rag/pdfs`
+- If it recurs, manually index: `r2 rag index --source dir --pdf-dir .claude/rag/pdfs`
 
 ### Paper indexed but not searchable
 - Embedding model may not handle the paper's language well
-- Try: `PYTHONPATH=.claude .venv/bin/python -m rag remove dir__FILENAME && PYTHONPATH=.claude .venv/bin/python -m rag index --force --source dir --pdf-dir .claude/rag/pdfs`
+- Try: `r2 rag remove dir__FILENAME && r2 rag index --force --source dir --pdf-dir .claude/rag/pdfs`
 
 ## Rules
 

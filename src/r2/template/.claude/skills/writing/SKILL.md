@@ -26,6 +26,8 @@ All writing rules derive from three principles: **density**, **flow**, and **cal
 
 Pack every paragraph with substance. Strip every word that does not carry weight. A compact five-sentence paragraph beats a diffuse ten-sentence one.
 
+**Match detail to context.** The introduction and contributions move the argument forward---details, caveats, and background belong in the body sections or footnotes, not here. When writing any section, ask: does the reader need this information _at this point_ to follow the argument? If not, cut it or move it downstream. The introduction should flow smoothly at the level of claims and evidence; methodological nuances, historical background, and qualifying caveats that interrupt that flow belong in the sections where they are directly relevant. Over-specifying in the wrong place is as damaging as under-specifying: it buries the signal and breaks the reader's momentum.
+
 Why this matters: Reviewers form impressions within the first page. Filler signals that the author isn't sure what the point is. In a historical case study where the empirical contribution must speak loudly, loose prose buries the signal.
 
 ### Flow
@@ -75,7 +77,22 @@ Load `references/table-and-notation-standards.md` when writing tables, figure ca
 
 Remove any sentence that does not advance the paragraph's single point. Test: if cutting a sentence changes nothing about what the reader understands, it was filler.
 
-### 7. Self-check every paragraph
+### 7. Humanizer pass
+
+After drafting or revising, scan every paragraph for AI-writing tells (full pattern catalog in `../humanizer/SKILL.md`). The most damaging patterns in academic prose:
+
+- **Significance inflation:** "pivotal," "crucial," "fundamental," "groundbreaking," "serves as a testament" --- delete or replace with precise verbs
+- **Superficial -ing phrases:** "highlighting," "underscoring," "emphasizing," "reflecting," "showcasing" --- these add fake depth; cut them or rewrite as main clauses with actual content
+- **Copula avoidance:** "serves as," "stands as," "functions as" --- just write "is"
+- **Rule of three:** forcing ideas into triads ("innovation, inspiration, and insights") --- use the natural number of items
+- **Negative parallelisms:** "not only X but Y," "it's not just X, it's Y" --- state the point directly
+- **Synonym cycling:** rotating through synonyms to avoid repetition ("the movement... the faction... the group... the organization") --- repeat the clearest noun
+- **Em dash overuse:** more than one em dash per paragraph is a tell; prefer commas, periods, or parentheses
+- **AI vocabulary:** "Additionally," "delve," "landscape" (abstract), "tapestry," "interplay," "nuanced," "multifaceted" --- replace with concrete language
+
+If any pattern appears, rewrite before moving on.
+
+### 8. Self-check every paragraph
 
 Before moving on from any paragraph, verify:
 - Body paragraphs: topic sentence states a claim, not a literature summary
@@ -83,6 +100,7 @@ Before moving on from any paragraph, verify:
 - Every claim matches the evidence (no verbs too strong for the design)
 - Compact: no sentence can be cut or merged without losing information
 - Flows from the previous paragraph and sets up the next
+- No AI-writing tells from the humanizer checklist above
 
 If any check fails, rewrite before moving on. Do not leave problems for a later pass---they accumulate and degrade the whole section.
 

@@ -121,7 +121,25 @@ For every issue, propose a specific fix. Not "improve the transition" but "add a
 
 When possible, suggest the actual sentence or bridge phrase. When the fix requires restructuring (e.g., moving a paragraph), describe the new order and why it works better.
 
-### 5. Produce output
+### 5. Humanizer pass
+
+Scan every paragraph for AI-writing tells (full pattern catalog in `.claude/skills/humanizer/SKILL.md`). Flag any instance as a flow issue under a new category:
+
+**AI-writing tell** --- A word, phrase, or structural pattern that signals machine-generated text. These erode reader trust even when the content is sound, because reviewers and editors are increasingly attuned to them.
+
+The most common tells in academic prose:
+- Significance inflation: "pivotal," "crucial," "fundamental," "serves as a testament"
+- Superficial -ing phrases: "highlighting," "underscoring," "emphasizing," "reflecting," "showcasing"
+- Copula avoidance: "serves as," "stands as," "functions as" instead of "is"
+- Rule of three: forcing ideas into triads
+- Negative parallelisms: "not only X but Y," "it's not just X, it's Y"
+- Synonym cycling: rotating through synonyms for the same referent
+- Em dash overuse: more than one per paragraph
+- AI vocabulary: "Additionally," "delve," "landscape" (abstract), "tapestry," "interplay," "nuanced," "multifaceted"
+
+Rate severity as **Minor friction** unless the pattern is pervasive (3+ instances in a section), in which case rate as **Causes confusion** because the cumulative effect signals inauthenticity.
+
+### 6. Produce output
 
 **Always present findings as a numbered checklist** so the user can select which items to implement. Organize in reading order. For each item, provide a one-line summary with the line number, category, and severity in parentheses. After the checklist, include a collapsible or clearly separated detail section with the full analysis for each item (reader's experience, suggested fix).
 

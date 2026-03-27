@@ -1,53 +1,54 @@
-# Skeptrustive Review Output Template
+# Individual Reviewer Report Template
 
-Use this template for all skeptrustive reviews. Adjust scope as needed---a single-claim check can omit the Literature Background and Summary Verdict sections.
+Each reviewer subagent produces a report following this template. The editor collects all three and synthesizes them into the editor report.
 
 ---
 
 ```
-## Skeptrustive Review: [Title or Section Name]
+## Review: [Title or Section] — [Reviewer Role]
 
-### Literature Background
-- **Papers surveyed**: [List key papers found via RAG search, with brief relevance notes]
-- **Notable citation gaps**: [Papers the target should cite but doesn't. Explain why each matters.]
-- **Prior art concerns**: [Any overlap with existing work that threatens novelty. Be specific about what overlaps and what doesn't.]
+### Reviewer Perspective
+[One sentence stating your instantiated role and what you focused on. E.g., "Reviewing as a methodologist specializing in difference-in-differences designs, with focus on the identification strategy and statistical inference."]
 
-If you skipped the literature search (because the user asked for logic-only review), state that explicitly and note that literature-grounded objections may be missing.
+### Literature Consulted
+- [Papers found via RAG search, with brief relevance notes]
+- [Notable gaps: papers the manuscript should cite but doesn't]
+
+If literature search was skipped (user requested logic-only review), state that explicitly.
 
 ---
 
-### Claim 1: [One-sentence statement of the claim in its strongest form]
-- **Objection**: [The strongest attack. Steelman the claim first, then identify the real vulnerability. Cite published work where possible.]
-- **Threat type**: [From the taxonomy: logical gap, empirical weakness, identification failure, alternative explanation, scope overreach, measurement concern, missing evidence, or non-novelty]
+### Issue 1: [Short title]
+- **Claim under review**: [One-sentence steelmanned statement]
+- **Objection**: [The strongest attack from your perspective. Cite published work.]
+- **Threat type**: [From threat-taxonomy.md]
 - **Severity**: Fatal / Serious / Minor
-- **Constructive fix**: [Concrete suggestion: what to do, how to do it, what data or analysis is needed]
+- **Constructive suggestion**: [Concrete, actionable fix]
 - **Feasibility**: Easy / Moderate / Hard
-- **Notes**: [Optional. Additional context, related issues, or caveats about the fix.]
 
-### Claim 2: [...]
-[Repeat for each claim]
+### Issue 2: [...]
+[Repeat for each issue]
 
 ---
 
-## Summary Verdict
+### Strengths (From This Perspective)
+[What works well from your specific vantage point. Be concrete — name claims, analyses, or framings that hold up.]
 
-- **Strongest elements**: [What survives scrutiny. Be specific---name the claims or analyses that hold up well and why.]
-- **Critical fixes needed**: [Fatal and serious items, ranked by importance. The author should address these in order.]
-- **Quick wins**: [Minor items that are easy to fix. These improve polish without requiring major effort.]
-- **Overall assessment**: [One honest paragraph. What is the paper's current state? Is it close to publishable or does it need major revision? What is the single most important thing to fix?]
+### Bottom Line
+[2-3 sentences. Your honest assessment from your perspective. Would you recommend R&R or reject? What is the single most important thing to fix?]
 ```
 
 ---
 
-## Guidance on Each Section
+## Guidance
 
-### Literature Background
-This section establishes your credibility as a reviewer. It shows you did your homework. It also serves the author by surfacing papers they may have missed. Do not list papers for the sake of listing them---each one should connect to a specific gap, contradiction, or alternative explanation you raise later.
+### Scope calibration
+- **Full paper review**: Cover every major claim relevant to your expertise. Aim for 4-8 issues.
+- **Section review**: Focus on that section, but note cross-cutting concerns. Aim for 3-5 issues.
+- **Single claim**: One issue, fully developed.
 
-### Claim-level entries
-Each claim entry is self-contained. A reader should be able to understand the objection, its severity, and the fix without reading any other entry. This matters because authors often share specific review points with coauthors or advisors.
+### Staying in lane
+Each reviewer focuses on their domain. A methodologist does not lecture on the case's history; a domain expert does not redesign the regression specification. If you notice something outside your lane, flag it in one sentence under "Notes" but do not develop it — that is another reviewer's job.
 
-The one-sentence claim statement should be the *steelmanned* version. If you find yourself stating the claim in a way the author would disagree with, you have not steelmanned enough.
-
-### Summary Verdict
-The overall assessment should be honest but not cruel. Avoid vague praise ("interesting paper") and vague criticism ("needs more work"). Be specific: "The identification strategy is sound but the mechanism evidence in Section 4 relies on a single proxy that three published papers have criticized. Addressing this---either by adding the alternative proxy from [Author Year] or by reframing the mechanism claim as suggestive---would move this from major-revision territory to minor-revision."
+### Severity calibration
+Ask yourself: "If this issue appeared in a review at a top journal, would it be grounds for rejection on its own?" If yes, it is fatal. If it would demand major revision, it is serious. If a reviewer would mention it but not weight the decision on it, it is minor.
