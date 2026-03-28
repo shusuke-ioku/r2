@@ -2,43 +2,20 @@
 
 *Not the droid you're looking for — but it will get your paper through R&R.*
 
-An AI-powered research environment for political science papers, built on [Claude Code](https://claude.ai/claude-code). You talk to Claude; r2 routes your request to the right specialized agent.
+A harness-engineered research environment for political science papers, built on [Claude Code](https://claude.ai/claude-code). 11 specialized agents, 17 skills, automated guardrails via hooks, and a mandatory skill-dispatch layer that routes every request before the model touches anything.
+
+Literature surveys that actually iterate: search four databases, snowball citations, download via Sci-Hub, read full text, discover new leads, loop until convergence. Simulated peer review calibrated against real APSR/AJPS acceptance patterns. A revision dashboard that pushes back when you try to dismiss valid reviewer concerns. An Obsidian vault that builds itself as you read.
 
 ## Install
 
 ```bash
 pip install "r2-research @ git+https://github.com/shusuke-ioku/r2.git"
-```
-
-## Quick Start
-
-```bash
-r2 init my-paper/
-cd my-paper/
-cp .env.example .env   # add your ANTHROPIC_API_KEY
-git init && git add -A && git commit -m "Initial scaffold"
+r2 init my-paper/ && cd my-paper/
+cp .env.example .env   # add ANTHROPIC_API_KEY
 claude                  # start Claude Code
 ```
 
-To add r2 to an **existing project**, run `r2 init .` — it only writes framework files, never touches your paper, data, or scripts.
-
-## What You Can Do
-
-Just talk to Claude naturally. r2 routes your request to the right agent automatically.
-
-**Write.** "Rewrite the introduction." "Tighten the lit review." "This overclaims — fix it." Claude writes dense, calibrated academic prose, checks citations against your library, and compiles the manuscript after every edit.
-
-**Find papers.** "Survey the literature on democratic backsliding." Claude searches your Zotero library and three external databases, downloads papers via Sci-Hub, snowballs citations, reads full text, and produces a thematic synthesis — not a paper-by-paper list.
-
-**Read a paper.** "Read Bermeo 2016 and tell me what it means for my project." Claude reads the source, evaluates it against a structured critique framework, writes an atomic note into your Obsidian vault, and tells you what to keep, revise, or drop.
-
-**Run analysis.** "Rerun the main results." "Add a robustness check with year fixed effects." Claude edits your R scripts, runs the pipeline, and verifies the output matches the manuscript.
-
-**Review your paper.** "Stress-test my argument." Three independent reviewer agents — a literature scholar, a methodologist, and a domain expert — each write severity-graded reports. An editor synthesizes them into a decision with publication prospects and a revision roadmap.
-
-**Build theory.** "Write a formal model of the mechanism." Claude writes game-theoretic setups, derives equilibria, proves propositions, and formats them in Typst.
-
-**Track revisions.** "What's left on the revision list?" Reviews automatically generate todo items. The task manager tracks progress, pushes back when you dismiss items that have merit, and reports what to work on next.
+Add r2 to an **existing project**: `r2 init .` — writes framework files only, never touches your paper or data.
 
 ## Updating
 
