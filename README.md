@@ -5,7 +5,7 @@
 A **harness-engineered** research environment for political science papers, built on [Claude Code](https://claude.ai/claude-code). **11 agents**, **17 skills**, **automated guardrails** via hooks, and a **mandatory skill-dispatch layer** that routes every request before the model touches anything.
 
 - **Iterative literature surveys** — search four databases, **snowball citations**, acquire PDFs automatically, read full text, discover new leads, loop until convergence
-- **Empirically calibrated peer review** — three independent reviewer agents scored against a 48-paper training set of top-generalist vs. field-journal publications to correct systematic biases
+- **Empirically calibrated peer review** — three independent reviewer agents scored against a blind training set of top-generalist vs. field-journal publications to correct systematic biases
 - **Gatekeeper revision management** — reviews auto-generate todo items; the task manager **pushes back** when you dismiss concerns that a real reviewer would raise again
 - **Self-building Obsidian vault** — every paper you read becomes a structured, wiki-linked note that future writing and review skills consult automatically
 
