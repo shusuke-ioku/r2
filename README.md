@@ -1,4 +1,4 @@
-# r2 v0.2.0
+# r2 [v0.2.0]
 
 *Not the droid you're looking for — but it will get your paper through R&R.*
 
