@@ -4,7 +4,7 @@
 
 A **harness-engineered** research environment for political science papers, built on [Claude Code](https://claude.ai/claude-code). **11 agents**, **17 skills**, **automated guardrails** via hooks, and a **mandatory skill-dispatch layer** that routes every request before the model touches anything.
 
-- **Iterative literature surveys** — search four databases, **snowball citations**, acquire PDFs automatically, read full text, discover new leads, loop until convergence
+- **Iterative literature surveys with RAG and Zotero** — a local **RAG vector store** over your PDF library, combined with three external databases (Semantic Scholar, OpenAlex, Scopus) and **two-level Zotero integration** (cloud API for metadata + local API for annotations). Surveys **snowball citations**, acquire PDFs automatically, read full text, discover new leads, and loop until convergence.
 - **Empirically calibrated peer review** — three independent reviewer agents scored against a blind training set of top-generalist vs. field-journal publications to correct systematic biases
 - **Gatekeeper revision management** — reviews auto-generate todo items; the task manager **pushes back** when you dismiss concerns that a real reviewer would raise again
 - **Self-building Obsidian vault** — every paper you read becomes a structured, wiki-linked note that future writing and review skills consult automatically
@@ -36,11 +36,75 @@ Only `ANTHROPIC_API_KEY` is required. Optional keys unlock external database sea
 
 ---
 
-## How It Works
+## Iterative Literature Surveys with RAG and Zotero
 
-### Agents and Skills
+r2 builds a **local RAG vector store** (ChromaDB + sentence-transformers) over your PDF library. Every paper you download or already have in Zotero gets chunked, embedded, and indexed for full-text semantic search.
 
-When you ask Claude to do something, r2 matches your request to a skill, which dispatches the right agent. 11 agents, 17 skills:
+On top of the local index, three external databases — **Semantic Scholar**, **OpenAlex**, and **Scopus** — provide abstract-level search across the full academic literature. The `deep-research` skill combines both into an iterative discovery loop:
+
+1. **Search** local RAG (multiple query variations) + external databases (broad, high-impact, recent, classical)
+2. **Snowball** forward and backward citations from every high-priority paper
+3. **Triage** candidates by relevance into a running candidate list
+4. **Acquire** high-priority papers: download PDF, create Zotero item with full CrossRef metadata, index into RAG — in one call
+5. **Read** acquired papers in full text via RAG, not just abstracts
+6. **Check convergence**: did reading surface new leads? If yes, loop back to step 1. If no, proceed to synthesis.
+
+The loop typically runs 2–4 iterations. The final report is written only after convergence, organized thematically — not paper-by-paper.
+
+**Zotero integration** operates at two levels. The **cloud API** (pyzotero) creates Zotero items with full metadata and PDF attachments whenever you download a paper — every acquisition flows into your bibliography automatically via Better BibTeX auto-export. The **local API** (Zotero desktop) gives Claude direct access to your library, PDF content, highlights, and annotations without exporting anything.
+
+```bash
+r2 rag index                              # index your PDFs into vector store
+r2 rag search "democratic backsliding"     # semantic search over local library
+r2 rag lit-search "exit voice" --focus top_journals  # search external DBs
+r2 rag lit-download "10.1093/example"      # download + Zotero + index in one call
+r2 rag lit-citations PAPER_ID             # forward citation snowballing
+r2 rag lit-references PAPER_ID            # backward citation snowballing
+```
+
+## Empirically Calibrated Peer Review
+
+An editor agent dispatches three independent reviewer subagents — a **literature scholar**, a **methodologist**, and a **case/domain expert** — each instantiated with expertise tailored to the paper's specific field, method, and empirical context. Reviewers operate independently, write severity-graded reports (fatal / serious / minor), and ground every objection in published work via RAG.
+
+The review framework uses the **NVI scoring system** (Novelty, Validity, Importance) adapted from real editorial practice. Each dimension is scored 1–5; the composite informs venue-tier classification and R&R probability estimates.
+
+The scoring has been **empirically calibrated** against a blind training set of published papers from top-generalist journals (APSR, AJPS) and field journals. This calibration corrects five systematic biases that the uncalibrated model exhibits: formal theory undervaluation, top-field hedging (defaulting to "good field journal" when uncertain), non-novelty over-application, probability compression in the 0.15–0.35 range, and NVI scale compression toward 3–4.
+
+```
+> /review-section              # full paper or a specific section
+> "stress-test my argument"    # triggers automatically
+> "what would reviewers say"   # triggers automatically
+```
+
+## Gatekeeper Revision Management
+
+Every review automatically generates actionable todo items in `revision/todo.md`, prioritized by severity (CRITICAL / IMPORTANT / MINOR) and tagged with effort estimates. The `task-manager` agent enforces a **gatekeeper principle**: before marking any item "done" or "not needed," it re-reads the original reviewer concern and verifies the resolution actually addresses it.
+
+If you dismiss an item but the reviewer's point has genuine merit, the task manager says so directly — "The reviewer's point stands because X. Dismissing it risks Y at review." It only marks "not needed" when it can articulate why the concern does not apply. This protects the paper from a real reviewer who will raise the same objection.
+
+The dashboard tracks progress with a visual progress bar, lane counts by priority, and category groupings (Identification, Robustness, Measurement, Framing, Citation). Completed items are archived in `revision/done.md` with full result records.
+
+```
+> "what's left on the revision list"   # evaluate progress
+> "mark item 3 done"                  # moves to done.md with result
+> "add a robustness task"             # manual additions
+```
+
+## Self-Building Obsidian Vault
+
+r2 scaffolds an [Obsidian](https://obsidian.md) vault at `notes/` with three types of structured notes:
+
+- **Paper notes** (`notes/papers/<citekey>.md`) — one atomic note per source with YAML frontmatter (citekey, authors, year, themes, relevance) and structured sections (key arguments, findings, methods, relevance to this project, borrowable elements, critique). Created automatically by the `reading` skill.
+- **Concept notes** (`notes/concepts/<concept>.md`) — one per theoretical idea, linking to the paper notes that develop it. Created when a source introduces a concept not yet in the vault.
+- **Thematic MOCs** (`notes/lit/`) — Maps of Content that organize paper notes by theme using `[[wiki-links]]`. Updated automatically as new papers are read.
+
+The `vault-search` skill searches this vault using **Obsidian's Local REST API** when available (full-text search, Dataview queries, tag lookups) or **file-based search** as fallback (frontmatter property queries, backlink traversal, YAML parsing). Other skills — `writing`, `deep-research`, `review`, `formal-modeling` — consult the vault automatically before proceeding.
+
+To enable API-based search, install the [Obsidian Local REST API](https://github.com/coddingtonbear/obsidian-local-rest-api) community plugin. File-based search works without it.
+
+## Agents and Skills
+
+When you ask Claude to do something, r2 matches your request to a skill, which dispatches the right agent:
 
 | Skill | Agent | What it does |
 |-------|-------|-------------|
@@ -70,43 +134,7 @@ r2 skills list                                      # all registered skills
 r2 skills search "literature"                       # semantic search
 ```
 
-### RAG Literature Engine
-
-Search your library and three external databases (Semantic Scholar, OpenAlex, Scopus), download papers, and do citation snowballing:
-
-```bash
-r2 rag index                              # index your PDFs
-r2 rag search "democratic backsliding"     # search local library
-r2 rag lit-search "exit voice" --focus top_journals  # search external DBs
-r2 rag lit-download "10.1093/example"      # download + Zotero + index
-```
-
-### Zotero Integration
-
-r2 integrates with Zotero at two levels:
-
-**Cloud API** (pyzotero) — when you download a paper with `r2 rag lit-download`, r2 automatically creates a Zotero item with full metadata (resolved via CrossRef) and attaches the PDF. Every paper you acquire appears in your Zotero library with correct bibliographic data. Set `RAG_ZOTERO_API_KEY` and `RAG_ZOTERO_USER_ID` in `.env`.
-
-**Local API** (Zotero desktop) — if Zotero desktop is running, r2 can search your library, read PDF content, and retrieve your highlights and annotations directly.
-
-```bash
-r2 rag lit-download "10.1093/example"                          # download + Zotero + index
-python .claude/scripts/zotero_cli.py search "backsliding"      # search Zotero
-python .claude/scripts/zotero_cli.py pdf-content ITEM_KEY      # read PDF text
-python .claude/scripts/zotero_cli.py search-annotations "key"  # search highlights
-```
-
-### Obsidian Vault
-
-r2 scaffolds an [Obsidian](https://obsidian.md) vault at `notes/` for structured knowledge management:
-
-- **Paper notes** (`notes/papers/<citekey>.md`) — one per source, with YAML frontmatter and structured sections. Created automatically when reading papers.
-- **Concept notes** (`notes/concepts/<concept>.md`) — one per theoretical idea, linking to paper notes.
-- **Thematic MOCs** (`notes/lit/`) — Maps of Content organizing paper notes by theme with `[[wiki-links]]`.
-
-Skills consult the vault automatically before writing prose, reviewing, or building theory. To enable API-based search, install the [Obsidian Local REST API](https://github.com/coddingtonbear/obsidian-local-rest-api) plugin. File-based search works without it.
-
-### Harness Engineering
+## Harness Engineering
 
 r2 treats the Claude Code harness — CLAUDE.md, rules, skills, hooks, and settings — as infrastructure to be engineered, not just configuration to be written.
 
