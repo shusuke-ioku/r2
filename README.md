@@ -2,9 +2,12 @@
 
 *Not the droid you're looking for — but it will get your paper through R&R.*
 
-A harness-engineered research environment for political science papers, built on [Claude Code](https://claude.ai/claude-code). 11 specialized agents, 17 skills, automated guardrails via hooks, and a mandatory skill-dispatch layer that routes every request before the model touches anything.
+A **harness-engineered** research environment for political science papers, built on [Claude Code](https://claude.ai/claude-code). **11 agents**, **17 skills**, **automated guardrails** via hooks, and a **mandatory skill-dispatch layer** that routes every request before the model touches anything.
 
-Literature surveys that actually iterate: search four databases, snowball citations, download via Sci-Hub, read full text, discover new leads, loop until convergence. Simulated peer review calibrated against real APSR/AJPS acceptance patterns. A revision dashboard that pushes back when you try to dismiss valid reviewer concerns. An Obsidian vault that builds itself as you read.
+- **Iterative literature surveys** — search four databases, **snowball citations**, acquire PDFs automatically, read full text, discover new leads, loop until convergence
+- **Empirically calibrated peer review** — three independent reviewer agents scored against a 48-paper training set of top-generalist vs. field-journal publications to correct systematic biases
+- **Gatekeeper revision management** — reviews auto-generate todo items; the task manager **pushes back** when you dismiss concerns that a real reviewer would raise again
+- **Self-building Obsidian vault** — every paper you read becomes a structured, wiki-linked note that future writing and review skills consult automatically
 
 ## Install
 
