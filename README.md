@@ -122,7 +122,6 @@ When you ask Claude to do something, r2 matches your request to a skill, which d
 | `task-management` | `task-manager` | Revision dashboard: add/done/evaluate tasks |
 | `verification` | *(cross-cutting)* | Prove correctness before reporting "done" |
 | `parallel-dispatch` | *(orchestration)* | Run independent tasks concurrently |
-| `portfolio-sync` | — | Sync title/abstract to a GitHub Pages site |
 | `skill-creation` | — | Create, evaluate, and optimize custom skills |
 | `humanizer` | — | Remove AI-writing tells from prose |
 
