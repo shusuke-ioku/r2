@@ -106,20 +106,13 @@ If any check fails, rewrite before moving on. Do not leave problems for a later 
 
 ## Fact-Checking Obligation
 
-Verify every factual claim before writing it, even when the user explicitly requests specific content. Check dates, names, places, and characterizations against sources (RAG, PDFs, existing notes in `paper/notes/`). If a claim cannot be verified, flag it to the user rather than writing it.
+Verify every factual claim before writing it, even when the user explicitly requests specific content. Check dates, names, places, and characterizations against sources (RAG, PDFs, existing notes in `notes/`). If a claim cannot be verified, flag it to the user rather than writing it.
 
 Why this is non-negotiable: A single wrong date or mischaracterized source in a historical paper can sink the manuscript's credibility with area-specialist reviewers. The user's role is to direct; the agent's role is to ensure accuracy.
 
-## Abstract Rule
+## Citation and Abstract Rules
 
-The abstract must never exceed 150 words. When writing or revising the abstract, count words and cut until under 150. Every word must earn its place.
-
-## Citation Rules
-
-- **Cite only what you have read:** Read the source (at minimum its abstract) via RAG or PDF before citing. Never cite from title alone.
-- **Zotero only:** Use `.claude/scripts/zotero_add.py` for missing/broken citations. Never edit `ref.bib` directly.
-- **Never self-cite:** Never use the user's own paper as a source. The lit review surveys external literature only.
-- **Consult lit files:** Always check `paper/notes/lit/` before writing prose that engages the literature.
+Follow `.claude/rules/citation-rules.md` (canonical source for citation practice, abstract length, Typst compilation, and bibliography rules).
 
 ## Quick-Reference: Common Fixes
 

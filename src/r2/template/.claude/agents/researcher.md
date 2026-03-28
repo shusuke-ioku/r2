@@ -6,7 +6,6 @@ maxTurns: 30
 memory: project
 skills:
   - deep-research
-  - reading
   - source-acquisition
 ---
 

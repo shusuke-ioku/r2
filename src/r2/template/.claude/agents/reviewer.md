@@ -4,7 +4,7 @@ description: >
   Use PROACTIVELY when stress-testing arguments, evaluating identification strategy,
   preparing for hostile peer review, or checking whether a claim is defensible.
   This agent reviews but NEVER edits the manuscript directly.
-tools: Read, Glob, Grep, Bash, Write, Edit
+tools: Read, Glob, Grep, Bash
 maxTurns: 50
 memory: project
 skills:
@@ -58,10 +58,11 @@ Each reviewer subagent should:
 After all three reviews return:
 1. Read all three reports carefully
 2. Follow `references/editor-report-template.md` exactly
-3. Score NVI (Novelty, Validity, Importance)
-4. Identify consensus issues, unique concerns, and contradictions
-5. Produce the revision roadmap and publication assessment
-6. Render a final recommendation with honest probabilities
+3. Score NVI (Novelty, Validity, Importance) — use the full 1-5 scale, not just 3-4
+4. Check for known biases: formal theory undervaluation, top-field hedging, Non-Novelty without citation, probability compression
+5. Identify consensus issues, unique concerns, and contradictions
+6. Produce the revision roadmap and publication assessment
+7. Render a final recommendation with honest probabilities — calibrated against real acceptance rates
 
 ## Rules
 - READ the full target before dispatching reviewers

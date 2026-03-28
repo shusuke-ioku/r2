@@ -24,7 +24,7 @@ To add r2 to an **existing project**, run `r2 init .` — it only writes framewo
 
 ## Agents and Skills
 
-When you ask Claude to do something, r2 matches your request to a skill, which dispatches the right agent. 8 agents, 14 skills:
+When you ask Claude to do something, r2 matches your request to a skill, which dispatches the right agent. 11 agents, 17 skills:
 
 | Skill | Agent | What it does |
 |-------|-------|-------------|
@@ -33,15 +33,18 @@ When you ask Claude to do something, r2 matches your request to a skill, which d
 | `debugging` | `analyst-agent` | Autonomous error diagnosis and self-correction |
 | `review` | `reviewer` | Stress-testing arguments and claims |
 | `deep-research` | `researcher` | Multi-database literature surveys with snowballing |
-| `reading` | `researcher` | Critical evaluation of individual papers |
+| `reading` | `reader` | Critical evaluation of individual papers + vault notes |
 | `source-acquisition` | `source-acquirer` | Download papers, add to Zotero, index into RAG |
 | `formal-modeling` | `theorist` | Game-theoretic models, proofs, propositions |
 | `slides` | `slides-writer` | Presentation slides synced with manuscript |
 | `proofreading` | `proofreader` | First-time reader simulation for flow diagnosis |
+| `vault-search` | `vault-searcher` | Search Obsidian vault for literature context |
+| `task-management` | `task-manager` | Revision dashboard: add/done/evaluate tasks |
 | `verification` | *(cross-cutting)* | Prove correctness before reporting "done" |
 | `parallel-dispatch` | *(orchestration)* | Run independent tasks concurrently |
 | `portfolio-sync` | — | Sync title/abstract to a GitHub Pages site |
 | `skill-creation` | — | Create, evaluate, and optimize custom skills |
+| `humanizer` | — | Remove AI-writing tells from prose |
 
 Skills are not static instructions — they can be created, tested, and iteratively improved. The `skill-creation` skill handles the full lifecycle: draft a SKILL.md, generate realistic test prompts, run them with and without the skill in parallel, compare outputs in a browser-based viewer, grade against assertions, aggregate into benchmarks, and repeat until satisfied. An automated optimization loop rewrites skill descriptions for better dispatch accuracy. The Skills Engine CLI (`r2 skills`) adds semantic search, ranked dispatch recommendations, and usage tracking on top.
 
@@ -104,6 +107,28 @@ Progress is visible throughout: the orchestrator runs the loop in the main conve
 > "what does the field say about civil society and authoritarianism"
 ```
 
+## Obsidian Vault Integration
+
+r2 scaffolds an [Obsidian](https://obsidian.md) vault at `notes/` for structured knowledge management. Three types of notes:
+
+- **Paper notes** (`notes/papers/<citekey>.md`) — one atomic note per source with YAML frontmatter (citekey, authors, year, themes, relevance) and structured sections (arguments, findings, methods, critique). Created automatically when reading papers via the `reading` skill.
+- **Concept notes** (`notes/concepts/<concept>.md`) — one note per theoretical idea, linking to the paper notes that develop it.
+- **Thematic MOCs** (`notes/lit/`) — Maps of Content that organize paper notes by theme with `[[wiki-links]]`.
+
+The `vault-search` skill (and `vault-searcher` agent) searches this vault using Obsidian's Local REST API when available, falling back to file-based search. Other skills — `writing`, `deep-research`, `review`, `formal-modeling` — consult the vault automatically before proceeding.
+
+To enable API-based search, install the [Obsidian Local REST API](https://github.com/coddingtonbear/obsidian-local-rest-api) community plugin in your vault. File-based search works without it.
+
+## Revision Dashboard
+
+Reviews generate actionable todo items in `revision/todo.md`. The `task-manager` agent tracks progress: adding items from reviews, marking them done with results, evaluating what remains, and enforcing a gatekeeper principle — it pushes back when items are dismissed without addressing the underlying concern.
+
+```
+> /review-section                    # review → generates todos
+> "what's left on the revision list" # triggers task-management
+> "mark item 3 done"                # updates dashboard
+```
+
 ## Simulated Peer Review
 
 An editor agent dispatches three independent reviewer subagents — a literature scholar, a methodologist, and a case/domain expert — each tailored to the paper's specific field, method, and empirical context. Reviewers operate independently, write severity-graded reports (fatal / serious / minor), and ground criticisms in published work via RAG. The editor synthesizes all three into a consolidated report with NVI assessment (Novelty, Validity, Importance), calibrated publication prospects at named venues, and a ranked revision roadmap.
@@ -113,6 +138,18 @@ An editor agent dispatches three independent reviewer subagents — a literature
 > "stress-test my argument"    # triggers automatically
 > "what would reviewers say"   # triggers automatically
 ```
+
+## Harness Engineering
+
+r2 treats the Claude Code harness — CLAUDE.md, rules, skills, hooks, and settings — as infrastructure to be engineered, not just configuration to be written. The framework implements several principles:
+
+**Skill dispatch as a mandatory routing layer.** Every user request is matched against the skill table before any work begins. A rationalization-prevention table blocks common excuses for skipping dispatch ("this is just a simple question," "the skill is overkill"). Skills are triggered at even 1% relevance.
+
+**Hooks as automated guardrails.** Shell hooks enforce invariants that the model would otherwise forget under context pressure: auto-compiling Typst after every edit, syntax-checking R scripts, blocking edits to auto-generated files (ref.bib, analysis outputs), verifying the paper compiles before session end, and injecting critical reminders after context compaction.
+
+**Context budget management.** Always-loaded context (CLAUDE.md + rules) is kept lean. Reference-heavy docs (RAG usage, skills engine) are candidates for on-demand loading via skills when context budget tightens. The `PostCompact` hook re-injects critical rules that would otherwise be lost during automatic conversation compression.
+
+**Build to delete.** Every skill and hook encodes an assumption about what the model can't do reliably on its own. As models improve, these assumptions should be periodically stress-tested and retired when they no longer hold.
 
 ## Updating
 
@@ -136,6 +173,7 @@ Only `ANTHROPIC_API_KEY` is required. Optional keys unlock external database sea
 
 | Date | Change |
 |------|--------|
+| 2026-03-28 | Add Obsidian vault integration (`notes/`), revision dashboard (`revision/`), 3 new agents (reader, vault-searcher, task-manager), 3 new skills (vault-search, task-management, humanizer), hooks (stop verify, R syntax check, session init), settings.local.json template; extract skill-dispatch to standalone rule; migrate all paths from `paper/notes/` to `notes/` |
 | 2026-03-27 | Drop copier; add `/update-r2` slash command; add humanizer skill; expand review skill with editor-report template and reviewer profiles; update agents and skills |
 | 2026-03-22 | Initial release — 8 agents, 14 skills, 10 slash commands, RAG with three external databases, citation snowballing |
 

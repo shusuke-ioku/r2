@@ -46,7 +46,7 @@ Why this matters: Overbuilt models obscure the mechanism. Reviewers ask "which o
 
 ### 1. Read context first
 
-Before writing any model, read the paper's introduction, empirical strategy, and existing theory discussion in `paper/paper.typ`. The model must formalize the argument the paper already makes---it should not introduce mechanisms that the empirics cannot speak to. Also read `paper/notes/lit.md` Section 5 (focal events and collective action) and Section 1 (backsliding typologies) to understand the theoretical positioning.
+Before writing any model, read the paper's introduction, empirical strategy, and existing theory discussion in `paper/paper.typ`. The model must formalize the argument the paper already makes---it should not introduce mechanisms that the empirics cannot speak to. Also read the relevant literature notes in `notes/lit/` to understand the theoretical positioning.
 
 ### 2. Specify the environment
 

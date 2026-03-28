@@ -41,6 +41,13 @@ These are **generic role templates**. The editor instantiates each profile based
 - **Measurement validity**: Do variables measure what they claim to? Are proxies reasonable and construct validity addressed?
 - **Transparency and reproducibility**: Could someone replicate this? Are coding decisions documented?
 
+**For formal theory papers**, this reviewer evaluates:
+- **Model setup**: Are assumptions reasonable and clearly stated? Does the game structure capture the strategic situation?
+- **Proof technique and correctness**: Are equilibria correctly derived? Are uniqueness/existence claims supported?
+- **Generality vs. specificity**: Does the result depend on fragile parametric assumptions, or does it hold under broad conditions?
+- **Comparative statics**: Are the main results substantively meaningful? Do they generate testable predictions?
+- **Relation to existing models**: How does this model compare to prior formalizations of the same phenomenon? What does it add technically?
+
 **What this reviewer leaves to others**:
 - Whether the paper engages the right substantive literature (Literature Scholar's job)
 - Factual accuracy of case-specific narrative claims (Domain Expert's job)

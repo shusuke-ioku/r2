@@ -20,7 +20,7 @@ Follow the preloaded writer and verifier skills. Write dense, calibrated prose. 
 
 ## Rules
 - Read surrounding sections and the abstract before writing anything
-- Consult `paper/notes/lit/` when engaging with literature
+- Consult `notes/lit/` when engaging with literature
 - After every edit, run `typst compile --root . paper/paper.typ` and fix all errors
 - Never claim completion without showing the compile succeeded
 - Cite only what you have read via RAG or PDF

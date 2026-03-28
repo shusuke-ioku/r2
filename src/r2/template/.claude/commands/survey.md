@@ -22,7 +22,7 @@ Launch a **researcher agent** with instructions to:
 - Search external databases (broad, high-impact, recent, classical)
 - Snowball from ALL HIGH-priority papers (forward + backward citations)
 - Triage: build/update candidate list with priorities
-- Write progress to `paper/notes/lit/_survey_progress.md`
+- Write progress to `notes/lit/_survey_progress.md`
 - Return the candidate list as structured output
 
 When the agent returns, **show the user**:

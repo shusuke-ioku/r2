@@ -6,7 +6,7 @@ Before writing:
 1. Read `.claude/skills/writing/SKILL.md` and follow it exactly
 2. Read surrounding sections in `paper/paper.typ` for context and flow
 3. Read the abstract and contribution claims for alignment
-4. If the section engages literature, consult `paper/notes/lit/` first
+4. If the section engages literature, consult `notes/lit/` first
 
 After writing:
 1. Run `typst compile --root . paper/paper.typ` and fix all errors

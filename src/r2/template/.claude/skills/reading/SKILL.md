@@ -66,18 +66,32 @@ identify the specific target:
 
 - A section of `paper/paper.typ` (e.g., "Section 3, paragraph on mechanism")
 - A script in `analysis/scripts/` (e.g., "add control in 30_main_results.R")
-- An entry in `paper/notes/lit.md`
+- A paper note in `notes/papers/` or concept note in `notes/concepts/`
 - A codebook update in `analysis/data/codebook.md`
 
 If a source has no implications for the project, say so explicitly and explain
 why. That is a valid and useful output.
 
-### 4. Connect to the literature map
+### 4. Create / update Obsidian notes
 
-Check whether the source is already covered in `paper/notes/lit.md`. If
-it is not and it is relevant, note that `lit.md` needs updating. If it is
-already there, check whether the existing characterization is accurate given
-your fresh reading.
+After producing the structured critique, write the source into the vault:
+
+**a. Atomic paper note.** Create (or update if it exists) a file at
+`notes/papers/<citekey>.md` using the template in `notes/templates/paper.md`.
+Citekey convention: `lastname_year` (e.g., `bermeo2016.md`); multi-author
+3+: `firstname_etal_year`. Fill in YAML frontmatter (citekey, authors, year,
+title, themes, relevance) and all body sections from your reading.
+Use `[[wiki-links]]` to reference other paper notes and concept notes.
+
+**b. Update the relevant MOC.** Check which thematic MOC in `notes/lit/`
+covers this source's topic. Add a one-line entry linking to the new paper
+note (e.g., `- [[bermeo2016]] --- typology of democratic backsliding`).
+If no MOC covers the topic, note this for the user.
+
+**c. Concept notes.** If the source introduces or substantially develops a
+theoretical concept not yet in `notes/concepts/`, create a concept note
+using `notes/templates/concept.md`. If the concept note already exists,
+add the new paper to its "Key Papers" section.
 
 ## Citation Rules
 
@@ -101,10 +115,9 @@ incorporate.
 notice if a borrowed claim rests on shaky evidence. Better to flag weakness now
 than have a reviewer do it later. When evidence is ambiguous, say so.
 
-**Why require causal scrutiny?** This project makes causal claims (radical
-elites -> democratic erosion). Any source the user cites for causal reasoning
-must itself have defensible causal identification, or the user needs to know
-the limitation and frame accordingly.
+**Why require causal scrutiny?** This project makes causal claims. Any source
+the user cites for causal reasoning must itself have defensible causal
+identification, or the user needs to know the limitation and frame accordingly.
 
 ## Common Failure Modes
 

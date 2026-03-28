@@ -4,54 +4,7 @@
 
 ## Rules for Every Agent
 
-### Skill Dispatch (Mandatory)
-
-Before ANY response—including clarifying questions—check whether a skill applies. If there is even a 1% chance a skill is relevant, invoke it. This is non-negotiable.
-
-**Available skills** (in `.claude/skills/`):
-
-| Skill | Trigger | Agent |
-|-------|---------|-------|
-| `writing` | Any prose/equation/table/caption edit in the manuscript | `manuscript-writer` |
-{% if use_r %}| `analysis` | Any R script, pipeline, results, or data task | `analyst-agent` |
-{% endif %}| `review` | Stress-testing arguments, identification strategy, or claims | `reviewer` |
-| `deep-research` | Surveying a literature, finding papers, mapping a field | `researcher` |
-| `reading` | Reading/evaluating a specific paper or book | `researcher` |
-| `formal-modeling` | Formal theory, game trees, proofs, propositions, equilibria | `theorist` |
-| `verification` | About to claim work is done, commit, or move to next task | *(cross-cutting)* |
-| `debugging` | Any error, failure, or unexpected behavior | `analyst-agent` |
-| `parallel-dispatch` | 2+ independent tasks that can run concurrently | *(orchestration)* |
-| `source-acquisition` | Download papers, add to Zotero, index into RAG | `source-acquirer` |
-{% if use_slides %}| `slides` | Create/update/sync presentation slides | `slides-writer` |
-{% endif %}| `proofreading` | Evaluating paper flow, readability, reader experience | `proofreader` |
-
-**Rationalization prevention:**
-
-| Thought | Reality |
-|---------|---------|
-| "This is just a simple question" | Questions are tasks. Check skills. |
-| "I need more context first" | Skill check comes BEFORE clarifying questions. |
-| "Let me explore the codebase first" | Skills tell you HOW to explore. Check first. |
-| "This doesn't need a formal skill" | If a skill exists, use it. |
-| "The skill is overkill" | Simple things become complex. Use it. |
-| "I'll just do this one thing first" | Check BEFORE doing anything. |
-
-**Priority:** If multiple skills apply, trigger process skills first (debugging, verification) then domain skills (writing, analysis).
-
-**Available agents** (in `.claude/agents/`):
-
-| Agent | Skills | Tool Restrictions |
-|-------|--------|-------------------|
-{% if use_r %}| `analyst-agent` | analysis, debugging, verification | Full tools |
-{% endif %}| `manuscript-writer` | writing, verification, proofreading | Full tools |
-| `researcher` | deep-research, reading, source-acquisition | No Edit (creates new files only) |
-| `source-acquirer` | source-acquisition, reading | Full tools (download + index) |
-| `reviewer` | review | Read-only + Bash (RAG); no Write/Edit |
-| `theorist` | formal-modeling, verification | Full tools |
-{% if use_slides %}| `slides-writer` | slides, writing | Full tools (never modify manuscript) |
-{% endif %}| `proofreader` | proofreading | Read-only (Read, Glob, Grep only) |
-
-**Agent routing:** When a skill applies and has a corresponding agent, delegate to that agent for focused, isolated execution. Use subagents liberally — one focused task per subagent.
+See `.claude/rules/skill-dispatch.md` for skill dispatch tables, rationalization prevention, and agent routing.
 
 ### Approach
 
@@ -62,15 +15,21 @@ Before ANY response—including clarifying questions—check whether a skill app
 - **Destructive actions:** Always confirm before deleting files/folders.
 - **Ambiguity:** Ask for clarification when instructions are unclear.
 
+### Session Start
+
+- **Orient first:** Read `revision/todo.md` for pending work. Review `.claude/lessons.md` for learned patterns. Check recent git history if relevant. Do this before diving into the user's request.
+
 ### Execution
 
 - **Autonomous debugging:** Re-run affected scripts and self-correct without asking.
 - **Verification:** Never mark a task complete without proving correctness (re-run, check logs, demonstrate results).
-
+{% if use_r %}- **Error-only output:** When running the R pipeline, use `QUIET=1` to surface only errors/warnings: `QUIET=1 bash .claude/skills/analysis/scripts/run_analysis_pipeline.sh --target <script>`. Use full output only when debugging.
+{% endif %}
 ### Documentation
 
 - **Update this doc:** When changes affect project structure or rules.
-- **Update structure map:** When files/folders change, update `.claude/directory-structure.md`.
+{% if use_r %}- **Update codebook:** When data changes affect `analysis/data/codebook.md`.
+{% endif %}- **Update structure map:** When files/folders change, update `.claude/directory-structure.md`.
 - **Lessons:** After any user correction, update `.claude/lessons.md`. Review lessons at session start.
 
 ---
@@ -85,10 +44,23 @@ Before ANY response—including clarifying questions—check whether a skill app
 | `analysis/output/figures/` | Generated plots |
 {% endif %}{% if paper_tool == "typst" %}| `paper/paper.typ` | Main manuscript (Typst) |
 {% else %}| `paper/paper.tex` | Main manuscript (LaTeX) |
-{% endif %}| `paper/notes/lit/` | Literature review notes |
-| `ref.bib` | Bibliography |
+{% endif %}| `notes/` | Obsidian vault: literature notes and background research |
+| `notes/papers/` | Atomic paper notes (one per source, by citekey) |
+| `notes/concepts/` | Concept notes (one per theoretical idea) |
+| `notes/lit/` | Thematic MOCs (Maps of Content) linking paper notes |
+| `revision/review/` | Journal review reports |
+| `revision/todo.md` | Active revision items |
+| `revision/done.md` | Completed items with full concern/resolution records |
+| `ref.bib` | Bibliography (BBT auto-exported, never edit directly) |
 {% if use_slides %}{% if paper_tool == "typst" %}| `talk/slides.typ` | Presentation slides |
 {% else %}| `talk/slides.tex` | Presentation slides |
 {% endif %}{% endif %}| `.claude/lessons.md` | Learned patterns from corrections |
-
+{% if use_r %}| `analysis/data/codebook.md` | Variable documentation |
+{% endif %}
 Full directory structure: see `.claude/directory-structure.md`
+
+## Harness Maintenance
+
+- **Build to delete:** Every skill/hook encodes an assumption about what the model can't do. Periodically stress-test those assumptions. If a skill's failure modes no longer occur, consider removing it.
+- **Context budget:** Always-loaded context (CLAUDE.md + rules + MEMORY.md) is limited. Keep it lean. If adding new rules, move lower-frequency reference docs to on-demand skills.
+- **Candidates for on-demand conversion:** `rag-usage.md` and `skills-engine.md` are reference docs used infrequently. Consider moving to skills if context budget tightens.

@@ -1,0 +1,59 @@
+# Skill Dispatch (Mandatory)
+
+Before ANY response---including clarifying questions---check whether a skill applies. If there is even a 1% chance a skill is relevant, invoke it. This is non-negotiable.
+
+**Available skills** (in `.claude/skills/`):
+
+
+| Skill | Trigger | Agent |
+| ----- | ------- | ----- |
+| `writing` | Any prose/equation/table/caption edit in the manuscript | `manuscript-writer` |
+{% if use_r %}| `analysis` | Any R script, pipeline, results, or data task | `analyst-agent` |
+{% endif %}| `review` | Stress-testing arguments, identification strategy, or claims | `reviewer` |
+| `deep-research` | Surveying a literature, finding papers, mapping a field | `researcher` |
+| `reading` | Reading/evaluating a specific paper or book | `reader` |
+| `formal-modeling` | Formal theory, game trees, proofs, propositions, equilibria | `theorist` |
+| `verification` | About to claim work is done, commit, or move to next task | *(cross-cutting)* |
+| `debugging` | Any error, failure, or unexpected behavior | `analyst-agent` |
+| `parallel-dispatch` | 2+ independent tasks that can run concurrently | *(orchestration)* |
+| `source-acquisition` | Download papers, add to Zotero, index into RAG | `source-acquirer` |
+{% if use_slides %}| `slides` | Create/update/sync presentation slides | `slides-writer` |
+{% endif %}| `proofreading` | Evaluating paper flow, readability, reader experience | `proofreader` |
+| `vault-search` | Search Obsidian vault for literature context | `vault-searcher` |
+| `task-management` | Manage revision dashboard: add/done/evaluate/edit tasks | `task-manager` |
+
+
+**Rationalization prevention:**
+
+
+| Thought | Reality |
+| ------- | ------- |
+| "This is just a simple question" | Questions are tasks. Check skills. |
+| "I need more context first" | Skill check comes BEFORE clarifying questions. |
+| "Let me explore the codebase first" | Skills tell you HOW to explore. Check first. |
+| "This doesn't need a formal skill" | If a skill exists, use it. |
+| "The skill is overkill" | Simple things become complex. Use it. |
+| "I'll just do this one thing first" | Check BEFORE doing anything. |
+
+
+**Priority:** If multiple skills apply, trigger process skills first (debugging, verification) then domain skills (writing, analysis).
+
+**Available agents** (in `.claude/agents/`):
+
+
+| Agent | Skills | Tool Restrictions |
+| ----- | ------ | ----------------- |
+{% if use_r %}| `analyst-agent` | analysis, debugging, verification | Full tools |
+{% endif %}| `manuscript-writer` | writing, verification, proofreading | Full tools |
+| `reader` | reading, vault-search | Full tools (reads + writes vault notes) |
+| `researcher` | deep-research, source-acquisition | No Edit (creates new files only) |
+| `source-acquirer` | source-acquisition, reading | Full tools (download + index) |
+| `reviewer` | review | Read-only + Bash (RAG); no Write/Edit |
+| `theorist` | formal-modeling, verification | Full tools |
+{% if use_slides %}| `slides-writer` | slides, writing | Full tools (never modify manuscript) |
+{% endif %}| `proofreader` | proofreading | Read-only (Read, Glob, Grep only) |
+| `vault-searcher` | vault-search | Read-only (Read, Glob, Grep, Bash) |
+| `task-manager` | task-management | Full tools |
+
+
+**Agent routing:** When a skill applies and has a corresponding agent, delegate to that agent for focused, isolated execution. Use subagents liberally --- one focused task per subagent.

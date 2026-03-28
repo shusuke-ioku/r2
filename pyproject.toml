@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "r2-research"
-version = "0.1.0"
+version = "0.2.0"
 description = "AI-driven research environment for academic papers — powered by Claude Code"
 readme = "README.md"
 license = "MIT"
