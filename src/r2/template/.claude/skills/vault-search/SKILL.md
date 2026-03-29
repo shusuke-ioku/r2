@@ -1,12 +1,12 @@
 ---
 name: vault-search
 description: >
-  Searches the Obsidian vault (notes/) for relevant paper notes, concept notes,
+  Searches the Obsidian vault (library/) for relevant paper notes, concept notes,
   and thematic MOCs. Uses the Obsidian Local REST API when available, falls back
   to file-based search. Trigger whenever context from the literature is needed:
   writing prose that engages the literature, checking what we know about a topic,
   finding which papers discuss a concept, tracing backlinks, or any task where
-  consulting notes/ would improve the output. Trigger on phrases like "what do
+  consulting library/ would improve the output. Trigger on phrases like "what do
   we have on X," "check our notes," "which papers discuss X," "find notes about
   X," "what does the vault say about X." Also trigger proactively when another
   skill (writing, formal-modeling, review) would benefit from vault context
@@ -17,7 +17,7 @@ description: >
 
 ## Why This Skill Exists
 
-The vault (`notes/`) contains structured knowledge: atomic paper notes with
+The vault (`library/`) contains structured knowledge: atomic paper notes with
 YAML frontmatter, concept notes linking papers to ideas, and thematic MOCs
 providing overviews. Searching this vault effectively means using its structure
 — frontmatter properties, wiki-links, tags, and Obsidian's search — not just
@@ -38,7 +38,7 @@ curl -sk https://127.0.0.1:27124/ 2>/dev/null | head -1
 If this returns JSON, the API is live. Read the API key from the plugin's
 config if needed:
 ```bash
-cat notes/.obsidian/plugins/obsidian-local-rest-api/data.json 2>/dev/null | python3 -c "import json,sys; print(json.load(sys.stdin).get('apiKey',''))"
+cat library/.obsidian/plugins/obsidian-local-rest-api/data.json 2>/dev/null | python3 -c "import json,sys; print(json.load(sys.stdin).get('apiKey',''))"
 ```
 
 **Full-text search** (Obsidian's built-in fuzzy search):
@@ -74,31 +74,31 @@ Use these when Obsidian isn't running or for quick targeted lookups.
 **a. Frontmatter property search** — find papers by theme, relevance, year:
 ```bash
 # All high-relevance papers on a theme
-grep -rl "theme-keyword" notes/papers/ | \
+grep -rl "theme-keyword" library/papers/ | \
   xargs grep -l "relevance: high"
 ```
 
 **b. Backlink search** — find all notes linking to a specific paper or concept:
 ```bash
 # Everything that references a citekey
-grep -rl "\[\[citekey\]\]" notes/
+grep -rl "\[\[citekey\]\]" library/
 ```
 
 **c. Citekey lookup** — jump straight to a paper note:
 ```bash
-cat notes/papers/citekey.md
+cat library/papers/citekey.md
 ```
 
 **d. Concept traversal** — read a concept note, then follow its linked papers:
 ```bash
 # Read the concept, extract linked papers
-cat notes/concepts/concept-name.md
-grep -oP '\[\[([^\]]+)\]\]' notes/concepts/concept-name.md
+cat library/concepts/concept-name.md
+grep -oP '\[\[([^\]]+)\]\]' library/concepts/concept-name.md
 ```
 
 **e. MOC scan** — read a thematic overview for broad context:
 ```bash
-cat notes/lit/topic-name.md
+cat library/lit/topic-name.md
 ```
 
 **f. Multi-property YAML search** — parse frontmatter for structured queries:
@@ -106,7 +106,7 @@ cat notes/lit/topic-name.md
 # Find all papers from 2020+ with high relevance
 python3 -c "
 import glob, yaml, sys
-for f in glob.glob('notes/papers/*.md'):
+for f in glob.glob('library/papers/*.md'):
     with open(f) as fh:
         txt = fh.read()
     if not txt.startswith('---'): continue
@@ -127,7 +127,7 @@ for f in glob.glob('notes/papers/*.md'):
 | "Which high-relevance papers on theme Y?" | Frontmatter property search |
 | "What cites paper Z?" | Backlink search for `[[Z]]` |
 | "Give me context on concept W" | Concept note → follow links |
-| "Broad overview of topic T" | MOC scan in `notes/lit/` |
+| "Broad overview of topic T" | MOC scan in `library/lit/` |
 | "All papers by Author A" | Frontmatter `authors:` search |
 | "Recent work (2020+) on X" | Multi-property YAML search |
 
@@ -152,7 +152,7 @@ Return results as a structured list:
 - [[concept-name]] — definition summary
 
 #### MOCs consulted
-- notes/lit/topic.md — section headings relevant to query
+- library/lit/topic.md — section headings relevant to query
 ```
 
 When called by another skill (writing, review, etc.), return the **content**
@@ -174,7 +174,7 @@ vault-searcher agent) before proceeding when literature context would help:
 **Searching only by keyword.** The vault's structure (frontmatter, links) is
 more precise than full-text search. Use property queries for structured needs.
 
-**Ignoring MOCs.** The thematic MOCs in `notes/lit/` are curated overviews —
+**Ignoring MOCs.** The thematic MOCs in `library/lit/` are curated overviews —
 they're often the fastest path to relevant context.
 
 **Not following links.** A concept note links to papers; a paper note links

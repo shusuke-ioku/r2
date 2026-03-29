@@ -60,8 +60,8 @@ without a target is not actionable.
 3. **Data / codebook edits**: New variables, recoding, or documentation updates
    in `analysis/data/codebook.md`.
 4. **Manuscript framing edits**: Changes to how the paper positions itself
-   relative to the literature, including updates to relevant MOCs in `notes/lit/`
-   and atomic paper notes in `notes/papers/`.
+   relative to the literature, including updates to relevant MOCs in `library/lit/`
+   and atomic paper notes in `library/papers/`.
 
 ## Priority List
 

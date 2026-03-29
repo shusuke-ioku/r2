@@ -547,7 +547,7 @@ def lit_download_batch(papers_json: str, auto_index: bool):
 @click.argument("query")
 @click.option("--file", "input_file", default="-", type=click.File("r"), help="Report content file (default: stdin)")
 def lit_save_report(query: str, input_file):
-    """Save a literature review report to notes/lit/YYYY-MM-DD_short-title.md.
+    """Save a literature review report to library/lit/YYYY-MM-DD_short-title.md.
 
     Reads report content from stdin or a file.
     """

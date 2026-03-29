@@ -84,7 +84,7 @@ Return your findings as structured markdown:
 - Every factual claim must cite a source URL
 - If you find an academic paper, note it for source-acquisition — don't
   try to download it yourself
-- Write findings to `notes/web/` if the user asks for persistence
+- Write findings to `library/web/` if the user asks for persistence
 - Prefer primary sources (government docs, organizational records) over
   secondary summaries
 - When in doubt about a claim, say so explicitly

@@ -507,7 +507,7 @@ def lit_deep_research(
     prompt for the LLM to produce a thorough literature survey.
 
     IMPORTANT: After you synthesize the results, call lit_save_report to save the
-    completed report to notes/lit/YYYY-MM-DD_short-title.md.
+    completed report to library/lit/YYYY-MM-DD_short-title.md.
 
     Args:
         query: Research question (e.g. "How do trade shocks affect political extremism?")

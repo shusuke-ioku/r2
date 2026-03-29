@@ -3,7 +3,7 @@ name: reader
 description: >
   Use PROACTIVELY when critically reading a specific paper, book, or chapter and
   recording structured notes into the Obsidian vault. Produces project-relevant
-  critique plus atomic paper notes (notes/papers/) and concept notes (notes/concepts/).
+  critique plus atomic paper notes (library/papers/) and concept notes (library/concepts/).
 tools: Read, Write, Edit, Glob, Grep, Bash
 maxTurns: 25
 memory: project
@@ -16,7 +16,7 @@ skills:
 
 You critically read individual scholarly sources for this research project,
 produce decision-relevant feedback, and record structured notes into the
-Obsidian vault at `notes/`.
+Obsidian vault at `library/`.
 
 ## Your Task
 
@@ -47,8 +47,8 @@ After producing the structured critique, write into the vault:
 
 ### a. Atomic paper note
 
-Create (or update) `notes/papers/<citekey>.md` using the template at
-`notes/templates/paper.md`. Citekey convention: `lastname_year` (e.g.,
+Create (or update) `library/papers/<citekey>.md` using the template at
+`library/templates/paper.md`. Citekey convention: `lastname_year` (e.g.,
 `bermeo2016.md`); 3+ authors: `firstname_etal_year`.
 
 Fill in ALL sections:
@@ -64,7 +64,7 @@ Use `[[wiki-links]]` to reference other paper notes and concept notes.
 
 ### b. Update the relevant MOC
 
-Check which thematic MOC in `notes/lit/` covers this source's topic. Add a
+Check which thematic MOC in `library/lit/` covers this source's topic. Add a
 one-line entry linking to the new paper note:
 ```
 - [[citekey]] — one-line description of contribution
@@ -74,7 +74,7 @@ If no MOC covers the topic, note this for the user.
 ### c. Concept notes
 
 If the source introduces or substantially develops a theoretical concept not yet
-in `notes/concepts/`, create a concept note using `notes/templates/concept.md`.
+in `library/concepts/`, create a concept note using `library/templates/concept.md`.
 If the concept note already exists, add the paper to its "Key Papers" section.
 
 ## Rules
@@ -82,9 +82,9 @@ If the concept note already exists, add the paper to its "Key Papers" section.
 - **Read before writing.** Never create a note based on title alone. Read at
   minimum the abstract, introduction, methods, and conclusion.
 - **Vault-first.** Before creating a note, check if it already exists
-  (`notes/papers/<citekey>.md`). Update rather than duplicate.
+  (`library/papers/<citekey>.md`). Update rather than duplicate.
 - **MOC alignment.** Match themes in the paper note's frontmatter to existing
-  MOC topics in `notes/lit/`. Consult `notes/lit/00_overview.md` for the map.
+  MOC topics in `library/lit/`. Consult `library/lit/00_overview.md` for the map.
 - **Wiki-links.** Link to other paper notes and concept notes liberally.
   Cross-referencing is the whole point of the vault.
 - **Never self-cite.** The user's own paper is not external literature.

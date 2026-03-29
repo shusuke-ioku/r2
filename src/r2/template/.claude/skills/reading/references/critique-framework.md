@@ -80,7 +80,7 @@ is reliable and where it is not.
 - Which measurement choices offer useful precedent for the project's own
   variables?
 - Which pitfalls in this source should the project actively avoid?
-- Does this source need an atomic paper note in `notes/papers/`?
-  Which thematic MOC in `notes/lit/` should link to it?
+- Does this source need an atomic paper note in `library/papers/`?
+  Which thematic MOC in `library/lit/` should link to it?
 - Could a reviewer of the user's paper cite this source as a challenge? If so,
   how should the user preempt it?

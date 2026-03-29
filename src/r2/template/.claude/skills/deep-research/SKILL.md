@@ -270,22 +270,22 @@ the user may want to pursue.
 
 For each HIGH-priority paper that was read during the discovery loop:
 
-1. **Create an atomic paper note** at `notes/papers/<citekey>.md` using the
-   template in `notes/templates/paper.md`. Fill in YAML frontmatter and all
+1. **Create an atomic paper note** at `library/papers/<citekey>.md` using the
+   template in `library/templates/paper.md`. Fill in YAML frontmatter and all
    body sections from your reading. Use `[[wiki-links]]` to reference other
    paper notes and concept notes.
 
-2. **Create concept notes** at `notes/concepts/<concept>.md` for any
+2. **Create concept notes** at `library/concepts/<concept>.md` for any
    theoretical concepts substantially developed across multiple papers.
-   Use the template in `notes/templates/concept.md`.
+   Use the template in `library/templates/concept.md`.
 
-3. **Update relevant thematic MOCs** in `notes/lit/` --- add one-line entries
+3. **Update relevant thematic MOCs** in `library/lit/` --- add one-line entries
    linking to the new paper notes.
 
 #### 2.4 Save the synthesis report
 
 Call **`lit_save_report`** to save the synthesis report to
-`notes/lit/YYYY-MM-DD_slug.md`. This report should use `[[wiki-links]]`
+`library/lit/YYYY-MM-DD_slug.md`. This report should use `[[wiki-links]]`
 to reference the atomic paper notes created in §2.3, making it a
 navigable MOC rather than a standalone monolith.
 
@@ -339,7 +339,7 @@ Show the user this after each step:
 
 ### Subagent log file (secondary)
 
-Each subagent should ALSO write progress to `notes/lit/_survey_progress.md`
+Each subagent should ALSO write progress to `library/lit/_survey_progress.md`
 (append-mode, with timestamps) for fine-grained tracking within long steps.
 This is a backup — the primary progress channel is the orchestrator
 reporting between steps.
@@ -408,7 +408,7 @@ Mention it in the acquisition log as a candidate for future acquisition.
 **Not reporting progress.** The user should always know which iteration
 you are on, how many papers you have found/downloaded/read, and whether
 the loop is converging. Write to the progress log file at every major
-step — `notes/lit/_survey_progress.md`. A silent 15-minute agent
+step — `library/lit/_survey_progress.md`. A silent 15-minute agent
 run with no visibility is a failure mode, not a feature.
 
 **Forgetting to save.** Always call `lit_save_report` at the end.

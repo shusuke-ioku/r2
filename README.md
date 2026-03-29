@@ -45,11 +45,13 @@ The problem with LLM writing assistance: it doesn't know what good looks like in
 
 Three parallel assessors evaluate your manuscript from distinct angles:
 
-| Assessor | Focus | Example issues |
-|----------|-------|----------------|
-| **Proofreader** | Reader experience | "Your finding doesn't appear until paragraph 4 — the reader has been passive for 3 paragraphs" |
-| **Calibration assessor** | Field norms | "With an IV first-stage F of 28, this hedging damages trust — 75% of APSR papers state the main finding flatly" |
-| **Humanizer** | AI tells | "Significance inflation: 3 adjectives in 2 sentences. Published papers let the coefficients speak." |
+
+| Assessor                 | Focus             | Example issues                                                                                                  |
+| ------------------------ | ----------------- | --------------------------------------------------------------------------------------------------------------- |
+| **Proofreader**          | Reader experience | "Your finding doesn't appear until paragraph 4 — the reader has been passive for 3 paragraphs"                  |
+| **Calibration assessor** | Field norms       | "With an IV first-stage F of 28, this hedging damages trust — 75% of APSR papers state the main finding flatly" |
+| **Humanizer**            | AI tells          | "Significance inflation: 3 adjectives in 2 sentences. Published papers let the coefficients speak."             |
+
 
 After assessment, the orchestrator deduplicates issues, ranks by severity, and builds a revision plan with word budgets per section. Revisions proceed section-by-section with Typst compilation after each edit. The loop re-assesses and iterates until convergence.
 
@@ -61,8 +63,6 @@ After assessment, the orchestrator deduplicates issues, ranks by severity, and b
 ```
 
 ## Simulated Peer Review
-
-Manuscript polish makes your writing match what gets published. Peer review asks a different question: **will this paper get in?**
 
 An editor agent dispatches three independent reviewer subagents, each with expertise tailored to your paper's field, method, and case. They write severity-graded reports (fatal / serious / minor) and ground every objection in published work via RAG.
 
@@ -112,22 +112,24 @@ The `vault-search` skill uses Obsidian's Local REST API when available, or file-
 
 Every request is matched to a skill before Claude acts. 18 skills route to 13 specialized agents:
 
-| Skill | What it does |
-|-------|-------------|
-| `polishing` | Convergence-loop submission polish with 3 parallel assessors |
-| `writing` | Empirically calibrated academic prose |
-| `proofreading` | First-time reader simulation for flow diagnosis |
-| `review` | Simulated peer review with NVI scoring |
-| `deep-research` | Multi-database literature surveys with snowballing |
-| `reading` | Critical evaluation of papers + vault notes |
-| `source-acquisition` | Download papers, Zotero, RAG indexing |
-| `analysis` | R pipeline management and debugging |
-| `formal-modeling` | Game-theoretic models, proofs, propositions |
-| `slides` | Presentation slides synced with manuscript |
-| `vault-search` | Obsidian vault search for literature context |
-| `task-management` | Revision dashboard |
-| `verification` | Prove correctness before reporting "done" |
-| `skill-creation` | Create, evaluate, and optimize custom skills |
+
+| Skill                | What it does                                                 |
+| -------------------- | ------------------------------------------------------------ |
+| `polishing`          | Convergence-loop submission polish with 3 parallel assessors |
+| `writing`            | Empirically calibrated academic prose                        |
+| `proofreading`       | First-time reader simulation for flow diagnosis              |
+| `review`             | Simulated peer review with NVI scoring                       |
+| `deep-research`      | Multi-database literature surveys with snowballing           |
+| `reading`            | Critical evaluation of papers + vault notes                  |
+| `source-acquisition` | Download papers, Zotero, RAG indexing                        |
+| `analysis`           | R pipeline management and debugging                          |
+| `formal-modeling`    | Game-theoretic models, proofs, propositions                  |
+| `slides`             | Presentation slides synced with manuscript                   |
+| `vault-search`       | Obsidian vault search for literature context                 |
+| `task-management`    | Revision dashboard                                           |
+| `verification`       | Prove correctness before reporting "done"                    |
+| `skill-creation`     | Create, evaluate, and optimize custom skills                 |
+
 
 ```bash
 r2 skills dispatch "rewrite the theory section"   # which skill handles this?

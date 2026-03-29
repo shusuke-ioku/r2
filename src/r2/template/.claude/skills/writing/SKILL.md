@@ -206,7 +206,7 @@ If any check fails, rewrite before moving on. Do not leave problems for a later 
 
 ## Fact-Checking Obligation
 
-Verify every factual claim before writing it, even when the user explicitly requests specific content. Check dates, names, places, and characterizations against sources (RAG, PDFs, existing notes in `notes/`). If a claim cannot be verified, flag it to the user rather than writing it.
+Verify every factual claim before writing it, even when the user explicitly requests specific content. Check dates, names, places, and characterizations against sources (RAG, PDFs, existing notes in `library/`). If a claim cannot be verified, flag it to the user rather than writing it.
 
 Why this is non-negotiable: A single wrong date or mischaracterized source in a historical paper can sink the manuscript's credibility with area-specialist reviewers. The user's role is to direct; the agent's role is to ensure accuracy.
 

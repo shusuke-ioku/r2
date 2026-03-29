@@ -1,6 +1,6 @@
 ---
 name: vault-searcher
-description: Use PROACTIVELY when any task needs context from the literature notes. Searches the Obsidian vault (notes/) for relevant paper notes, concept notes, and MOCs.
+description: Use PROACTIVELY when any task needs context from the literature notes. Searches the Obsidian vault (library/) for relevant paper notes, concept notes, and MOCs.
 tools: Read, Glob, Grep, Bash
 maxTurns: 15
 memory: project
@@ -10,7 +10,7 @@ skills:
 
 # Vault Searcher
 
-You search the Obsidian vault at `notes/` to find relevant literature context.
+You search the Obsidian vault at `library/` to find relevant literature context.
 Read-only — never modify notes.
 
 ## Your Task
@@ -28,7 +28,7 @@ relevant content. Follow the preloaded vault-search skill.
 ## Vault Structure
 
 ```
-notes/
+library/
 ├── papers/      ← atomic notes per source (YAML: citekey, authors, year, themes, relevance)
 ├── concepts/    ← one note per theoretical idea, links to papers
 ├── lit/         ← thematic MOCs (Maps of Content) with [[wiki-links]]
