@@ -163,6 +163,64 @@ Implication:
 - Conclusion closure should rest on implication, not on a generic look ahead.
 - The 0/80 result for "more research is needed" is the single strongest negative norm in the corpus.
 
+### 10. Abstract norms
+
+From a direct reading of all 28 extractable abstracts in the top-tier corpus (CAL001--CAL030):
+
+**Word count**: mean 147, median 149, range 78--196. Sweet spot is 140--160 words.
+
+**Opening move** (first sentence):
+
+- research question (39%): "How/Why/Can/Do..." — the most common opener
+- phenomenon or claim statement (36%): a declarative fact about the world
+- result-first statement (18%): announces the theoretical result directly — almost exclusively formal theory
+- CW/literature gap (14%): "Scholars have debated..." — least common
+
+**Finding verb**: "find" (36%) and "show" (29%) dominate. "Suggest" appears only for secondary findings or mechanisms. "Confirm" is almost never used. "Establish" is reserved for formal theory.
+
+**Finding placement**: findings typically appear in sentences 4--6 (middle-to-late), not up front. Empirical papers place findings later (sentences 5--7) because they first set up puzzle, argument, and method. Formal theory places results earlier (sentences 2--4).
+
+**Hedging**: 75% of abstracts state the main finding flatly. Hedging ("suggest", "consistent with") is reserved for secondary findings. The main result almost never uses "may" or "might."
+
+**Structure — empirical papers** (6-move pattern):
+
+1. puzzle or phenomenon (1 sentence)
+2. CW or gap (1 sentence)
+3. argument — what this paper claims (1 sentence)
+4. design/data — identification strategy, case, data source (1--2 sentences)
+5. finding — stated with "find" or "show" (1--2 sentences)
+6. implication — what this means for the broader question (1 sentence)
+
+**Structure — formal theory papers** (5-move pattern):
+
+1. puzzle or question (1 sentence)
+2. model description (1--2 sentences)
+3. main result (1--2 sentences)
+4. secondary results or comparative statics (1--2 sentences)
+5. broader significance (1 sentence)
+
+**Things APSR/AJPS abstracts never do**:
+
+- no citations in the abstract (one rare term-of-art exception)
+- no self-praise adjectives ("novel", "innovative", "first to")
+- no limitations or caveats
+- no statistical significance language ("p < 0.05", "significant at the 5% level")
+- no metadiscourse ("contributes to the literature", "fills a gap")
+- no passive voice for findings ("It was found that...")
+- no future-research calls
+- no bullet points or numbered lists — continuous prose only
+- no "importantly" or "interestingly"
+- no sweeping historical openers ("Throughout history...")
+
+Implication:
+
+- Follow the 6-move empirical template or 5-move formal theory template.
+- Target 140--160 words. Never exceed 200.
+- Open with a puzzle or phenomenon, not with "This paper..."
+- State the finding flatly with "find" or "show." Hedge only secondary claims.
+- Close on implication, never on future research or limitations.
+- Keep it citation-free, formatting-free, and jargon-lean.
+
 ## Common manuscript anti-patterns
 
 These are recurring failures the integrated skills should catch.
