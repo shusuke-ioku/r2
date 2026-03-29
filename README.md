@@ -1,13 +1,18 @@
-# r2 [v0.3.0]
+# r2
 
 *Not the droid you're looking for — but it will get your paper through R&R.*
 
-A **harness-engineered** research environment for political science papers, built on [Claude Code](https://claude.ai/claude-code). **13 agents**, **18 skills**, **automated guardrails** via hooks, and a **mandatory skill-dispatch layer** that routes every request before the model touches anything.
+An AI research environment for political science, built on [Claude Code](https://claude.ai/claude-code). r2 treats writing, reviewing, and literature work as engineering problems: every evaluation norm is extracted from real published papers, every skill is routed before the model acts, and every guardrail is automated.
 
-- **Calibrated manuscript assessment and revision** — three parallel assessors (proofreader, calibration assessor, humanizer) evaluate craft against an **empirical audit of published APSR/AJPS papers**, then a convergence loop implements revisions section-by-section until no Critical or Important issues remain
-- **Iterative literature surveys with RAG and Zotero** — a local **RAG vector store** over your PDF library, combined with three external databases (Semantic Scholar, OpenAlex, Scopus) and **two-level Zotero integration** (cloud API for metadata + local API for annotations). Surveys **snowball citations**, acquire PDFs automatically, read full text, discover new leads, and loop until convergence.
-- **Empirically calibrated peer review** — three independent reviewer agents scored against a blind training set of top-generalist vs. field-journal publications to correct systematic biases
-- **Self-building Obsidian vault** — every paper you read becomes a structured, wiki-linked note that future writing and review skills consult automatically
+## What it does
+
+**Write like the journals you're targeting.** The writing and polishing skills are calibrated against an empirical audit of APSR/AJPS papers — not generic style guides. When the skill says "move your finding to paragraph 2," that's because 82% of top-tier intros do exactly that.
+
+**Know what reviewers will say before they say it.** Three simulated reviewers — a literature scholar, a methodologist, and a domain expert — score your paper on Novelty, Validity, and Importance. Their biases have been corrected against a blind training set so they don't under-rate formal theory or compress scores to the middle.
+
+**Read the literature faster than you can download it.** A local RAG index over your PDFs, three external databases, snowballing, automatic PDF acquisition, and Zotero integration. The survey loops until it stops finding new leads.
+
+**Build a knowledge base as you go.** Every paper you read becomes a structured Obsidian note. Future writing and review skills consult it automatically.
 
 ## Install
 
@@ -22,9 +27,7 @@ Add r2 to an **existing project**: `r2 init .` — writes framework files only, 
 
 ## Updating
 
-Run `/update-r2` inside Claude Code. Claude fetches the latest template, diffs each file, and merges changes — preserving your customizations.
-
-To update the CLI itself:
+Run `/update-r2` inside Claude Code. To update the CLI itself:
 
 ```bash
 pip install --upgrade "r2-research @ git+https://github.com/shusuke-ioku/r2.git"
@@ -32,139 +35,121 @@ pip install --upgrade "r2-research @ git+https://github.com/shusuke-ioku/r2.git"
 
 ## API Keys
 
-Only `ANTHROPIC_API_KEY` is required. Optional keys unlock external database search (Scopus, Semantic Scholar) and Zotero integration. See `.env.example` for the full list.
+Only `ANTHROPIC_API_KEY` is required. Optional keys unlock Scopus, Semantic Scholar, and Zotero. See `.env.example`.
 
 ---
 
-## Calibrated Manuscript Assessment and Revision
+## Manuscript Polish
 
-r2 includes a **convergence-loop polishing framework** that prepares manuscripts for top-journal submission. Rather than relying on generic style rules, every evaluation criterion is grounded in an **empirical audit of published APSR/AJPS papers** — what verbs they use for which research designs, how they hedge findings, where they place limitations, how they structure introductions and conclusions.
+The problem with LLM writing assistance: it doesn't know what good looks like in your field. r2 solves this by extracting concrete norms from an 80-paper calibration corpus of APSR/AJPS publications — what verbs they use, how they structure intros, where they place findings, how they close conclusions.
 
-The framework dispatches **three parallel assessors**, each evaluating craft from a distinct angle:
+Three parallel assessors evaluate your manuscript from distinct angles:
 
-- **Proofreader** — simulates a first-time reader, tracking flow, logic, pacing, undefined terms, and structural deviations across 9 diagnostic categories
-- **Calibration Assessor** — checks prose against empirical findings from the APSR/AJPS audit: design-calibrated verbs, hedge asymmetry, limitation placement, topic sentences, introduction timing, conclusion length, restatement strategy, paragraph length, voice, and assertiveness hierarchy
-- **Humanizer** — scans for AI-writing tells using a comprehensive pattern catalog (significance inflation, synonym cycling, rule-of-three, copula avoidance, and more)
+| Assessor | Focus | Example issues |
+|----------|-------|----------------|
+| **Proofreader** | Reader experience | "Your finding doesn't appear until paragraph 4 — the reader has been passive for 3 paragraphs" |
+| **Calibration assessor** | Field norms | "With an IV first-stage F of 28, this hedging damages trust — 75% of APSR papers state the main finding flatly" |
+| **Humanizer** | AI tells | "Significance inflation: 3 adjectives in 2 sentences. Published papers let the coefficients speak." |
 
-After assessment, the orchestrator **synthesizes** all three reports: deduplicates issues, resolves conflicts between assessors, priority-ranks into Critical/Important/Polish tiers, and computes a **word budget per section** against empirical benchmarks. The revision plan goes to the user for approval before any edits begin.
+After assessment, the orchestrator deduplicates issues, ranks by severity, and builds a revision plan with word budgets per section. Revisions proceed section-by-section with Typst compilation after each edit. The loop re-assesses and iterates until convergence.
 
-Implementation proceeds **section-by-section** via the manuscript-writer agent, with Typst compilation and word-count verification after each section. The loop then **re-assesses** only edited sections and iterates until convergence — zero Critical issues, zero Important issues, and fewer than 3 new Polish-level issues from re-assessment. Maximum 3 iterations.
-
-A **conservative bias correction** step prevents over-flagging: if the manuscript text matches what actual APSR papers do per the calibration report, the issue is dismissed or downgraded. The empirical audit is the ground truth, not intuitions about what "should" be.
+**Priority ordering is corpus-backed**: intro ownership (+32pp gap between top and non-top) gets fixed before results placement (+9pp gap) gets fixed before sentence-level polish.
 
 ```
 > /polish                    # full convergence loop
 > "polish for APSR"          # triggers automatically
-> "submission prep"           # triggers automatically
-> /polish --target 12000     # with total word count target
 ```
 
-## Iterative Literature Surveys with RAG and Zotero
+## Simulated Peer Review
 
-r2 builds a **local RAG vector store** (ChromaDB + sentence-transformers) over your PDF library. Every paper you download or already have in Zotero gets chunked, embedded, and indexed for full-text semantic search.
+Manuscript polish makes your writing match what gets published. Peer review asks a different question: **will this paper get in?**
 
-On top of the local index, three external databases — **Semantic Scholar**, **OpenAlex**, and **Scopus** — provide abstract-level search across the full academic literature. The `deep-research` skill combines both into an iterative discovery loop:
+An editor agent dispatches three independent reviewer subagents, each with expertise tailored to your paper's field, method, and case. They write severity-graded reports (fatal / serious / minor) and ground every objection in published work via RAG.
 
-1. **Search** local RAG (multiple query variations) + external databases (broad, high-impact, recent, classical)
-2. **Snowball** forward and backward citations from every high-priority paper
-3. **Triage** candidates by relevance into a running candidate list
-4. **Acquire** high-priority papers: download PDF, create Zotero item with full CrossRef metadata, index into RAG — in one call
-5. **Read** acquired papers in full text via RAG, not just abstracts
-6. **Check convergence**: did reading surface new leads? If yes, loop back to step 1. If no, proceed to synthesis.
+The **NVI scoring system** (Novelty, Validity, Importance) is adapted from real editorial practice. Each dimension is scored 1--5; the composite drives venue-tier classification and R&R probability estimates.
 
-The loop typically runs 2–4 iterations. The final report is written only after convergence, organized thematically — not paper-by-paper.
+The scoring has been **calibrated against a blind test set** of top-generalist vs. field-journal papers, correcting five biases: formal theory undervaluation, top-field hedging, non-novelty over-application, probability compression, and score compression toward 3--4.
 
-**Zotero integration** operates at two levels. The **cloud API** (pyzotero) creates Zotero items with full metadata and PDF attachments whenever you download a paper — every acquisition flows into your bibliography automatically via Better BibTeX auto-export. The **local API** (Zotero desktop) gives Claude direct access to your library, PDF content, highlights, and annotations without exporting anything.
+| Polish answers | Review answers |
+|----------------|----------------|
+| Does this read like APSR? | Would APSR accept it? |
+| Is the intro front-loaded? | Is the contribution novel? |
+| Are the findings stated at the right confidence level? | Is the identification strategy credible? |
+| Are there AI-writing tells? | Does the literature positioning hold up? |
+
+```
+> /review                     # full simulated peer review
+> "stress-test my argument"   # triggers automatically
+```
+
+## Literature Surveys
+
+r2 builds a **local RAG vector store** (ChromaDB + sentence-transformers) over your PDF library and connects to three external databases: Semantic Scholar, OpenAlex, and Scopus.
+
+The `deep-research` skill runs an iterative discovery loop:
+
+1. **Search** local RAG + external databases with multiple query variations
+2. **Snowball** forward and backward citations from high-priority papers
+3. **Acquire** PDFs automatically: download, create Zotero item with CrossRef metadata, index into RAG
+4. **Read** acquired papers in full text, not just abstracts
+5. **Check convergence**: new leads found? Loop back. No? Synthesize.
+
+The loop typically runs 2--4 iterations. The final report is thematic, not paper-by-paper.
+
+**Zotero integration** operates at two levels: the cloud API creates items with full metadata and PDF attachments (auto-exported via Better BibTeX), while the local API gives Claude direct access to your library, highlights, and annotations.
 
 ```bash
-r2 rag index                              # index your PDFs into vector store
-r2 rag search "democratic backsliding"     # semantic search over local library
-r2 rag lit-search "exit voice" --focus top_journals  # search external DBs
-r2 rag lit-download "10.1093/example"      # download + Zotero + index in one call
-r2 rag lit-citations PAPER_ID             # forward citation snowballing
-r2 rag lit-references PAPER_ID            # backward citation snowballing
+r2 rag index                              # index PDFs into vector store
+r2 rag search "democratic backsliding"     # semantic search
+r2 rag lit-search "exit voice" --focus top_journals
+r2 rag lit-download "10.1093/example"      # download + Zotero + index
 ```
 
-## Empirically Calibrated Peer Review
+## Knowledge Vault
 
-An editor agent dispatches three independent reviewer subagents — a **literature scholar**, a **methodologist**, and a **case/domain expert** — each instantiated with expertise tailored to the paper's specific field, method, and empirical context. Reviewers operate independently, write severity-graded reports (fatal / serious / minor), and ground every objection in published work via RAG.
+r2 scaffolds an [Obsidian](https://obsidian.md) vault at `library/` with three note types:
 
-The review framework uses the **NVI scoring system** (Novelty, Validity, Importance) adapted from real editorial practice. Each dimension is scored 1–5; the composite informs venue-tier classification and R&R probability estimates.
+- **Paper notes** — one per source, with structured sections: key arguments, findings, methods, relevance, critique
+- **Concept notes** — one per theoretical idea, linking to papers that develop it
+- **Thematic MOCs** — Maps of Content organized by theme with `[[wiki-links]]`
 
-The scoring has been **empirically calibrated** against a blind training set of published papers from top-generalist journals (APSR, AJPS) and field journals. This calibration corrects five systematic biases that the uncalibrated model exhibits: formal theory undervaluation, top-field hedging (defaulting to "good field journal" when uncertain), non-novelty over-application, probability compression in the 0.15–0.35 range, and NVI scale compression toward 3–4.
+The `vault-search` skill uses Obsidian's Local REST API when available, or file-based search as fallback. Other skills consult the vault automatically before writing or reviewing.
 
-```
-> /review-section              # full paper or a specific section
-> "stress-test my argument"    # triggers automatically
-> "what would reviewers say"   # triggers automatically
-```
+## Skills and Agents
 
-## Self-Building Obsidian Vault
+Every request is matched to a skill before Claude acts. 18 skills route to 13 specialized agents:
 
-r2 scaffolds an [Obsidian](https://obsidian.md) vault at `notes/` with three types of structured notes:
-
-- **Paper notes** (`notes/papers/<citekey>.md`) — one atomic note per source with YAML frontmatter (citekey, authors, year, themes, relevance) and structured sections (key arguments, findings, methods, relevance to this project, borrowable elements, critique). Created automatically by the `reading` skill.
-- **Concept notes** (`notes/concepts/<concept>.md`) — one per theoretical idea, linking to the paper notes that develop it. Created when a source introduces a concept not yet in the vault.
-- **Thematic MOCs** (`notes/lit/`) — Maps of Content that organize paper notes by theme using `[[wiki-links]]`. Updated automatically as new papers are read.
-
-The `vault-search` skill searches this vault using **Obsidian's Local REST API** when available (full-text search, Dataview queries, tag lookups) or **file-based search** as fallback (frontmatter property queries, backlink traversal, YAML parsing). Other skills — `writing`, `deep-research`, `review`, `formal-modeling` — consult the vault automatically before proceeding.
-
-To enable API-based search, install the [Obsidian Local REST API](https://github.com/coddingtonbear/obsidian-local-rest-api) community plugin. File-based search works without it.
-
-## Agents and Skills
-
-When you ask Claude to do something, r2 matches your request to a skill, which dispatches the right agent:
-
-| Skill | Agent | What it does |
-|-------|-------|-------------|
-| `polishing` | `polisher` | Convergence-loop submission polish with 3 parallel assessors |
-| `writing` | `manuscript-writer` | Academic prose, equations, tables, captions |
-| `analysis` | `analyst-agent` | R pipeline, debugging, result alignment |
-| `debugging` | `analyst-agent` | Autonomous error diagnosis and self-correction |
-| `review` | `reviewer` | Simulated peer review with three independent reviewers |
-| `deep-research` | `researcher` | Multi-database literature surveys with snowballing |
-| `reading` | `reader` | Critical evaluation of individual papers + vault notes |
-| `source-acquisition` | `source-acquirer` | Download papers, add to Zotero, index into RAG |
-| `formal-modeling` | `theorist` | Game-theoretic models, proofs, propositions |
-| `slides` | `slides-writer` | Presentation slides synced with manuscript |
-| `proofreading` | `proofreader` | First-time reader simulation for flow diagnosis |
-| `vault-search` | `vault-searcher` | Search Obsidian vault for literature context |
-| `task-management` | `task-manager` | Revision dashboard: add/done/evaluate tasks |
-| `verification` | *(cross-cutting)* | Prove correctness before reporting "done" |
-| `parallel-dispatch` | *(orchestration)* | Run independent tasks concurrently |
-| `skill-creation` | — | Create, evaluate, and optimize custom skills |
-| `humanizer` | `calibration-assessor`* | Remove AI-writing tells from prose |
-
-\* The `calibration-assessor` agent is dispatched by the polisher as one of three parallel assessors — it is not invoked standalone.
-
-Skills can be created, tested, and iteratively improved. The `skill-creation` skill handles the full lifecycle: draft a SKILL.md, generate test prompts, run them with and without the skill, compare outputs, grade against assertions, and repeat. The Skills Engine CLI (`r2 skills`) adds semantic search, ranked dispatch, and usage tracking.
+| Skill | What it does |
+|-------|-------------|
+| `polishing` | Convergence-loop submission polish with 3 parallel assessors |
+| `writing` | Empirically calibrated academic prose |
+| `proofreading` | First-time reader simulation for flow diagnosis |
+| `review` | Simulated peer review with NVI scoring |
+| `deep-research` | Multi-database literature surveys with snowballing |
+| `reading` | Critical evaluation of papers + vault notes |
+| `source-acquisition` | Download papers, Zotero, RAG indexing |
+| `analysis` | R pipeline management and debugging |
+| `formal-modeling` | Game-theoretic models, proofs, propositions |
+| `slides` | Presentation slides synced with manuscript |
+| `vault-search` | Obsidian vault search for literature context |
+| `task-management` | Revision dashboard |
+| `verification` | Prove correctness before reporting "done" |
+| `skill-creation` | Create, evaluate, and optimize custom skills |
 
 ```bash
 r2 skills dispatch "rewrite the theory section"   # which skill handles this?
 r2 skills list                                      # all registered skills
-r2 skills search "literature"                       # semantic search
 ```
 
-## Harness Engineering
+## Design Principles
 
-r2 treats the Claude Code harness — CLAUDE.md, rules, skills, hooks, and settings — as infrastructure to be engineered, not just configuration to be written.
+**Norms from data, not intuition.** The calibration layer is built from an 80-paper corpus audit. When the model says "this is how top journals do it," it can cite the count.
 
-**Skill dispatch as mandatory routing.** Every request is matched against the skill table before any work begins. A rationalization-prevention table blocks common excuses for skipping dispatch. Skills trigger at even 1% relevance.
+**Mandatory skill dispatch.** Every request hits the skill router first. A rationalization-prevention table blocks excuses like "this is too simple for a skill."
 
-**Hooks as automated guardrails.** Shell hooks enforce invariants the model forgets under context pressure: auto-compiling Typst after edits, syntax-checking R scripts, blocking edits to auto-generated files, verifying compilation before session end, and re-injecting critical rules after context compaction.
+**Automated guardrails via hooks.** Typst auto-compilation, R syntax checks, file-edit blocks, compilation verification before session end, rule re-injection after context compaction.
 
-**Context budget management.** Always-loaded context is kept lean. Reference-heavy docs are candidates for on-demand loading via skills. The `PostCompact` hook re-injects critical rules lost during conversation compression.
-
-**Build to delete.** Every skill and hook encodes an assumption about what the model can't do reliably. As models improve, stress-test those assumptions and retire what no longer holds.
-
-## Update History
-
-| Date | Change |
-|------|--------|
-| 2026-03-29 | v0.3.0 — Calibrated manuscript assessment and revision: polishing skill, polisher agent, calibration-assessor agent, `/polish` command; grounded in empirical APSR/AJPS audit |
-| 2026-03-28 | v0.2.0 — Obsidian vault, revision dashboard, 3 new agents, hooks, harness engineering; migrate `paper/notes/` → `notes/` |
-| 2026-03-27 | v0.1.0 — Drop copier; `/update-r2`; humanizer; expanded review with editor reports |
-| 2026-03-22 | Initial release — 8 agents, 14 skills, RAG with three external databases |
+**Build to delete.** Every skill encodes an assumption about what the model can't do reliably. Stress-test those assumptions as models improve.
 
 ## License
 
