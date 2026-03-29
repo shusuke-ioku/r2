@@ -10,7 +10,7 @@ An AI research environment for political science, built on [Claude Code](https:/
 
 **Know what reviewers will say before they say it.** Three simulated reviewers — a literature scholar, a methodologist, and a domain expert — score your paper on Novelty, Validity, and Importance. Their biases have been corrected against a blind training set so they don't under-rate formal theory or compress scores to the middle.
 
-**Read the literature faster than you can download it.** A local RAG index over your PDFs, three external databases, snowballing, automatic PDF acquisition, and Zotero integration. The survey loops until it stops finding new leads.
+**Read the literature faster than you can download it.** A local RAG index over your PDFs, three external databases, snowballing, automatic PDF acquisition, and Zotero integration. The survey loops until it stops finding new leads. Think Claude's deep research, but for academic papers — with your own library as the starting point.
 
 **Build a knowledge base as you go.** Every paper you read becomes a structured Obsidian note. Future writing and review skills consult it automatically.
 
