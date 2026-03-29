@@ -4,7 +4,7 @@
 
 A **harness-engineered** research environment for political science papers, built on [Claude Code](https://claude.ai/claude-code). **13 agents**, **18 skills**, **automated guardrails** via hooks, and a **mandatory skill-dispatch layer** that routes every request before the model touches anything.
 
-- **Empirics-based submission polish** — three parallel assessors (proofreader, calibration assessor, humanizer) evaluate craft against an **empirical audit of published APSR/AJPS papers**, then a convergence loop implements revisions section-by-section until no Critical or Important issues remain
+- **Calibrated manuscript assessment and revision** — three parallel assessors (proofreader, calibration assessor, humanizer) evaluate craft against an **empirical audit of published APSR/AJPS papers**, then a convergence loop implements revisions section-by-section until no Critical or Important issues remain
 - **Iterative literature surveys with RAG and Zotero** — a local **RAG vector store** over your PDF library, combined with three external databases (Semantic Scholar, OpenAlex, Scopus) and **two-level Zotero integration** (cloud API for metadata + local API for annotations). Surveys **snowball citations**, acquire PDFs automatically, read full text, discover new leads, and loop until convergence.
 - **Empirically calibrated peer review** — three independent reviewer agents scored against a blind training set of top-generalist vs. field-journal publications to correct systematic biases
 - **Gatekeeper revision management** — reviews auto-generate todo items; the task manager **pushes back** when you dismiss concerns that a real reviewer would raise again
@@ -103,7 +103,7 @@ The `vault-search` skill searches this vault using **Obsidian's Local REST API**
 
 To enable API-based search, install the [Obsidian Local REST API](https://github.com/coddingtonbear/obsidian-local-rest-api) community plugin. File-based search works without it.
 
-## Empirics-Based Submission Polish
+## Calibrated Manuscript Assessment and Revision
 
 r2 includes a **convergence-loop polishing framework** that prepares manuscripts for top-journal submission. Rather than relying on generic style rules, every evaluation criterion is grounded in an **empirical audit of 10 published APSR/AJPS papers** — what verbs they use for which research designs, how they hedge findings, where they place limitations, how they structure introductions and conclusions.
 
@@ -176,7 +176,7 @@ r2 treats the Claude Code harness — CLAUDE.md, rules, skills, hooks, and setti
 
 | Date | Change |
 |------|--------|
-| 2026-03-29 | v0.3.0 — Empirics-based submission polish: polishing skill, polisher agent, calibration-assessor agent, `/polish` command; grounded in empirical APSR/AJPS audit |
+| 2026-03-29 | v0.3.0 — Calibrated manuscript assessment and revision: polishing skill, polisher agent, calibration-assessor agent, `/polish` command; grounded in empirical APSR/AJPS audit |
 | 2026-03-28 | v0.2.0 — Obsidian vault, revision dashboard, 3 new agents, hooks, harness engineering; migrate `paper/notes/` → `notes/` |
 | 2026-03-27 | v0.1.0 — Drop copier; `/update-r2`; humanizer; expanded review with editor reports |
 | 2026-03-22 | Initial release — 8 agents, 14 skills, RAG with three external databases |
