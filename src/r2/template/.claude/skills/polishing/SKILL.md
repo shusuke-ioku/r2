@@ -13,7 +13,17 @@ description: >
 
 # Polishing Framework
 
-Loop-until-convergence manuscript polish. Three parallel assessors evaluate craft from distinct perspectives; the orchestrator synthesizes, implements, and iterates.
+Loop-until-convergence manuscript polish. This skill orchestrates `writing`, `proofreading`, and `humanizer` around a shared manuscript-calibration standard rather than letting each assessor use its own disconnected style logic.
+
+## Shared Ground Truth
+
+All assessment and revision work in this skill must be anchored in:
+
+- `.claude/skills/writing/references/section-forms.md`
+- `.claude/skills/writing/references/manuscript-calibration.md`
+- `.claude/skills/writing/references/prose-standards.md`
+
+These references define the common manuscript target for all assessors.
 
 ## Architecture
 
@@ -58,7 +68,7 @@ Launch all 3 assessors in parallel using the Agent tool. Each gets:
 
 **Agent**: `proofreader` (existing, subagent_type: `proofreader`)
 **Skill**: proofreading (refactored: 9 categories, no humanizer pass, no overclaiming/too-conceding)
-**Focus**: reader experience — flow, logic, pacing, terms, structure
+**Focus**: reader experience — flow, continuity, pacing, section placement, and reader-state breakdowns
 
 **Dispatch prompt template**:
 ```
@@ -68,10 +78,11 @@ using the proofreading skill. Produce a structured report per
 
 Scope: [full paper | sections X, Y, Z]
 
-APSR calibrations:
+Shared manuscript calibrations:
 - Do NOT flag main finding restated 3-5× with progressive precision (Finding 8)
 - Flag if finding not stated by intro paragraph 2-3 (Finding 6)
 - Flag conclusions > 700 words or introducing new analysis (Finding 7)
+- Use manuscript-calibration.md as the paragraph-density and section-placement benchmark
 
 Output format: assessment-template.md categories for Proofreader.
 ```
@@ -79,8 +90,8 @@ Output format: assessment-template.md categories for Proofreader.
 ### Assessor 2: Calibration Assessor
 
 **Agent**: `calibration-assessor` (new, subagent_type: `calibration-assessor`)
-**References**: calibration-categories.md, calibration-report.md, section-forms.md, prose-standards.md
-**Focus**: APSR norm compliance — verbs, hedging, assertiveness, section benchmarks, word budget
+**References**: calibration-categories.md, manuscript-calibration.md, calibration-report.md, section-forms.md, prose-standards.md
+**Focus**: manuscript prose calibration — verbs, hedging, assertiveness, paragraph economy, section benchmarks, word budget
 
 **Dispatch prompt template**:
 ```
@@ -92,6 +103,7 @@ Scope: [full paper | sections X, Y, Z + full word-budget recalculation]
 
 Key references to load:
 - .claude/skills/polishing/references/calibration-categories.md (your evaluation criteria)
+- .claude/skills/writing/references/manuscript-calibration.md (shared manuscript norms)
 - .claude/skills/writing/references/calibration-report.md (evidence base)
 - .claude/skills/writing/references/section-forms.md (benchmarks)
 - .claude/skills/writing/references/prose-standards.md (assertiveness, citation rules)
@@ -223,7 +235,7 @@ For each section with Critical or Important issues:
    - The section's current text (read from paper.typ)
    - The filtered issue list for this section (from the revision plan)
    - The word budget for this section
-   - Instruction: "Follow the writing skill. Apply all listed fixes. Stay within the word budget."
+   - Instruction: "Follow the writing skill and the shared manuscript-calibration references. Apply all listed fixes. Stay within the word budget."
 
 2. **Verify after edit**:
    - `typst compile --root . paper/paper.typ` → must exit 0

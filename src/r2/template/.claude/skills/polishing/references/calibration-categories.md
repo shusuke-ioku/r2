@@ -85,10 +85,13 @@ Additional intro checks (from section-forms.md):
 - Opening sentence: NOT "This paper..." or a literature review or a definition
 - CW: stated as fact, not attributed to "scholars" or "the literature"
 - Synthesis: stated as logical consequence, not "what I call" / "cumulative implication"
+- Intro ownership: by paragraph 2–3 the reader should know what this manuscript argues or finds, not just why the topic matters
 - Contributions: one paragraph each, framed against specific prior work
-- No roadmap (13/15 audited papers have none)
+- No roadmap by default; if present, it comes only after the answer and method are already clear
 - No "may" / "might" on the main finding
 - No passive voice on findings
+
+**Flag "background accretion"** when an introduction spends two paragraphs on broad motivation, field significance, or case setup before the manuscript takes ownership of its own answer.
 
 ---
 
@@ -103,6 +106,8 @@ Additional intro checks (from section-forms.md):
 | Contains standalone limitations paragraph | Critical |
 
 Standard conclusion: 2–3 paragraphs, 300–700 words. Summary with "so what" → broader implications → (optional) future research.
+
+**Flag "soft landing"** when the conclusion closes with diffuse recap, generic caution, or "more research is needed" filler instead of stating the manuscript's implication.
 
 ---
 

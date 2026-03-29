@@ -16,11 +16,11 @@ description: >
 
 # Writer
 
-Maximum intellectual impact per word. Every sentence earns its place.
+Manuscript-first prose generation and revision. This skill writes paragraphs and sections; it does not simulate a naive reader end-to-end and it does not orchestrate whole-paper convergence loops.
 
-## Four Principles
+## Core Principles
 
-All writing rules derive from four principles: **density**, **flow**, **calibration**, and **assertiveness**. Internalize the reasoning behind each.
+All manuscript-writing rules derive from four principles: **density**, **placement**, **calibration**, and **assertiveness**.
 
 ### Density
 
@@ -30,13 +30,11 @@ Pack every paragraph with substance. Strip every word that does not carry weight
 
 Why this matters: Reviewers form impressions within the first page. Filler signals that the author isn't sure what the point is. In a historical case study where the empirical contribution must speak loudly, loose prose buries the signal.
 
-### Flow
+### Placement
 
-Every sentence follows naturally from the one before. Every paragraph answers the question raised by the previous one. If a transition feels forced ("Turning now to..."), the structure is wrong---fix the structure, not the transition.
+Put the most important claim where the reader expects to find it. In manuscript prose, the largest failures are usually placement failures, not word-choice failures: findings arrive too late, magnitudes too late, contributions too late, or a paragraph's point appears only at the end.
 
-**Topic shifts:** When moving between sections or major ideas, state the argument or finding directly---never frame the shift as a question. A topic sentence like "The organizational surge also reshaped parliamentary politics" is stronger than "Did the organizational surge reshape parliamentary politics?" Questions defer the point; statements advance it.
-
-Why this matters: Forced transitions are a symptom of disorganized argument, not a cosmetic problem. Readers who lose the thread stop trusting the analysis.
+Why this matters: the calibration corpus shows that top-tier manuscripts front-load findings, use compact intro structures, and put the result in the same paragraph as the evidence pointer.
 
 ### Calibration
 
@@ -78,6 +76,24 @@ Why this matters: The reader is a political scientist. They know the field's con
 
 Load `references/section-forms.md` for the full assertiveness hierarchy with APSR examples and anti-patterns.
 
+## Shared Reference Layer
+
+Load these references before writing:
+
+1. `references/section-forms.md`
+2. `references/manuscript-calibration.md`
+3. `references/prose-standards.md`
+4. `references/table-and-notation-standards.md` only when writing tables, captions, or equations
+
+Treat `manuscript-calibration.md` as the shared empirical ground truth across `writing`, `proofreading`, and `polishing`.
+
+## Role Boundaries
+
+- Use this skill to draft, rewrite, compress, and sharpen manuscript prose.
+- Do not use this skill as the primary whole-paper reader-experience evaluator; that is `proofreading`.
+- Do not run multi-round orchestration here; that is `polishing`.
+- Use `humanizer` as a final cleanup pass, not as the main writing logic.
+
 ## Workflow
 
 ### 1. Read context first
@@ -86,13 +102,23 @@ Read surrounding sections, the abstract, and contribution claims in `paper/paper
 
 **Context-aware writing:** Always consider what the reader already knows at the point you are writing. Do not re-introduce concepts, datasets, variables, or terminology that have already been explained earlier in the paper. Use short references ("organizational density," not "organizational density, the count of existing organizations per 100,000 population") for anything the reader has already encountered. The level of detail in an explanation should match its novelty to the reader at that specific location in the manuscript---first mention gets full explanation, subsequent mentions get none.
 
-### 2. Map the argument chain
+### 2. Load the section form and manuscript norm
+
+Before drafting any section, identify:
+
+- the section type from `section-forms.md`
+- the paragraph-density and timing norms from `manuscript-calibration.md`
+- the design-calibrated verb target from `prose-standards.md`
+
+Do not draft until you know where the main finding, design, and contribution should appear.
+
+### 3. Map the argument chain
 
 Identify what claim each paragraph needs to make. One idea per paragraph. If a paragraph serves two purposes, split it. If you cannot state a paragraph's point in one sentence, the paragraph needs restructuring, not more sentences.
 
-### 3. Draft with the right mode
+### 4. Draft with the right mode
 
-**Before drafting any section**, load `references/section-forms.md` and follow the standard form for that section type. The templates are extracted from 20+ APSR/AJPS papers and represent the expected structure. Deviation requires a specific reason.
+**Before drafting any section**, follow the standard form for that section type. Deviation requires a specific reason.
 
 **Body paragraphs (lit review, theory, discussion):** Open every paragraph with a **topic sentence that states a claim**, not a literature summary. The most important claim goes in the first or second sentence. Then fill in evidence and citations. Readers skim topic sentences to follow the argument---if they summarize literature instead of making claims, the argument disappears.
 
@@ -101,23 +127,37 @@ Identify what claim each paragraph needs to make. One idea per paragraph. If a p
 
 **Results paragraphs:** Table-reference and purpose-statement openers are standard: "Table 1 reports the main results" or "In this section we test our prediction that..." The claim follows immediately after the table reference. In APSR/AJPS, roughly half of results paragraphs open this way. Claim-first is also fine for results---both patterns are standard.
 
-**Introduction:** Follow the paragraph-by-paragraph template in `references/section-forms.md` strictly. Paragraph 1 states CW as fact or poses a question---never opens with "This paper..." or a literature review. Paragraphs 2--3 state the paper's answer and finding flatly. Paragraphs 4--5 explain the identification strategy. Paragraphs 6--7 state contributions, each framed against specific prior work. The main finding must appear by paragraph 2--3, on page 1. No roadmap. Check every intro paragraph against the section-forms "Things APSR Papers Never Do" list before moving on.
+**Introduction:** Follow the paragraph-by-paragraph template in `references/section-forms.md` strictly, but also obey the corpus-level warning from `references/manuscript-calibration.md`: do not simulate sophistication by splitting the introduction into too many short paragraphs. Top-tier intros in the local corpus are short in paragraph count and dense in argumentative content. Put the finding in paragraph 2--3.
 
-### 4. Apply prose standards
+**Intro rewrite recipe:** When an intro is weak, rebuild it in this order:
+1. one opening paragraph that states the conventional wisdom, puzzle, or motivating fact
+2. one paragraph that states the paper's answer and main finding flatly
+3. one paragraph that explains how the paper knows
+4. one contribution paragraph, plus a roadmap only if the structure truly needs it
 
-Load `references/prose-standards.md` for the full style rules on precision, calibration, citation practice, and introduction structure. Read it whenever writing or revising prose---it contains the detailed rules that keep the manuscript consistent.
+**Results:** Use the top-tier pattern observed in the local PDFs and audits: table-reference or purpose-statement openers are fine, but the result belongs in the same paragraph as the table pointer. Quantify quickly. Robustness and mechanisms should not steal the narrative center from the main estimate.
 
-### 5. Apply table and notation standards
+**Conclusion:** Compress aggressively. The conclusion should restate the finding with "so what," not relitigate every caveat.
 
-Load `references/table-and-notation-standards.md` when writing tables, figure captions, or equations. The paper's tables follow a strict Typst format; deviations break visual consistency and signal carelessness to reviewers.
+**Conclusion rewrite recipe:** When a conclusion is weak, replace recap-heavy prose with:
+1. one paragraph restating the finding and what it changes
+2. one paragraph on broader implication
+3. at most one short future-research sentence if it genuinely follows from the finding
 
-### 6. Cut ruthlessly
+### 5. Apply prose standards
 
-Remove any sentence that does not advance the paragraph's single point. Test: if cutting a sentence changes nothing about what the reader understands, it was filler.
+Use `references/prose-standards.md` for precision, calibration, citation practice, and introduction structure.
+
+### 6. Cut and place
+
+- Move the main claim to the first or second sentence unless the section form specifically calls for a different opener.
+- Merge or split paragraphs until each paragraph has one clear job.
+- If a transition sentence only tells the reader that you are moving on, cut it and fix the structure instead.
+- In results paragraphs, cut any sentence that delays coefficient direction, magnitude, or the substantive takeaway.
 
 ### 7. Humanizer pass
 
-After drafting or revising, scan every paragraph for AI-writing tells (full pattern catalog in `../humanizer/SKILL.md`). The most damaging patterns in academic prose:
+After drafting or revising, scan every paragraph for AI-writing tells (full pattern catalog in `../humanizer/SKILL.md`). The most damaging patterns in manuscript prose:
 
 - **Significance inflation:** "pivotal," "crucial," "fundamental," "groundbreaking," "serves as a testament" --- delete or replace with precise verbs
 - **Superficial -ing phrases:** "highlighting," "underscoring," "emphasizing," "reflecting," "showcasing" --- these add fake depth; cut them or rewrite as main clauses with actual content
@@ -140,6 +180,7 @@ Before moving on from any paragraph, verify against `references/section-forms.md
 - Compact: no sentence can be cut or merged without losing information
 - Flows from the previous paragraph and sets up the next
 - No AI-writing tells from the humanizer checklist above
+- Paragraph shape matches the shared corpus norms in `references/manuscript-calibration.md`
 
 **Introduction (section-forms validation):**
 - CW stated as fact, not attributed to "scholars" or "the literature"
@@ -147,12 +188,14 @@ Before moving on from any paragraph, verify against `references/section-forms.md
 - Finding appears by paragraph 2--3
 - Does NOT open with "This paper...", a literature review, or a definition
 - No "may" or "might" on the main finding; no passive voice on findings
-- No roadmap; no limitations apology
+- No roadmap by default; if used, it appears only after the answer and method are already clear; no limitations apology
+- Not fragmented into too many short paragraphs for the amount of argumentative work being done
 
 **Results (section-forms validation):**
 - Finding appears in the same paragraph as the table reference
 - Magnitude quantified (standard deviations, percentage points)
 - Nulls on competitors stated flatly as positive evidence
+- Robustness and mechanism paragraphs clearly subordinate to the main result
 
 **Conclusion (section-forms validation):**
 - Under 1000 words; 2--3 paragraphs
@@ -188,3 +231,11 @@ Follow `.claude/rules/citation-rules.md` (canonical source for citation practice
 **Vague referents across section boundaries** --- When a new section opens with a pronoun or generic noun phrase ("The conspirators," "They," "This group"), the reader may have lost the antecedent. At the start of a new section or after a heading, re-anchor the referent with enough specificity that the paragraph is intelligible without re-reading the previous section. "The May 15 conspirators" or "the naval officers and agrarian nationalists who assassinated Inukai" beats "The conspirators."
 
 **Citation dumps** --- If a parenthetical contains more than 3--4 citations, ask whether each one does distinct work. Cluster related citations and explain what each group contributes. Citations demonstrate positioning, not reading volume.
+
+**Intro fragmentation** --- If the introduction is accumulating many short paragraphs, stop. Rebuild the intro around 2--4 dense units: CW/puzzle, answer/finding, credibility, contributions. The local calibration corpus shows that top-tier intros are denser than non-top intros, not more segmented.
+
+**Background accretion** --- If the introduction keeps explaining why the topic matters without saying what this paper shows, cut that material ruthlessly. Replace broad importance claims with argumentative ownership: what is the paper's answer, and why should the reader believe it?
+
+**Results drift** --- If a results paragraph spends several sentences on setup before reporting the estimate, move the estimate up. The table reference and the substantive result belong together.
+
+**Soft landing conclusion** --- If the conclusion ends with "more research is needed," generic caution, or diffuse recap, rebuild it around the paper's implication. A strong manuscript ends by telling the reader what changed, not by retreating.

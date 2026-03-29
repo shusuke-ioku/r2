@@ -19,11 +19,20 @@ description: >
 
 # Proofreader
 
-Simulate a first-time reader. Flag every moment where understanding breaks down.
+Simulate a first-time reader. Diagnose where manuscript structure, continuity, or pacing breaks reader understanding. This skill is the reader-experience checker, not the main sentence-level rewriter.
 
 ## Why This Skill Exists
 
-The writing skill optimizes prose density and calibration at the paragraph level. The review skill stress-tests arguments and identification strategy. Neither catches the problems that emerge only when someone reads the paper front-to-back: a term used before it is defined, a result that assumes context from a section the reader hasn't reached yet, a transition that makes sense to the author (who knows where the argument is going) but baffles a newcomer. These are flow problems, and they are invisible to the person who wrote the paper. The only way to find them is to simulate the experience of a naive reader encountering each sentence in order.
+The writing skill generates and revises prose at paragraph and section level. The polishing skill orchestrates multi-pass convergence. This skill exists to answer a different question: can a first-time manuscript reader follow the argument from beginning to end without losing the thread?
+
+Use this skill to catch:
+
+- broken reader-state continuity
+- misplaced definitions or findings
+- structural deviations from the manuscript calibration norms
+- pacing and repetition that accumulate across sections
+
+Do not use this skill as a catch-all stylistic linter.
 
 ## Core Principle: The Reader's State Machine
 
@@ -51,9 +60,14 @@ Do not let a single logical gap pass unremarked. It is better to flag ten gaps a
 
 ## Workflow
 
-### 0. Load section-forms.md
+### 0. Load the shared manuscript references
 
-Before reading the paper, load `.claude/skills/writing/references/section-forms.md`. This file defines the standard APSR/AJPS section structures---paragraph templates, quantitative benchmarks, assertiveness hierarchy, and "Things APSR Papers Never Do" lists---extracted from 20+ audited papers. Use it as the structural benchmark throughout your reading. Every section of the manuscript should conform to the corresponding section form; deviations are flagged as "Section form deviation" (see category below).
+Before reading the paper, load:
+
+- `.claude/skills/writing/references/section-forms.md`
+- `.claude/skills/writing/references/manuscript-calibration.md`
+
+Use these as the structural benchmark throughout the read-through. Every section should be judged against the shared manuscript norms, not against the author's likely intentions.
 
 ### 1. Read the full paper sequentially
 
@@ -72,6 +86,10 @@ Example: "The organizational density measure captures..." when organizational de
 **Expectation violation** --- The previous paragraph set up a specific expectation (explicitly or implicitly), and the next paragraph goes somewhere else entirely. The reader feels a jolt --- "wait, I thought we were talking about X."
 
 Example: A paragraph ends by raising the puzzle of why rural areas were disproportionately affected, but the next paragraph discusses parliamentary vote shares with no bridge.
+
+**Background accretion** --- The manuscript keeps accumulating topic motivation, literature setup, or broad significance without taking ownership of the paper's own answer. This is especially damaging in introductions. The reader understands that the topic matters, but still does not know what *this paper* argues or finds.
+
+Example: paragraph 1 explains why democratic breakdown is important, paragraph 2 explains why the historical case is interesting, and only paragraph 3 or 4 says what the paper actually shows.
 
 **Logical gap** --- The argument skips a step. The conclusion of a paragraph does not follow from its premises without an intermediate claim that is missing. The reader can sense the destination but cannot trace the path. This is the single most important category. A paper with beautiful prose but broken logic fails; a paper with rough prose but airtight logic succeeds. Treat every logical gap as a potential rejection reason.
 
@@ -105,46 +123,23 @@ Example: The introduction previews the mechanism, the theory section restates it
 
 Example: The introduction mentions that the paper addresses "why democratic institutions failed to self-correct" but the conclusion never returns to this question.
 
-**Overclaiming** --- The text makes a claim that exceeds what the research design supports. Overclaiming is real and worth catching, but the threshold must track the identification strategy. Flagging confident language for a well-identified finding is a false positive that weakens the paper. (Evidence base: `writing/references/calibration-report.md`, audit of published APSR/AJPS papers.)
+**Calibration break** --- The prose confidence or placement breaks reader trust because it plainly deviates from the shared manuscript norms. Use this category only when the calibration failure affects reader understanding or confidence in what the paper claims. Do not use it as a substitute for sentence-level editing.
 
-**What IS overclaiming (flag these):**
-- *Causal language without identification*: "X caused Y" when the design is cross-sectional without an instrument, sensitivity test, or quasi-experimental variation.
-- *Universalizing from a specific case*: "radicals always bypass gatekeeping through civic organizations" when the paper documents one historical case.
-- *Strength mismatch*: A $p < 0.10$ result described as "confirming" rather than reported with its p-value. A placebo test described as "confirming" when it merely "fails to reject."
-- *Omitting hedges on indirect evidence*: Betweenness centrality described as "coordinated" when the data show only co-membership.
+Flag when:
 
-**What is NOT overclaiming (do not flag):**
-- Causal verbs for DiD, IV, event study, or RDD designs: "reduces," "produces," "resulted in" are standard APSR/AJPS practice (Grumbach 2022: "reduces"; Dasgupta & Ziblatt 2022: "resulted in"; Claassen 2019: "produce").
-- "Shows," "demonstrates," "reveals," "finds" for a paper's main finding with clean identification.
-- "Drives" or "contributed to" for cross-sectional results with Oster tests, extensive controls, and a plausible mechanism (Abramson & Carter 2016: "drives"; Grzymala-Busse 2023: "contributed to").
-- Flat assertions of null results on competing explanations: "has no measurable effect" (King et al. 2013, APSR).
+- the intro defers the real answer too long
+- a results paragraph separates the table reference from the actual finding
+- the conclusion reopens the paper instead of closing it
+- the paper repeatedly sounds unsure about its own main result despite a strong design
+- the paper overstates beyond the design and leaves the reader unsure what to believe
 
-**The test:** does the verb exceed what the research design supports? Not: does the verb sound too confident? Underclaiming --- hedging a well-identified finding --- is as damaging as overclaiming. It signals the author does not trust the identification strategy.
-
-Use the assertiveness hierarchy from `section-forms.md` to calibrate: CW should be stated as fact, synthesis as logical consequence, challenges directly, main findings flatly, mechanism evidence with measured confidence, and only speculation beyond the data gets honest hedging.
-
-**Too conceding** --- The mirror of overclaiming. The text hedges or qualifies beyond what the assertiveness hierarchy warrants. This is as damaging as overclaiming at APSR---it signals the author does not trust their own argument.
-
-**What IS too conceding (flag these):**
-- CW attributed to "scholars" or "the literature" instead of stated as fact: "Scholars have argued that..." / "The literature suggests..."
-- Synthesis disclaimed as the author's construction: "Together, these literatures produce what I call..." / "The expectation is a cumulative implication, not any single work's claim"
-- Challenge softened: "While the prevailing view has considerable merit, this paper offers an alternative perspective..."
-- Main finding hedged with "suggests" or "may" when the design supports causal verbs
-- Apologetic framing: "This paper attempts to shed some light on..."
-- Limitations in the introduction
-
-**What is NOT too conceding (do not flag):**
-- "Suggests" or "is consistent with" for secondary findings or mechanism tests
-- "Provides evidence that" for indirect evidence
-- Reporting p-values for marginal results without labeling them "significant"
-- Inline, brief caveats in methods or results about specific design limitations
-
-**Severity:** Rate as "Causes confusion" because too-conceding prose signals insecurity and weakens the reader's trust in the contribution. If pervasive (3+ instances in a section), rate as "Blocks comprehension" because the cumulative effect makes the reader unsure what the paper actually claims.
+This category is about reader trust, not about fully adjudicating research design. If you need sentence-level repair, hand that off to `writing`.
 
 **Section form deviation** --- A section does not follow the standard APSR/AJPS structure defined in `section-forms.md`. This is a structural problem, not a prose problem---the section's organization departs from the expected form without justification.
 
 **Flag when:**
 - Introduction does not state the finding by paragraph 2--3
+- Introduction spends multiple paragraphs establishing broad relevance before stating the paper's answer
 - Introduction opens with "This paper..." or a literature review ("Smith 2020 argues...") as the first sentence
 - Introduction uses "scholars have argued" or "the literature suggests" to introduce CW
 - Results paragraph separates the table reference from the finding (finding in a different paragraph)
@@ -168,23 +163,23 @@ For every issue, propose a specific fix. Not "improve the transition" but "add a
 
 When possible, suggest the actual sentence or bridge phrase. When the fix requires restructuring (e.g., moving a paragraph), describe the new order and why it works better.
 
-### 5. Humanizer pass
+For introduction issues, default to a four-part repair logic:
 
-Scan every paragraph for AI-writing tells (full pattern catalog in `.claude/skills/humanizer/SKILL.md`). Flag any instance as a flow issue under a new category:
+1. cut broad motivation that does not move the paper toward its own answer
+2. move the answer or finding into paragraph 2--3
+3. place the design or evidence strategy immediately after the answer
+4. move contributions after the reader already knows what the paper found
 
-**AI-writing tell** --- A word, phrase, or structural pattern that signals machine-generated text. These erode reader trust even when the content is sound, because reviewers and editors are increasingly attuned to them.
+### 5. Keep the role boundary clean
 
-The most common tells in academic prose:
-- Significance inflation: "pivotal," "crucial," "fundamental," "serves as a testament"
-- Superficial -ing phrases: "highlighting," "underscoring," "emphasizing," "reflecting," "showcasing"
-- Copula avoidance: "serves as," "stands as," "functions as" instead of "is"
-- Rule of three: forcing ideas into triads
-- Negative parallelisms: "not only X but Y," "it's not just X, it's Y"
-- Synonym cycling: rotating through synonyms for the same referent
-- Em dash overuse: more than one per paragraph
-- AI vocabulary: "Additionally," "delve," "landscape" (abstract), "tapestry," "interplay," "nuanced," "multifaceted"
+Do not spend the bulk of the report on:
 
-Rate severity as **Minor friction** unless the pattern is pervasive (3+ instances in a section), in which case rate as **Causes confusion** because the cumulative effect signals inauthenticity.
+- isolated word-choice issues
+- grammar fixes
+- AI-tell cleanup that does not affect reading continuity
+- detailed overclaiming adjudication better handled by `review` or `writing`
+
+If those issues matter, mention them briefly and route the fix to the right skill.
 
 ### 6. Produce output
 
@@ -213,7 +208,7 @@ Then for each item, provide the detailed analysis:
 
 After all individual issues, provide:
 
-**Overall flow assessment** --- A short (3--5 sentence) summary of how the paper reads as a whole. What is the dominant flow problem (if any)? Where does the paper read most smoothly? What is the single highest-priority structural change?
+**Overall flow assessment** --- A short (3--5 sentence) summary of how the paper reads as a whole. Identify the dominant reader-state failure, the section that deviates most from the manuscript calibration norms, and the single highest-priority structural fix.
 
 ## Hard Constraint: Abstract Length
 
@@ -224,6 +219,7 @@ The abstract must never exceed 150 words. If it does, flag it as a pacing proble
 - **Prose polish**: It does not rewrite sentences for density or style (that is the writing skill's job).
 - **Argument stress-testing**: It does not evaluate whether claims are well-supported or identification is valid (that is the review skill's job).
 - **Line editing**: It does not catch typos, grammar errors, or formatting issues.
+- **Humanizer sweep**: It does not run full AI-tell cleanup unless those patterns are clearly harming flow.
 
 The proofreader asks one question only: "Can a first-time reader follow this?" If the answer is no, it explains exactly where and why, and how to fix it.
 
