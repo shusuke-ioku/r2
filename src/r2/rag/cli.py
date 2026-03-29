@@ -568,3 +568,61 @@ def lit_save_report(query: str, input_file):
     content = input_file.read()
     filepath.write_text(content, encoding="utf-8")
     click.echo(f"Report saved to: {filepath}")
+
+
+# ---------------------------------------------------------------------------
+# Web search & fetch (Codex-powered)
+# ---------------------------------------------------------------------------
+
+@cli.command("web-search")
+@click.argument("query")
+@click.option("--mode", default="deep", type=click.Choice(["quick", "deep"]),
+              help="quick = single pass; deep = iterative search (default)")
+@click.option("--context", default=None, help="Additional context for the search")
+@click.option("--timeout", default=300, type=int, help="Timeout in seconds (default: 300)")
+@click.option("--codex-flag", "codex_flags", multiple=True, help="Extra flags for codex exec (repeatable)")
+def web_search_cmd(query: str, mode: str, context: str | None, timeout: int, codex_flags: tuple):
+    """Search the web via Codex CLI.
+
+    Uses `codex exec` to perform iterative web research with built-in
+    browsing. Returns a structured synthesis with sources.
+
+    \b
+    Examples:
+      r2 rag web-search "Imperial Way faction Japan 1930s"
+      r2 rag web-search "rural protest movements interwar period" --mode quick
+      r2 rag web-search "Tohoku region economic conditions 1930" --context "for a political science paper on democratic erosion"
+    """
+    from r2.rag.web_search import web_search
+
+    click.echo(f"Searching ({mode} mode)...", err=True)
+    result = web_search(
+        query=query,
+        mode=mode,
+        context=context,
+        timeout=timeout,
+        codex_flags=list(codex_flags) if codex_flags else None,
+    )
+    click.echo(result.format())
+
+
+@cli.command("web-fetch")
+@click.argument("url")
+@click.option("--js/--no-js", default=False, help="Use Playwright for JS rendering (default: no)")
+@click.option("--max-length", default=50000, type=int, help="Max content length in chars (default: 50000)")
+def web_fetch_cmd(url: str, js: bool, max_length: int):
+    """Fetch and extract content from a URL.
+
+    Downloads the page and extracts the main text content, stripping
+    navigation, scripts, and other boilerplate.
+
+    \b
+    Examples:
+      r2 rag web-fetch "https://en.wikipedia.org/wiki/Kodoha"
+      r2 rag web-fetch "https://example.com/dynamic-page" --js
+    """
+    from r2.rag.web_fetch import web_fetch
+
+    click.echo(f"Fetching {url}...", err=True)
+    result = web_fetch(url=url, js=js, max_length=max_length)
+    click.echo(result.format())

@@ -1,0 +1,3 @@
+Trigger the polisher agent. Run the convergence-loop polishing framework: dispatch 3 parallel assessors (proofreader, calibration, humanizer), synthesize their reports, present revision plan for approval, implement section-by-section, and iterate until convergence. Target: top-journal submission quality. Optional argument: --target NWORDS to set total word count target (default: use section-forms.md benchmarks).
+
+$ARGUMENTS

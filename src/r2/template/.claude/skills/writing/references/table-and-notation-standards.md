@@ -33,12 +33,41 @@ Every table in this paper uses exactly the same Typst format. Visual consistency
 - **Inset**: `(x: 4pt, y: 4pt)`.
 - **Column headers**: numbered `[(1)], [(2)], ...` in a dedicated row.
 
+### Standard Information Set (Regression Tables)
+
+Every regression table follows this exact row sequence. Do not omit sections, reorder them, or invent alternatives.
+
+1. **Outcome row** — bold, spanning all columns: `table.cell(colspan: N)[*Outcome Name (unit)*]`
+2. **Model numbers** — `[(1)], [(2)], ...` in a dedicated row
+3. **Post-treatment window** — `[+12m], [+24m], [~Feb 36], [~Jul 37]` or equivalent
+4. **Pre-treatment mean [SD]** — spanning all columns: `table.cell(colspan: N)[value [SD]]`. Include the group qualifier in brackets, e.g., `[Pre-treat. mean [SD] (NP)]`
+5. `table.hline(stroke: 0.7pt)` — separates header from coefficients
+6. **Coefficient rows** — bold variable name, estimate + SE (+ Conley SE in brackets if applicable), one row per coefficient. Use `#linebreak()` between estimate, parenthesized SE, and bracketed Conley SE
+7. `table.hline(stroke: 0.2pt)` — separates coefficients from controls
+8. **_Controls_ section** — italic label `[_Controls_]` with empty spanning cell, then one row per control (Yes/No)
+9. `table.hline(stroke: 0.2pt)` or `0.4pt` — separates controls from fit statistics
+10. **_Fit Statistics_ section** — italic label `[_Fit Statistics_]` with empty spanning cell, then: Observations (always), plus as applicable: Matched prefectures, Within $R^2$, $R^2$, Treated/Control prefectures, Pre/Post-treatment periods
+11. `table.hline(stroke: 1.2pt)` — bottom border
+
+**Descriptive statistics tables** follow a different pattern (see @tab:descriptive_stats): column headers are $N$, Mean, SD, Min, Max, plus group means; rows are variables grouped by panel (Panel A: Outcome, Panel B: Covariates).
+
 ### Sections and Content
 
 - **Section labels**: `[_Controls_]` and `[_Fit Statistics_]` (italic), each followed by `table.cell(colspan: N, "")`.
 - **Coefficients**: point estimates in `$...$`, standard errors in parentheses via `#linebreak()`.
 - **Stars**: `$^(*)$`, `$^(**)$`, `$^(***)$`.
-- **Notes**: `table-note(...)` in a spanning `table.cell`, or via the second argument of `caption-with-note`.
+- **Star legend**: always in the caption note, never in the table body. Standard: `$.^(***) $: 0.01, $.^(**)$: 0.05, $.^(*)$: 0.1.`
+- **SE description**: always in the caption note. State what's in parentheses and brackets, e.g., "Clustered (Prefecture & Month) standard errors in parentheses; Conley spatial SEs (100 km cutoff) in brackets."
+- **Notes**: via the second argument of `caption-with-note`. Do not use inline `table-note(...)` unless spanning a footer row.
+
+### Caption Note Checklist
+
+Every regression table caption note must include all of the following:
+1. What the SE in parentheses is (clustering structure or jackknife)
+2. What the SE in brackets is, if present (Conley with distance cutoff)
+3. Star significance thresholds
+4. Sample description (which prefectures, what matching was applied)
+5. Any non-obvious coding (e.g., "non-speakers coded as zero")
 
 ### What Not to Do
 

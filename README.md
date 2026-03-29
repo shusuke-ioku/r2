@@ -1,9 +1,10 @@
-# r2 [v0.2.0]
+# r2 [v0.3.0]
 
 *Not the droid you're looking for — but it will get your paper through R&R.*
 
-A **harness-engineered** research environment for political science papers, built on [Claude Code](https://claude.ai/claude-code). **11 agents**, **17 skills**, **automated guardrails** via hooks, and a **mandatory skill-dispatch layer** that routes every request before the model touches anything.
+A **harness-engineered** research environment for political science papers, built on [Claude Code](https://claude.ai/claude-code). **13 agents**, **18 skills**, **automated guardrails** via hooks, and a **mandatory skill-dispatch layer** that routes every request before the model touches anything.
 
+- **Empirics-based submission polish** — three parallel assessors (proofreader, calibration assessor, humanizer) evaluate craft against an **empirical audit of published APSR/AJPS papers**, then a convergence loop implements revisions section-by-section until no Critical or Important issues remain
 - **Iterative literature surveys with RAG and Zotero** — a local **RAG vector store** over your PDF library, combined with three external databases (Semantic Scholar, OpenAlex, Scopus) and **two-level Zotero integration** (cloud API for metadata + local API for annotations). Surveys **snowball citations**, acquire PDFs automatically, read full text, discover new leads, and loop until convergence.
 - **Empirically calibrated peer review** — three independent reviewer agents scored against a blind training set of top-generalist vs. field-journal publications to correct systematic biases
 - **Gatekeeper revision management** — reviews auto-generate todo items; the task manager **pushes back** when you dismiss concerns that a real reviewer would raise again
@@ -102,12 +103,36 @@ The `vault-search` skill searches this vault using **Obsidian's Local REST API**
 
 To enable API-based search, install the [Obsidian Local REST API](https://github.com/coddingtonbear/obsidian-local-rest-api) community plugin. File-based search works without it.
 
+## Empirics-Based Submission Polish
+
+r2 includes a **convergence-loop polishing framework** that prepares manuscripts for top-journal submission. Rather than relying on generic style rules, every evaluation criterion is grounded in an **empirical audit of 10 published APSR/AJPS papers** — what verbs they use for which research designs, how they hedge findings, where they place limitations, how they structure introductions and conclusions.
+
+The framework dispatches **three parallel assessors**, each evaluating craft from a distinct angle:
+
+- **Proofreader** — simulates a first-time reader, tracking flow, logic, pacing, undefined terms, and structural deviations across 9 diagnostic categories
+- **Calibration Assessor** — checks prose against empirical findings from the APSR/AJPS audit: design-calibrated verbs, hedge asymmetry, limitation placement, topic sentences, introduction timing, conclusion length, restatement strategy, paragraph length, voice, and assertiveness hierarchy
+- **Humanizer** — scans for AI-writing tells using a comprehensive pattern catalog (significance inflation, synonym cycling, rule-of-three, copula avoidance, and more)
+
+After assessment, the orchestrator **synthesizes** all three reports: deduplicates issues, resolves conflicts between assessors, priority-ranks into Critical/Important/Polish tiers, and computes a **word budget per section** against empirical benchmarks. The revision plan goes to the user for approval before any edits begin.
+
+Implementation proceeds **section-by-section** via the manuscript-writer agent, with Typst compilation and word-count verification after each section. The loop then **re-assesses** only edited sections and iterates until convergence — zero Critical issues, zero Important issues, and fewer than 3 new Polish-level issues from re-assessment. Maximum 3 iterations.
+
+A **conservative bias correction** step prevents over-flagging: if the manuscript text matches what actual APSR papers do per the calibration report, the issue is dismissed or downgraded. The empirical audit is the ground truth, not intuitions about what "should" be.
+
+```
+> /polish                    # full convergence loop
+> "polish for APSR"          # triggers automatically
+> "submission prep"           # triggers automatically
+> /polish --target 12000     # with total word count target
+```
+
 ## Agents and Skills
 
 When you ask Claude to do something, r2 matches your request to a skill, which dispatches the right agent:
 
 | Skill | Agent | What it does |
 |-------|-------|-------------|
+| `polishing` | `polisher` | Convergence-loop submission polish with 3 parallel assessors |
 | `writing` | `manuscript-writer` | Academic prose, equations, tables, captions |
 | `analysis` | `analyst-agent` | R pipeline, debugging, result alignment |
 | `debugging` | `analyst-agent` | Autonomous error diagnosis and self-correction |
@@ -123,7 +148,9 @@ When you ask Claude to do something, r2 matches your request to a skill, which d
 | `verification` | *(cross-cutting)* | Prove correctness before reporting "done" |
 | `parallel-dispatch` | *(orchestration)* | Run independent tasks concurrently |
 | `skill-creation` | — | Create, evaluate, and optimize custom skills |
-| `humanizer` | — | Remove AI-writing tells from prose |
+| `humanizer` | `calibration-assessor`* | Remove AI-writing tells from prose |
+
+\* The `calibration-assessor` agent is dispatched by the polisher as one of three parallel assessors — it is not invoked standalone.
 
 Skills can be created, tested, and iteratively improved. The `skill-creation` skill handles the full lifecycle: draft a SKILL.md, generate test prompts, run them with and without the skill, compare outputs, grade against assertions, and repeat. The Skills Engine CLI (`r2 skills`) adds semantic search, ranked dispatch, and usage tracking.
 
@@ -149,6 +176,7 @@ r2 treats the Claude Code harness — CLAUDE.md, rules, skills, hooks, and setti
 
 | Date | Change |
 |------|--------|
+| 2026-03-29 | v0.3.0 — Empirics-based submission polish: polishing skill, polisher agent, calibration-assessor agent, `/polish` command; grounded in empirical APSR/AJPS audit |
 | 2026-03-28 | v0.2.0 — Obsidian vault, revision dashboard, 3 new agents, hooks, harness engineering; migrate `paper/notes/` → `notes/` |
 | 2026-03-27 | v0.1.0 — Drop copier; `/update-r2`; humanizer; expanded review with editor reports |
 | 2026-03-22 | Initial release — 8 agents, 14 skills, RAG with three external databases |

@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "r2-research"
-version = "0.2.0"
+version = "0.3.0"
 description = "AI-driven research environment for academic papers — powered by Claude Code"
 readme = "README.md"
 license = "MIT"
@@ -29,17 +29,21 @@ dependencies = [
     "mcp>=1.0",
     "httpx>=0.27",
     "pyzotero>=1.5",
+    "beautifulsoup4>=4.12",
 ]
 
 [project.optional-dependencies]
 download = [
     "scidownl>=1.0",
 ]
+web = [
+    "playwright>=1.40",
+]
 skills-engine = [
     "cognee>=0.5.4",
 ]
 all = [
-    "r2-research[download,skills-engine]",
+    "r2-research[download,web,skills-engine]",
 ]
 
 [project.scripts]

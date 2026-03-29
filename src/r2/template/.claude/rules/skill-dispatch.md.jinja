@@ -7,6 +7,7 @@ Before ANY response---including clarifying questions---check whether a skill app
 
 | Skill | Trigger | Agent |
 | ----- | ------- | ----- |
+| `polishing` | Submission polish, convergence loop, APSR prep | `polisher` |
 | `writing` | Any prose/equation/table/caption edit in the manuscript | `manuscript-writer` |
 {% if use_r %}| `analysis` | Any R script, pipeline, results, or data task | `analyst-agent` |
 {% endif %}| `review` | Stress-testing arguments, identification strategy, or claims | `reviewer` |
@@ -21,6 +22,7 @@ Before ANY response---including clarifying questions---check whether a skill app
 {% endif %}| `proofreading` | Evaluating paper flow, readability, reader experience | `proofreader` |
 | `vault-search` | Search Obsidian vault for literature context | `vault-searcher` |
 | `task-management` | Manage revision dashboard: add/done/evaluate/edit tasks | `task-manager` |
+| `web-search` | Non-academic web info: news, Wikipedia, govt docs, history | `web-searcher` |
 
 
 **Rationalization prevention:**
@@ -43,6 +45,8 @@ Before ANY response---including clarifying questions---check whether a skill app
 
 | Agent | Skills | Tool Restrictions |
 | ----- | ------ | ----------------- |
+| `polisher` | polishing, writing, verification | Full tools |
+| `calibration-assessor` | polishing (assessment only) | Read-only (Read, Glob, Grep) |
 {% if use_r %}| `analyst-agent` | analysis, debugging, verification | Full tools |
 {% endif %}| `manuscript-writer` | writing, verification, proofreading | Full tools |
 | `reader` | reading, vault-search | Full tools (reads + writes vault notes) |
@@ -54,6 +58,7 @@ Before ANY response---including clarifying questions---check whether a skill app
 {% endif %}| `proofreader` | proofreading | Read-only (Read, Glob, Grep only) |
 | `vault-searcher` | vault-search | Read-only (Read, Glob, Grep, Bash) |
 | `task-manager` | task-management | Full tools |
+| `web-searcher` | web-search | Full tools (WebSearch, WebFetch, Bash) |
 
 
 **Agent routing:** When a skill applies and has a corresponding agent, delegate to that agent for focused, isolated execution. Use subagents liberally --- one focused task per subagent.

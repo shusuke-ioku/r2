@@ -51,6 +51,10 @@ Do not let a single logical gap pass unremarked. It is better to flag ten gaps a
 
 ## Workflow
 
+### 0. Load section-forms.md
+
+Before reading the paper, load `.claude/skills/writing/references/section-forms.md`. This file defines the standard APSR/AJPS section structures---paragraph templates, quantitative benchmarks, assertiveness hierarchy, and "Things APSR Papers Never Do" lists---extracted from 20+ audited papers. Use it as the structural benchmark throughout your reading. Every section of the manuscript should conform to the corresponding section form; deviations are flagged as "Section form deviation" (see category below).
+
 ### 1. Read the full paper sequentially
 
 Read `paper/paper.typ` from the first line to the last. Do not skip sections, do not jump ahead, do not skim. The entire point is to experience the paper in the order a reader would.
@@ -93,19 +97,62 @@ Example: The paper's main causal finding appears in the middle of a paragraph ab
 
 Example: The introduction previews the mechanism, the theory section restates it identically, and the results section explains it a third time with the same wording.
 
+**Exception --- strategic restatement.** Top APSR/AJPS papers restate their main finding 3-5 times: abstract, introduction, results, end of results, conclusion. Each restatement adds something --- precision, quantification, theoretical context, or implications. This is standard practice, not redundancy. Flag restatement as redundancy only when successive iterations use identical wording and add no new information. Progressive restatement (each time more precise) is a feature, not a bug.
+
 **Pacing problem** --- A section is too compressed (rushing through material that needs space) or too drawn out (belaboring a point that could be made in half the words). The reader either loses the thread from overload or loses interest from repetition.
 
 **Dangling thread** --- The text raises a question, promises an explanation, or introduces a tension that is never resolved. The reader reaches the end still wondering about it.
 
 Example: The introduction mentions that the paper addresses "why democratic institutions failed to self-correct" but the conclusion never returns to this question.
 
-**Overclaiming** --- The text makes a causal, universal, or definitive claim that the evidence does not support at the stated strength. The most common forms:
-- *Causal language for associational evidence*: "X drove Y" or "X was driven by Y" when the research design identifies a correlation or a suggestive pattern, not a clean causal effect. Watch especially for verbs like "drove," "caused," "produced," "generated," "determined" in contexts where the identification strategy supports only association, plausible mechanism, or suggestive evidence.
-- *Universalizing from a specific case*: "radicals always bypass gatekeeping through civic organizations" when the paper documents one historical case.
-- *Omitting hedges where the evidence is indirect*: A network analysis shows betweenness centrality but the text says the person "coordinated" the conspiracy, when the data show only organizational co-membership.
-- *Strength mismatch between evidence and claim*: A marginally significant result ($p < 0.10$) described without qualification, or a placebo test described as "confirming" when it merely "fails to reject."
+**Overclaiming** --- The text makes a claim that exceeds what the research design supports. Overclaiming is real and worth catching, but the threshold must track the identification strategy. Flagging confident language for a well-identified finding is a false positive that weakens the paper. (Evidence base: `writing/references/calibration-report.md`, audit of published APSR/AJPS papers.)
 
-Overclaiming is insidious because it sounds confident and authoritative --- exactly the tone authors aim for. But reviewers are trained to catch it, and a single overclaim can undermine trust in the entire paper. When in doubt, flag it. The fix is usually a single word: "driven by" → "associated with," "confirms" → "is consistent with," "shows" → "suggests."
+**What IS overclaiming (flag these):**
+- *Causal language without identification*: "X caused Y" when the design is cross-sectional without an instrument, sensitivity test, or quasi-experimental variation.
+- *Universalizing from a specific case*: "radicals always bypass gatekeeping through civic organizations" when the paper documents one historical case.
+- *Strength mismatch*: A $p < 0.10$ result described as "confirming" rather than reported with its p-value. A placebo test described as "confirming" when it merely "fails to reject."
+- *Omitting hedges on indirect evidence*: Betweenness centrality described as "coordinated" when the data show only co-membership.
+
+**What is NOT overclaiming (do not flag):**
+- Causal verbs for DiD, IV, event study, or RDD designs: "reduces," "produces," "resulted in" are standard APSR/AJPS practice (Grumbach 2022: "reduces"; Dasgupta & Ziblatt 2022: "resulted in"; Claassen 2019: "produce").
+- "Shows," "demonstrates," "reveals," "finds" for a paper's main finding with clean identification.
+- "Drives" or "contributed to" for cross-sectional results with Oster tests, extensive controls, and a plausible mechanism (Abramson & Carter 2016: "drives"; Grzymala-Busse 2023: "contributed to").
+- Flat assertions of null results on competing explanations: "has no measurable effect" (King et al. 2013, APSR).
+
+**The test:** does the verb exceed what the research design supports? Not: does the verb sound too confident? Underclaiming --- hedging a well-identified finding --- is as damaging as overclaiming. It signals the author does not trust the identification strategy.
+
+Use the assertiveness hierarchy from `section-forms.md` to calibrate: CW should be stated as fact, synthesis as logical consequence, challenges directly, main findings flatly, mechanism evidence with measured confidence, and only speculation beyond the data gets honest hedging.
+
+**Too conceding** --- The mirror of overclaiming. The text hedges or qualifies beyond what the assertiveness hierarchy warrants. This is as damaging as overclaiming at APSR---it signals the author does not trust their own argument.
+
+**What IS too conceding (flag these):**
+- CW attributed to "scholars" or "the literature" instead of stated as fact: "Scholars have argued that..." / "The literature suggests..."
+- Synthesis disclaimed as the author's construction: "Together, these literatures produce what I call..." / "The expectation is a cumulative implication, not any single work's claim"
+- Challenge softened: "While the prevailing view has considerable merit, this paper offers an alternative perspective..."
+- Main finding hedged with "suggests" or "may" when the design supports causal verbs
+- Apologetic framing: "This paper attempts to shed some light on..."
+- Limitations in the introduction
+
+**What is NOT too conceding (do not flag):**
+- "Suggests" or "is consistent with" for secondary findings or mechanism tests
+- "Provides evidence that" for indirect evidence
+- Reporting p-values for marginal results without labeling them "significant"
+- Inline, brief caveats in methods or results about specific design limitations
+
+**Severity:** Rate as "Causes confusion" because too-conceding prose signals insecurity and weakens the reader's trust in the contribution. If pervasive (3+ instances in a section), rate as "Blocks comprehension" because the cumulative effect makes the reader unsure what the paper actually claims.
+
+**Section form deviation** --- A section does not follow the standard APSR/AJPS structure defined in `section-forms.md`. This is a structural problem, not a prose problem---the section's organization departs from the expected form without justification.
+
+**Flag when:**
+- Introduction does not state the finding by paragraph 2--3
+- Introduction opens with "This paper..." or a literature review ("Smith 2020 argues...") as the first sentence
+- Introduction uses "scholars have argued" or "the literature suggests" to introduce CW
+- Results paragraph separates the table reference from the finding (finding in a different paragraph)
+- Conclusion exceeds 1000 words, introduces new analysis, or contains a standalone limitations paragraph
+- Paper contains a standalone limitations section (should be scattered inline, 100--300 words total)
+- Roadmap sentence appears ("This paper proceeds as follows...")
+
+**Severity:** Rate as "Causes confusion" by default. Rate as "Blocks comprehension" if the deviation fundamentally misstructures the argument (e.g., finding deferred past paragraph 4 of the introduction).
 
 ### 3. Assess severity
 
@@ -156,7 +203,7 @@ Then for each item, provide the detailed analysis:
 ```
 ### 1. [Section name], line XX
 
-**Category:** [one of the eight categories above]
+**Category:** [one of the ten categories above]
 **Severity:** [Blocks comprehension / Causes confusion / Minor friction]
 
 **What happens to the reader:** [describe the reader's experience]
