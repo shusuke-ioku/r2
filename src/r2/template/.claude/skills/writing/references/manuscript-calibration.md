@@ -71,12 +71,19 @@ Observed pattern:
 - Magnitude follows quickly
 - Robustness is narrated as pressure on the main claim, not as a second paper
 
+Corpus-wide support (77 papers):
+
+- 54% of top-tier table-referencing paragraphs co-locate the finding in the same paragraph, vs 45% non-top
+- The drift pattern (finding in the next paragraph) is rare in both tiers (~10-12%)
+- This is a quality norm, not a tier-defining signal: the gap (+9pp) is real but much smaller than the intro-ownership gap (+32pp)
+
 Implication:
 
 - Results paragraphs should be among the shortest in the paper.
 - State coefficient direction and magnitude early.
 - Nulls on competing explanations should be stated cleanly, not hedged into mush.
 - Robustness and mechanism tests should appear as pressure on the main finding, not as rival centers of gravity.
+- During polishing, rank intro-ownership failures above results-drift failures when both are present.
 
 ### 4. Conventional wisdom is stated as fact, not as hearsay
 
@@ -147,13 +154,14 @@ Implication:
 
 ### 9. Future-work endings are uncommon
 
-Across the full corpus, generic future-work signals are rare. `more research is needed` does not appear at all, and `future research` appears in only 7/80 endings.
+Across the full corpus, generic future-work signals are rare. `more research is needed` does not appear in any of the 80 papers. `future research` appears in only 7/80 endings, and tilts non-top: 31% of detected non-top conclusions vs 14% of top conclusions. Caution/limitations language in conclusions is also effectively absent.
 
 Implication:
 
 - Do not end conclusions with ritualized future-work filler.
 - If future research appears, it should be brief and logically downstream of the finding.
 - Conclusion closure should rest on implication, not on a generic look ahead.
+- The 0/80 result for "more research is needed" is the single strongest negative norm in the corpus.
 
 ## Common manuscript anti-patterns
 
@@ -207,3 +215,12 @@ When tradeoffs appear, prefer:
 4. direct claims over literature throat-clearing
 5. brief conclusions over comprehensive recaps
 6. argumentative ownership over broad topical motivation
+
+## Priority ordering (corpus-backed)
+
+When multiple manuscript problems compete for attention, rank by discriminating power:
+
+1. **Intro ownership** (strongest signal: +32pp gap between top and non-top)
+2. **Conclusion closure** (0/80 for "more research is needed"; future-work tilts non-top)
+3. **Results placement** (quality norm: +9pp gap, much weaker than intro)
+4. **Sentence-level polish** (lowest priority; address only after structural issues are resolved)
