@@ -7,7 +7,6 @@ A **harness-engineered** research environment for political science papers, buil
 - **Calibrated manuscript assessment and revision** — three parallel assessors (proofreader, calibration assessor, humanizer) evaluate craft against an **empirical audit of published APSR/AJPS papers**, then a convergence loop implements revisions section-by-section until no Critical or Important issues remain
 - **Iterative literature surveys with RAG and Zotero** — a local **RAG vector store** over your PDF library, combined with three external databases (Semantic Scholar, OpenAlex, Scopus) and **two-level Zotero integration** (cloud API for metadata + local API for annotations). Surveys **snowball citations**, acquire PDFs automatically, read full text, discover new leads, and loop until convergence.
 - **Empirically calibrated peer review** — three independent reviewer agents scored against a blind training set of top-generalist vs. field-journal publications to correct systematic biases
-- **Gatekeeper revision management** — reviews auto-generate todo items; the task manager **pushes back** when you dismiss concerns that a real reviewer would raise again
 - **Self-building Obsidian vault** — every paper you read becomes a structured, wiki-linked note that future writing and review skills consult automatically
 
 ## Install
@@ -36,6 +35,29 @@ pip install --upgrade "r2-research @ git+https://github.com/shusuke-ioku/r2.git"
 Only `ANTHROPIC_API_KEY` is required. Optional keys unlock external database search (Scopus, Semantic Scholar) and Zotero integration. See `.env.example` for the full list.
 
 ---
+
+## Calibrated Manuscript Assessment and Revision
+
+r2 includes a **convergence-loop polishing framework** that prepares manuscripts for top-journal submission. Rather than relying on generic style rules, every evaluation criterion is grounded in an **empirical audit of published APSR/AJPS papers** — what verbs they use for which research designs, how they hedge findings, where they place limitations, how they structure introductions and conclusions.
+
+The framework dispatches **three parallel assessors**, each evaluating craft from a distinct angle:
+
+- **Proofreader** — simulates a first-time reader, tracking flow, logic, pacing, undefined terms, and structural deviations across 9 diagnostic categories
+- **Calibration Assessor** — checks prose against empirical findings from the APSR/AJPS audit: design-calibrated verbs, hedge asymmetry, limitation placement, topic sentences, introduction timing, conclusion length, restatement strategy, paragraph length, voice, and assertiveness hierarchy
+- **Humanizer** — scans for AI-writing tells using a comprehensive pattern catalog (significance inflation, synonym cycling, rule-of-three, copula avoidance, and more)
+
+After assessment, the orchestrator **synthesizes** all three reports: deduplicates issues, resolves conflicts between assessors, priority-ranks into Critical/Important/Polish tiers, and computes a **word budget per section** against empirical benchmarks. The revision plan goes to the user for approval before any edits begin.
+
+Implementation proceeds **section-by-section** via the manuscript-writer agent, with Typst compilation and word-count verification after each section. The loop then **re-assesses** only edited sections and iterates until convergence — zero Critical issues, zero Important issues, and fewer than 3 new Polish-level issues from re-assessment. Maximum 3 iterations.
+
+A **conservative bias correction** step prevents over-flagging: if the manuscript text matches what actual APSR papers do per the calibration report, the issue is dismissed or downgraded. The empirical audit is the ground truth, not intuitions about what "should" be.
+
+```
+> /polish                    # full convergence loop
+> "polish for APSR"          # triggers automatically
+> "submission prep"           # triggers automatically
+> /polish --target 12000     # with total word count target
+```
 
 ## Iterative Literature Surveys with RAG and Zotero
 
@@ -77,20 +99,6 @@ The scoring has been **empirically calibrated** against a blind training set of 
 > "what would reviewers say"   # triggers automatically
 ```
 
-## Gatekeeper Revision Management
-
-Every review automatically generates actionable todo items in `revision/todo.md`, prioritized by severity (CRITICAL / IMPORTANT / MINOR) and tagged with effort estimates. The `task-manager` agent enforces a **gatekeeper principle**: before marking any item "done" or "not needed," it re-reads the original reviewer concern and verifies the resolution actually addresses it.
-
-If you dismiss an item but the reviewer's point has genuine merit, the task manager says so directly — "The reviewer's point stands because X. Dismissing it risks Y at review." It only marks "not needed" when it can articulate why the concern does not apply. This protects the paper from a real reviewer who will raise the same objection.
-
-The dashboard tracks progress with a visual progress bar, lane counts by priority, and category groupings (Identification, Robustness, Measurement, Framing, Citation). Completed items are archived in `revision/done.md` with full result records.
-
-```
-> "what's left on the revision list"   # evaluate progress
-> "mark item 3 done"                  # moves to done.md with result
-> "add a robustness task"             # manual additions
-```
-
 ## Self-Building Obsidian Vault
 
 r2 scaffolds an [Obsidian](https://obsidian.md) vault at `notes/` with three types of structured notes:
@@ -102,29 +110,6 @@ r2 scaffolds an [Obsidian](https://obsidian.md) vault at `notes/` with three typ
 The `vault-search` skill searches this vault using **Obsidian's Local REST API** when available (full-text search, Dataview queries, tag lookups) or **file-based search** as fallback (frontmatter property queries, backlink traversal, YAML parsing). Other skills — `writing`, `deep-research`, `review`, `formal-modeling` — consult the vault automatically before proceeding.
 
 To enable API-based search, install the [Obsidian Local REST API](https://github.com/coddingtonbear/obsidian-local-rest-api) community plugin. File-based search works without it.
-
-## Calibrated Manuscript Assessment and Revision
-
-r2 includes a **convergence-loop polishing framework** that prepares manuscripts for top-journal submission. Rather than relying on generic style rules, every evaluation criterion is grounded in an **empirical audit of published APSR/AJPS papers** — what verbs they use for which research designs, how they hedge findings, where they place limitations, how they structure introductions and conclusions.
-
-The framework dispatches **three parallel assessors**, each evaluating craft from a distinct angle:
-
-- **Proofreader** — simulates a first-time reader, tracking flow, logic, pacing, undefined terms, and structural deviations across 9 diagnostic categories
-- **Calibration Assessor** — checks prose against empirical findings from the APSR/AJPS audit: design-calibrated verbs, hedge asymmetry, limitation placement, topic sentences, introduction timing, conclusion length, restatement strategy, paragraph length, voice, and assertiveness hierarchy
-- **Humanizer** — scans for AI-writing tells using a comprehensive pattern catalog (significance inflation, synonym cycling, rule-of-three, copula avoidance, and more)
-
-After assessment, the orchestrator **synthesizes** all three reports: deduplicates issues, resolves conflicts between assessors, priority-ranks into Critical/Important/Polish tiers, and computes a **word budget per section** against empirical benchmarks. The revision plan goes to the user for approval before any edits begin.
-
-Implementation proceeds **section-by-section** via the manuscript-writer agent, with Typst compilation and word-count verification after each section. The loop then **re-assesses** only edited sections and iterates until convergence — zero Critical issues, zero Important issues, and fewer than 3 new Polish-level issues from re-assessment. Maximum 3 iterations.
-
-A **conservative bias correction** step prevents over-flagging: if the manuscript text matches what actual APSR papers do per the calibration report, the issue is dismissed or downgraded. The empirical audit is the ground truth, not intuitions about what "should" be.
-
-```
-> /polish                    # full convergence loop
-> "polish for APSR"          # triggers automatically
-> "submission prep"           # triggers automatically
-> /polish --target 12000     # with total word count target
-```
 
 ## Agents and Skills
 
