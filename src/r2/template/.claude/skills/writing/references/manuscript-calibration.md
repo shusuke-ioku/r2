@@ -167,7 +167,7 @@ Implication:
 
 From a direct reading of all 28 extractable abstracts in the top-tier corpus (CAL001--CAL030):
 
-**Word count**: mean 147, median 149, range 78--196. Sweet spot is 140--160 words.
+**Word count**: mean 147, median 149, range 78--196. Target 140--150 words. 150 is the strict maximum.
 
 **Opening move** (first sentence):
 
@@ -215,7 +215,7 @@ From a direct reading of all 28 extractable abstracts in the top-tier corpus (CA
 Implication:
 
 - Follow the 6-move empirical template or 5-move formal theory template.
-- Target 140--160 words. Never exceed 200.
+- Target 140--150 words. 150 is the strict maximum.
 - Open with a puzzle or phenomenon, not with "This paper..."
 - State the finding flatly with "find" or "show." Hedge only secondary claims.
 - Close on implication, never on future research or limitations.
