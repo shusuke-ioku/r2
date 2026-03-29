@@ -105,7 +105,7 @@ To enable API-based search, install the [Obsidian Local REST API](https://github
 
 ## Calibrated Manuscript Assessment and Revision
 
-r2 includes a **convergence-loop polishing framework** that prepares manuscripts for top-journal submission. Rather than relying on generic style rules, every evaluation criterion is grounded in an **empirical audit of 10 published APSR/AJPS papers** — what verbs they use for which research designs, how they hedge findings, where they place limitations, how they structure introductions and conclusions.
+r2 includes a **convergence-loop polishing framework** that prepares manuscripts for top-journal submission. Rather than relying on generic style rules, every evaluation criterion is grounded in an **empirical audit of published APSR/AJPS papers** — what verbs they use for which research designs, how they hedge findings, where they place limitations, how they structure introductions and conclusions.
 
 The framework dispatches **three parallel assessors**, each evaluating craft from a distinct angle:
 
