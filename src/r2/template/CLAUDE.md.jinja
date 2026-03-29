@@ -17,7 +17,7 @@ See `.claude/rules/skill-dispatch.md` for skill dispatch tables, rationalization
 
 ### Session Start
 
-- **Orient first:** Read `revision/todo.md` for pending work. Review `.claude/lessons.md` for learned patterns. Check recent git history if relevant. Do this before diving into the user's request.
+- **Orient first:** Read `paper/revision/todo.md` for pending work. Review `.claude/lessons.md` for learned patterns. Check recent git history if relevant. Do this before diving into the user's request.
 
 ### Execution
 
@@ -44,13 +44,13 @@ See `.claude/rules/skill-dispatch.md` for skill dispatch tables, rationalization
 | `analysis/output/figures/` | Generated plots |
 {% endif %}{% if paper_tool == "typst" %}| `paper/paper.typ` | Main manuscript (Typst) |
 {% else %}| `paper/paper.tex` | Main manuscript (LaTeX) |
-{% endif %}| `notes/` | Obsidian vault: literature notes and background research |
-| `notes/papers/` | Atomic paper notes (one per source, by citekey) |
-| `notes/concepts/` | Concept notes (one per theoretical idea) |
-| `notes/lit/` | Thematic MOCs (Maps of Content) linking paper notes |
-| `revision/review/` | Journal review reports |
-| `revision/todo.md` | Active revision items |
-| `revision/done.md` | Completed items with full concern/resolution records |
+{% endif %}| `library/` | Obsidian vault: literature notes and background research |
+| `library/papers/` | Atomic paper notes (one per source, by citekey) |
+| `library/concepts/` | Concept notes (one per theoretical idea) |
+| `library/lit/` | Thematic MOCs (Maps of Content) linking paper notes |
+| `paper/revision/review/` | Journal review reports |
+| `paper/revision/todo.md` | Active revision items |
+| `paper/revision/done.md` | Completed items with full concern/resolution records |
 | `ref.bib` | Bibliography (BBT auto-exported, never edit directly) |
 {% if use_slides %}{% if paper_tool == "typst" %}| `talk/slides.typ` | Presentation slides |
 {% else %}| `talk/slides.tex` | Presentation slides |

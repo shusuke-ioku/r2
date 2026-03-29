@@ -124,7 +124,7 @@ Adjust scope in the editor's dispatch. For a single-section review, tell reviewe
 
 ## Output
 
-1. **Save the full review** to `revision/review/YYYY-MM-DD_slug.md`.
+1. **Save the full review** to `paper/revision/review/YYYY-MM-DD_slug.md`.
 2. **Generate todos** by invoking the task-management skill (or delegating to
    the task-manager agent) to extract actionable items and append them to
-   `revision/todo.md`. Every review must produce corresponding todo items.
+   `paper/revision/todo.md`. Every review must produce corresponding todo items.

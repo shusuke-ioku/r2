@@ -1,12 +1,12 @@
 ---
 name: task-management
 description: >
-  Manages the revision dashboard (revision/todo.md): adds tasks from reviews,
+  Manages the revision dashboard (paper/revision/todo.md): adds tasks from reviews,
   sessions, or user requests; marks items done with results; evaluates progress;
   updates the progress bar and lane counts. Single source of truth for what
   needs doing and what has been done. Trigger on: "add task," "mark done,"
   "what's left," "todo status," "update todos," "action items," "what should
-  I work on next," "prioritize," or any mention of revision/todo.md. Also
+  I work on next," "prioritize," or any mention of paper/revision/todo.md. Also
   trigger proactively: (1) after a review skill run, (2) at session end when
   substantive work was discussed, (3) after completing any analysis or writing
   task that corresponds to an open item.
@@ -16,14 +16,14 @@ description: >
 
 ## Purpose
 
-`revision/todo.md` is the single persistent file tracking all revision work.
+`paper/revision/todo.md` is the single persistent file tracking all revision work.
 This skill governs every read and write to that file: adding items, marking
 them done, updating progress, and evaluating what remains.
 
 ## File Location and Format
 
 ```
-revision/
+paper/revision/
 ├── review/    ← full review reports
 ├── todo.md    ← active items (the working queue)
 └── done.md    ← completed items with concern/resolution records
@@ -74,7 +74,7 @@ Description. **Deliverable in bold.** → target file/section
 
 Sources: reviews, sessions, user requests, or proactive identification.
 
-1. **Read** `revision/todo.md` first. Never add duplicates.
+1. **Read** `paper/revision/todo.md` first. Never add duplicates.
 2. **Assign**: sequential ID (next available number), priority (`CRITICAL` /
    `IMPORTANT` / `MINOR`), effort (`EASY` / `MODERATE` / `HARD`), category
    (Identification / Robustness / Measurement / Framing / Citation / other).
@@ -95,7 +95,7 @@ From reviews specifically:
 ### DONE — Mark items complete
 
 **Gatekeeper principle.** Before marking any item "done" or "not needed," go
-back to the original reviewer concern in `revision/review/` and verify the
+back to the original reviewer concern in `paper/revision/review/` and verify the
 resolution actually addresses it. The user may dismiss an item as unnecessary,
 but if the reviewer's point has genuine merit, **push back**. Specifically:
 
@@ -138,7 +138,7 @@ Result categories for Done entries:
 
 When asked "what's left," "status," or "what should I work on":
 
-1. Read `revision/todo.md`.
+1. Read `paper/revision/todo.md`.
 2. List open items by priority, then effort.
 3. Flag stale items (7+ days old, not started).
 4. Recommend next action based on priority and dependencies.

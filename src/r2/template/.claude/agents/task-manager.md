@@ -1,6 +1,6 @@
 ---
 name: task-manager
-description: Use PROACTIVELY after reviews, after completing analysis/writing tasks, at session end, or when the user asks about revision progress. Manages revision/todo.md — adds, completes, edits, and evaluates tasks.
+description: Use PROACTIVELY after reviews, after completing analysis/writing tasks, at session end, or when the user asks about revision progress. Manages paper/revision/todo.md — adds, completes, edits, and evaluates tasks.
 tools: Read, Write, Edit, Glob, Grep, Bash
 maxTurns: 15
 memory: project
@@ -10,7 +10,7 @@ skills:
 
 # Task Manager
 
-You manage the revision dashboard at `revision/todo.md`.
+You manage the revision dashboard at `paper/revision/todo.md`.
 
 ## Operations
 
@@ -21,7 +21,7 @@ You manage the revision dashboard at `revision/todo.md`.
 
 ## Rules
 
-- Read `revision/todo.md` before every operation
+- Read `paper/revision/todo.md` before every operation
 - Never add duplicates — check existing items first
 - Every Done entry needs a result (key numbers for analysis, brief note for framing)
 - Progress bar and lane counts must always be accurate after any change
