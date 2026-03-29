@@ -27,7 +27,7 @@ Add r2 to an **existing project**: `r2 init .` — writes framework files only, 
 
 ## Updating
 
-Run `/update-r2` inside Claude Code. To update the CLI itself:
+Run `/update-r2` inside Claude Code. It fetches the latest template, previews changes, and updates framework files while preserving your paper, data, and any original skills you've created. To update the CLI itself:
 
 ```bash
 pip install --upgrade "r2-research @ git+https://github.com/shusuke-ioku/r2.git"
@@ -69,13 +69,6 @@ An editor agent dispatches three independent reviewer subagents, each with exper
 The **NVI scoring system** (Novelty, Validity, Importance) is adapted from real editorial practice. Each dimension is scored 1--5; the composite drives venue-tier classification and R&R probability estimates.
 
 The scoring has been **calibrated against a blind test set** of top-generalist vs. field-journal papers, correcting five biases: formal theory undervaluation, top-field hedging, non-novelty over-application, probability compression, and score compression toward 3--4.
-
-| Polish answers | Review answers |
-|----------------|----------------|
-| Does this read like APSR? | Would APSR accept it? |
-| Is the intro front-loaded? | Is the contribution novel? |
-| Are the findings stated at the right confidence level? | Is the identification strategy credible? |
-| Are there AI-writing tells? | Does the literature positioning hold up? |
 
 ```
 > /review                     # full simulated peer review
